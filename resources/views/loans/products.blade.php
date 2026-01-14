@@ -12,7 +12,7 @@
     <p>Amount: {{ $product->min_loan_amount }} - {{ $product->max_loan_amount }}</p>
     <p>Interest: {{ $product->interest_rate }}%</p>
     <p>Term: {{ $product->loan_term_months }} months</p>
-    <a href="{{ route('loan_products.apply', $product->id) }}"
+    <a href="{{ route('loan.apply', $product->id) }}"
        class="bg-blue-600 text-white px-4 py-2 rounded">
         Apply
     </a>

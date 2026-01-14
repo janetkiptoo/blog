@@ -11,23 +11,31 @@ Route::get('/about', [App\Http\Controllers\WebController::class, 'about'])->name
 Route::get('/services', [App\Http\Controllers\WebController::class, 'services'])->name('web.services');
 Route::get('/contact', [App\Http\Controllers\WebController::class, 'contact'])->name('web.contact');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/students/create', [App\Http\Controllers\StudentController::class, 'create'])->name('students.create');
-Route::post('/students', [App\Http\Controllers\StudentController::class, 'store'])->name('students.store'); 
-Route::get('/students/apply', [App\Http\Controllers\ApplicationController::class, 'create'])->name('students.apply');
-Route::post('/students/apply', [App\Http\Controllers\ApplicationController::class, 'store'])->name('students.apply.store');
-Route::get('/students/repay_loan', [App\Http\Controllers\StudentController::class, 'repay_loan'])->name('students.repay_loan'); 
-Route::get('/loans/products', [App\Http\Controllers\LoanProductController::class, 'index'])->name('loans.index');  
-Route::get('/loan_products', [App\Http\Controllers\LoanProductController::class, 'index'])->name('loan_products.index');
-Route::post('/loan_products/{productId}/apply', [App\Http\Controllers\LoanApplicationController::class, 'store'])->name('loan_products.apply');
-
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::middleware('verified')->name('admin.')->prefix('admin')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('dashboard');
+        })->name('dashboard');
+        Route::prefix('students')->name('students.')->group(function () {
+            Route::get('/create', [App\Http\Controllers\StudentController::class, 'create'])->name('create');
+            Route::post('', [App\Http\Controllers\StudentController::class, 'store'])->name('store');
+            Route::get('/apply', [App\Http\Controllers\ApplicationController::class, 'create'])->name('apply');
+            Route::post('/apply', [App\Http\Controllers\ApplicationController::class, 'store'])->name('apply.store');
+            Route::get('/repay_loan', [App\Http\Controllers\StudentController::class, 'repay_loan'])->name('repay_loan');
+        });
+        Route::prefix('loans')->name('loans.')->group(function () {
+            Route::get('/products', [App\Http\Controllers\LoanProductController::class, 'index'])->name('index');
+            Route::get('/products', [App\Http\Controllers\LoanProductController::class, 'index'])->name('products');
+        });
+        Route::get('/loan_products/{productId}/apply', [App\Http\Controllers\LoanApplicationController::class, 'index'])->name('loan.apply');
+        Route::post('/loan_products/{productId}/apply', [App\Http\Controllers\LoanApplicationController::class, 'store'])->name('loan.store');
+    });
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+    });
 });
 
 require __DIR__.'/auth.php';

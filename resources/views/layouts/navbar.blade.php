@@ -12,6 +12,9 @@
                 </ul>
                 </div>
 
+                @if (Auth::check())
+<p>Logout</p>
+                @else
               <div class="flex gap-6  ">
                 <a href="/login">
                  <button class="bg-blue-500 hover:bg-blue-700 text-white  px-4 rounded">login</button>
@@ -20,5 +23,5 @@
                 <button class="bg-blue-500 hover:bg-blue-700 text-white px-4 rounded">sign up</button>
                 </a>
                 </div>
-
+@endif
  </div>

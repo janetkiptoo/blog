@@ -18,12 +18,12 @@
             @csrf
 
             <div class="mb-4">
-                <label for="amount" >Repayment Amount</label>
-                <input type="number" name="amount" id="amount"  class="w-full border border-gray-300 rounded px-10 py-20">
+                <label for="loan_amount" >Repayment Amount:</label>
+                <input type="number" name="loan amount" id="loan_amount"  class="w-full border border-gray-300 rounded px-10 py-20">
                 </div>
                 <div>
                    <label for="payment_method" class="block text-gray-700 mb-2">Payment Method</label>
-                   <input type="text"  name ="payment method" id="payment_method" class="w-full border border-gray-300 rounded px-10 py-20">
+                   <input type="text"  name ="payment_method" id="payment_method" class="w-full border border-gray-300 rounded px-10 py-20">
 
 
 </div>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('loan_application', function (Blueprint $table) {
              $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('loan_product_id')->constrained('loan_product')->cascadeOnDelete();
+            $table->foreignId('loan_product_id')->constrained('loan_products')->cascadeOnDelete();
             $table->decimal('loan_amount', 10, 2);
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->decimal('approved_amount', 10, 2)->nullable();
