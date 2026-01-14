@@ -17,6 +17,12 @@ Route::get('/dashboard', function () {
 
 Route::get('/students/create', [App\Http\Controllers\StudentController::class, 'create'])->name('students.create');
 Route::post('/students', [App\Http\Controllers\StudentController::class, 'store'])->name('students.store'); 
+Route::get('/students/apply', [App\Http\Controllers\ApplicationController::class, 'create'])->name('students.apply');
+Route::post('/students/apply', [App\Http\Controllers\ApplicationController::class, 'store'])->name('students.apply.store');
+Route::get('/students/repay_loan', [App\Http\Controllers\StudentController::class, 'repay_loan'])->name('students.repay_loan'); 
+Route::get('/loans/products', [App\Http\Controllers\LoanProductController::class, 'index'])->name('loans.index');  
+Route::get('/loan_products', [App\Http\Controllers\LoanProductController::class, 'index'])->name('loan_products.index');
+Route::post('/loan_products/{productId}/apply', [App\Http\Controllers\LoanApplicationController::class, 'store'])->name('loan_products.apply');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

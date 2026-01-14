@@ -11,6 +11,11 @@ class StudentController extends Controller
     {
         return view('students.create');
     }
+   
+    public function repay_loan()
+    {
+        return view('students.repay_loan');
+    }
     //
     public function store(Request $request)
    {
@@ -21,9 +26,8 @@ class StudentController extends Controller
             
           
         ]);
-
         // Save student
-        Student::create($request->only(['name','email', 'course']));
+        Student::create($request->only(['name','email']));
 
         // Redirect back with success
         return redirect('home')->with('success', 'Student registered successfully.');

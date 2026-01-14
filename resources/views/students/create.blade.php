@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800  leading-tight">
+        <h2 class="font-semibold text-xl text-center text-gray-800  leading-tight">
             {{ __('Register Student') }}
         </h2>
     </x-slot>
@@ -8,7 +8,7 @@
     <div class="bg-gray-100 rounded-lg shadow-lg p-8 max-w-2xl w-full">
 
         <h1 class="text-2xl font-bold text-gray-800 text-center mb-6">Register to apply</h1>
-          <form action="/students" method="POST" class="space-y-4">
+          <form action="/students" method="POST" class="space-y-2">
             @csrf
             <div>
                 <label for="name" class="block text-gray-700 ">Name</label>

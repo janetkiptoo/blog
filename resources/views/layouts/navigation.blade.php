@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="flex items-center justify-between px-4 py-2 bg-sky-500 gap-6">
+<nav x-data="{ open: false }" class="flex items-center text-black justify-between px-4 py-2 bg-sky-500 ">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-black">
         <div class="flex justify-between h-16">
@@ -15,13 +15,30 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    </div>
 
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex text-white">
                         <x-nav-link :href="route('students.create')" :active="request()->routeIs('students.create')">
                             {{ __('registration') }}
                         </x-nav-link>
+                         </div>
+
+            
+
+                       <div class="hidden  space-x-8 sm:-my-px sm:ms-10 sm:flex text-white">
+                        <x-nav-link :href="route('students.apply')" :active="request()->routeIs('students.apply')">
+                            {{ __('Apply for loan') }}
+                        </x-nav-link>
+</div>
+
+                        <div class="hidden  space-x-8 sm:-my-px sm:ms-10 sm:flex text-white">
+                        <x-nav-link :href="route('students.repay_loan')" :active="request()->routeIs('students.repay_loan')">
+                            {{ __('Repay loan') }}
+                        </x-nav-link>
+</div>
+                        
+
                 </div>
-            </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
