@@ -1,14 +1,13 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-center text-gray-800  leading-tight">
-            {{ __('Register as  a Student to Apply') }}
-        </h2>
-    </x-slot>
+@extends('layouts.web')
+
+@section('title', 'Contact ')
+
+@section('content')
 <section class="flex justify-center items-center py-10 px-6 flex-col min-h-screen bg-white">
     <div class="bg-gray-100 rounded-lg shadow-lg p-8 max-w-2xl w-full">
 
-        <h1 class="text-2xl font-bold text-gray-800 text-center mb-6">Name: {{ Auth::user()->name }}</h1>
-          <form action="/students" method="POST" class="space-y-2">
+        <h1 class="text-2xl font-bold text-gray-800 text-center mb-6">Register as a Student</h1>
+          <form action="{{ route('students.store') }}" method="POST" class="space-y-2">
             @csrf
             <div>
                 <label for="national_id" class="block text-gray-700 mb-1 mt-3">National ID</label>
@@ -39,4 +38,4 @@
 
     </div>
 </section>
-</x-app-layout>
+@endsection

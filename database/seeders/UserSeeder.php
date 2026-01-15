@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'name' => 'janet',
             'email' => 'janetjeruto@kabarak.ac.ke',
             'password' => Hash::make('password'),
+            'is_admin' => true,
         ]);
 
         //

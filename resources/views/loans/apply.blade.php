@@ -6,7 +6,7 @@
     </x-slot>
     <div class="max-w-2xl mx-auto p-6 bg-white rounded shadow">
         
-        <form method="POST" action="{{ route('loan.store', $product->id) }}">
+        <form method="POST" action="{{ route('student.loan.store', $product->id) }}">
             @csrf
             <div class="mb-4">
                 <label for=" loan_amount" class="block text-gray-700">Loan Amount</label>

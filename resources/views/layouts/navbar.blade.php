@@ -9,11 +9,14 @@
                 <li><a href="/about" class=" hover:text-blue-200">ABOUT</a></li>
                 <li><a href="/services" class=" hover:text-blue-200">SERVICES</a></li>
                 <li><a href="/contact" class=" hover:text-blue-200">CONTACT</a></li>
+                <li><a href="/create" class=" hover:text-blue-200">REGISTER AS STUDENT</a></li>
                 </ul>
                 </div>
 
                 @if (Auth::check())
-<p>Logout</p>
+
+            <button type="submit" class="underline text-sm text-  hover:text-gray-900  rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ">
+                {{ __('Log Out') }}
                 @else
               <div class="flex gap-6  ">
                 <a href="/login">
