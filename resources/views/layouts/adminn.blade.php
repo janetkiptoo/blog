@@ -4,26 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Student Loan Platform')</title>
-   @vite('resources/css/app.css')
-<body class="bg-gray-100">
+    @vite('resources/css/app.css')
+</head>
+<body class="bg-gray-100 flex min-h-screen">
 
-    <nav class="bg-sky-500 text-black p-4 flex justify-between">
-        <div>
-            <a href="{{ route('admin.dashboard') }}" class="font-bold">Admin Panel</a>
+
+    <nav class="bg-sky-500 w-64 flex-shrink-0 p-6 flex flex-col">
+        <div class="mb-8">
+            <a href="{{ route('admin.dashboard') }}" class="text-black text-2xl font-bold block mb-6">Admin Panel</a>
         </div>
-        <div class="space-x-4">
-            <a href="#loans" class="px-4 py-2 ">Loan Applications</a>
-            <a href="#users" class="px-4 py-2 ">Users</a>
-            <a href="#products" class="px-4 py-2 ">Loan Products</a>
-            <a href="{{ route('profile.edit') }}" class="px-4 py-2 ">Profile</a>
-            <form method="POST" action="{{ route('logout') }}" class="inline">
-                @csrf
-                <button type="submit">Logout</button>
-            </form>
-        </div>
+
+        <a href="{{ route('admin.loans') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Applications</a>
+        <a href="{{ route('admin.users.index') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Users</a>
+        <a href="{{ route('admin.loan-products') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products</a>
+        <a href="{{ route('profile.edit') }}" class="black py-2 px-3 rounded hover:bg-sky-600 mb-2">Profile</a>
+
+        <form method="POST" action="{{ route('logout') }}" class="mt-auto">
+            @csrf
+            <button type="submit" class="w-full text-left text-black py-2 px-3 rounded hover:bg-sky-600">
+                Logout
+            </button>
+        </form>
     </nav>
 
-    <main class="p-6">
+    <!-- Main content -->
+    <main class="flex-1 p-6">
         @yield('content')
     </main>
 

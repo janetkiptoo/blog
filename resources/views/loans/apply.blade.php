@@ -1,9 +1,6 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
-            Apply for {{ $product->product_name }} Loan
-        </h2>
-    </x-slot>
+@extends('layouts.app')
+
+@section('content')
     <div class="max-w-2xl mx-auto p-6 bg-white rounded shadow">
         
         <form method="POST" action="{{ route('student.loan.store', $product->id) }}">
@@ -24,4 +21,4 @@
             </div>
         </form>
     </div>
-</x-app-layout>
+@endsection

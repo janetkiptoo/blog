@@ -1,9 +1,6 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
-            Repay Loan
-        </h2>
-    </x-slot>
+@extends('layouts.app')
+
+@section('content')
 <section class="flex justify-center items-center py-10 px-6 flex-col min-h-screen bg-white">
     <div >
     <div class="mb-2 ">
