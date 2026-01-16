@@ -4,6 +4,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\LoanProductController;
+
+
 
 // Public pages
 Route::get('/', function () {
@@ -24,7 +28,7 @@ Route::middleware('auth')->group(function () {
     // Student routes
     Route::middleware('verified')->name('student.')->prefix('student')->group(function () {
 
-        // Use DashboardController to pass $user and $loan
+        
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::prefix('students')->name('students.')->group(function () {
@@ -47,19 +51,23 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
     });
 
-    // Admin routes
-    Route::middleware(['auth', 'admin'])->name('admin.')->prefix('admin')->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-        Route::post('/loan/{id}/approve', [AdminController::class, 'approve'])->name('loan.approve');
-        Route::post('/loan/{id}/reject', [AdminController::class, 'reject'])->name('loan.reject');
+  Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
-        Route::get('/loan-products', [AdminController::class, 'loanProducts'])->name('loan-products.index');
-        Route::get('/loan-products/create', [AdminController::class, 'createLoanProduct'])->name('loan-products.create');
+   Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+        Route::get('/loans', [AdminController::class, 'loans'])->name('loans');
+        Route::post('/loans/{id}/approve', [AdminController::class, 'approve'])->name('loan.approve');
+        Route::post('/loans/{id}/reject', [AdminController::class, 'reject'])->name('loan.reject');
+
+        // USERS — resource controller ONLY
+        Route::resource('users', UserController::class);
+     
+        Route::resource('loan-products', LoanProductController::class); 
+        Route::get('/loan-products', [AdminController::class, 'products'])->name('loan-products');
         Route::post('/loan-products', [AdminController::class, 'storeLoanProduct'])->name('loan-products.store');
-
-        Route::get('/users', [AdminController::class, 'users'])->name('users.index');
     });
 
-});
+        // Route::get('/users', [AdminController::class, 'users'])->name('users');
+    });
 
 require __DIR__.'/auth.php';

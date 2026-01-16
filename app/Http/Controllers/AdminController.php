@@ -9,13 +9,27 @@ use App\Models\LoanProduct;
 
 class AdminController extends Controller
 {
+    public function dashboard()
+    {
+        return view('admin.dashboard');
+    }
 
-    public function index(){
-        $loans = LoanApplication::with(['user','loanProduct'])->get();
+    public function loans()
+    {
+        $loans = LoanApplication::with(['user', 'loanProduct'])->get();
+        return view('admin.loans', compact('loans'));
+    }
+
+    public function users()
+    {
         $users = User::all();
-        $products = LoanProduct::all();
+        return view('admin.users', compact('users'));
+    }
 
-        return view('admin.dashboard', compact('loans','users','products'));
+    public function products()
+    {
+        $products = LoanProduct::all();
+        return view('admin.loan-products', compact('products'));
     }
 
 
