@@ -3,32 +3,54 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\LoanApplication; 
+use App\Models\User;
+use App\Models\LoanApplication;
+use App\Models\LoanProduct;
 
 class AdminController extends Controller
 {
-    public function index()
-    {
-        $loans = LoanApplication::with('user', 'loanProduct')->get();
 
-        return view('admin.dashboard', compact('loans'));
+    public function index(){
+        $loans = LoanApplication::with(['user','loanProduct'])->get();
+        $users = User::all();
+        $products = LoanProduct::all();
+
+        return view('admin.dashboard', compact('loans','users','products'));
     }
-    public function showLoan($id)
+
+
+    public function approve($id)
     {
-        $loan = LoanApplication::with('user', 'loanProduct')->findOrFail($id);
+        $loan = LoanApplication::findOrFail($id);
+        $loan->status = 'approved';
+        $loan->approved_amount = $loan->loan_amount;
+        $loan->save();
 
-        return view('admin.loan_detail', compact('loan'));
+        return redirect()->back()->with('success','Loan approved.');
     }
-    public function approve($id){
-     $loan = LoanApplication::findOrFail($id);
-        $loan->update(['status' => 'approved']);
 
-        return back()->with('success', 'Loan approved successfully.');
-    }  
-    
-    public function reject($id){
-        $loan=LoanApplication::findOrFail($id);
-        $loan->update(['status' => 'rejected']);
-        return back()->with('failed','loan rejected.');
-    }     
+
+    public function reject($id)
+    {
+        $loan = LoanApplication::findOrFail($id);
+        $loan->status = 'rejected';
+        $loan->save();
+
+        return redirect()->back()->with('success','Loan rejected.');
+    }
+
+    public function storeLoanProduct(Request $request)
+    {
+        $request->validate([
+            'product_name' => 'required',
+            'min_loan_amount' => 'required|numeric',
+            'max_loan_amount' => 'required|numeric',
+            'interest_rate' => 'required|numeric',
+            'loan_term_months' => 'required|integer'
+        ]);
+
+        LoanProduct::create($request->all());
+
+        return redirect()->back()->with('success','Loan product added!');
+    }
 }

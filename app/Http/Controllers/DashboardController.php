@@ -11,15 +11,16 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $loan=LoanApplication::where('user_id',$user->id)->latest()->first();
+       $loan = LoanApplication::with('user', 'loanProduct')->findOrFail($id);
         
         
         return view('dashboard', compact('user','loan'));
     }
      public function showLoan($id)
     {
+        $user = auth()->user();
         $loan = LoanApplication::with('user', 'loanProduct')->findOrFail($id);
 
-        return view('dashboard', compact('loan'));
+        return view('dashboard', compact('loan','user'));
     }
 }

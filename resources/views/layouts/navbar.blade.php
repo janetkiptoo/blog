@@ -15,8 +15,10 @@
 
                 @if (Auth::check())
 
-            <button type="submit" class="underline text-sm text-  hover:text-gray-900  rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ">
-                {{ __('Log Out') }}
+            <form method="POST" action="{{ route('logout') }}" class="inline">
+                @csrf
+                <button type="submit">Logout</button>
+            </form>
                 @else
               <div class="flex gap-6  ">
                 <a href="/login">
