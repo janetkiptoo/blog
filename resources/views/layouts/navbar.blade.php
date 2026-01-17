@@ -9,7 +9,7 @@
                 <li><a href="/about" class=" hover:text-blue-200">ABOUT</a></li>
                 <li><a href="/services" class=" hover:text-blue-200">SERVICES</a></li>
                 <li><a href="/contact" class=" hover:text-blue-200">CONTACT</a></li>
-                <li><a href="/create" class=" hover:text-blue-200">REGISTER AS STUDENT</a></li>
+               
                 </ul>
                 </div>
 

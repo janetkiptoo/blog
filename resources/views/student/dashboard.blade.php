@@ -5,7 +5,7 @@
     <h1 class="text-3xl font-bold mb-6 text-center">Student Dashboard</h1>
 
     <div class="mb-6 p-6 bg-white shadow-lg rounded-lg">
-        <h2 class="text-2xl font-semibold mb-4">Welcome, {{ Auth::user()->name }}h2>
+        <h2 class="text-2xl font-semibold mb-4">Welcome, {{ Auth::user()->name }}</h2>
         <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
         <p><strong>Institution:</strong> {{ Auth::user()->institution }}</p>
         <p><strong>Course:</strong> {{ Auth::user()->course }}</p>
@@ -23,9 +23,7 @@
         <p><strong>Applied On:</strong> {{ $loan->created_at->format('d M, Y') }}</p>
 
         @if($loan->status !== 'paid')
-        <a href="{{ route('student.loans.repay', $loan->id) }}"
-           class="mt-4 inline-block bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
-            Repay Loan
+        <a href="{{ route('student.loans.repay', $loan->id) }}"class="mt-4 inline-block bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"> Repay Loan
         </a>
         @endif
     </div>

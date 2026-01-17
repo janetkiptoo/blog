@@ -7,7 +7,7 @@
     <div class="bg-gray-100 rounded-lg shadow-lg p-8 max-w-2xl w-full">
 
         <h1 class="text-2xl font-bold text-gray-800 text-center mb-6">Register as a Student</h1>
-          <form action="{{ route('students.store') }}" method="POST" class="space-y-2">
+         
             @csrf
             <div>
                 <label for="national_id" class="block text-gray-700 mb-1 mt-3">National ID</label>
