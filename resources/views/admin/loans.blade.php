@@ -5,8 +5,7 @@
 @section('content')
 <div class="max-w-3xl mx-auto py-6">
 
-    <div class="bg-white p-6 rounded shadow">
-        <h2 class="text-2xl font-bold mb-6">loans</h2>
+    
   <div id="loans" class="mb-8 bg-white p-6 rounded shadow">
         <h2 class="text-xl font-semibold mb-4">Loan Applications</h2>
         <table class="w-full border">

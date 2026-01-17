@@ -6,6 +6,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\LoanProductController;
+use App\Http\Controllers\LoanController;
+
 
 
 
@@ -36,13 +38,19 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::prefix('loans')->name('loans.')->group(function () {
-            Route::get('/products', [App\Http\Controllers\LoanProductController::class, 'index'])->name('index');
-            Route::get('/products', [App\Http\Controllers\LoanProductController::class, 'index'])->name('products');
+        Route::get('/products', [App\Http\Controllers\LoanProductController::class, 'index'])->name('index');
+        Route::get('/products', [App\Http\Controllers\LoanProductController::class, 'index'])->name('products');
+        Route::get('/{id}/repay', [LoanController::class, 'showRepay'])->name('repay.show');
+        Route::post('/{id}/repay', [LoanController::class, 'repay'])->name('repay');
         });
 
         Route::get('/loan_products/{productId}/apply', [App\Http\Controllers\LoanApplicationController::class, 'index'])->name('loan.apply');
         Route::post('/loan_products/{productId}/apply', [App\Http\Controllers\LoanApplicationController::class, 'store'])->name('loan.store');
     });
+
+   
+
+
 
     // Profile routes
     Route::prefix('profile')->name('profile.')->group(function () {
@@ -59,12 +67,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/loans/{id}/approve', [AdminController::class, 'approve'])->name('loan.approve');
         Route::post('/loans/{id}/reject', [AdminController::class, 'reject'])->name('loan.reject');
 
-        // USERS — resource controller ONLY
+        
         Route::resource('users', UserController::class);
      
         Route::resource('loan-products', LoanProductController::class); 
-        Route::get('/loan-products', [AdminController::class, 'products'])->name('loan-products');
-        Route::post('/loan-products', [AdminController::class, 'storeLoanProduct'])->name('loan-products.store');
+       
     });
 
         // Route::get('/users', [AdminController::class, 'users'])->name('users');

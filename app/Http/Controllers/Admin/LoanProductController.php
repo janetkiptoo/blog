@@ -23,7 +23,7 @@ class LoanProductController extends Controller
      */
     public function create()
     {
-         return view('admin.loan-products');
+         return view('admin.loan-products.create');
         //
     }
 
@@ -43,7 +43,7 @@ class LoanProductController extends Controller
 
         LoanProduct::create($request->all());
 
-        return redirect()->route('admin.loan-products')
+        return redirect()->route('admin.loan-products.index')
                          ->with('success', 'Loan product added successfully');
         //
     }
@@ -81,7 +81,7 @@ class LoanProductController extends Controller
 
         $loan_product->update($request->all());
 
-        return redirect()->route('admin.loan-products')
+        return redirect()->route('admin.loan-products.index')
                          ->with('success', 'Loan product updated successfully');
         //
     }
@@ -93,7 +93,7 @@ class LoanProductController extends Controller
     {
         $loan_product->delete();
 
-        return redirect()->route('admin.loan-products')
+        return redirect()->route('admin.loan-products.index')
                          ->with('success', 'Loan product deleted successfully');
     }
 }

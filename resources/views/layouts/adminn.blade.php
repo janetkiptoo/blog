@@ -16,7 +16,8 @@
 
         <a href="{{ route('admin.loans') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Applications</a>
         <a href="{{ route('admin.users.index') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Users</a>
-        <a href="{{ route('admin.loan-products') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products</a>
+        <a href="{{ route('admin.loan-products.index') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products</a>
+         <a href="{{ route('admin.loan-products.create') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products add</a>
         <a href="{{ route('profile.edit') }}" class="black py-2 px-3 rounded hover:bg-sky-600 mb-2">Profile</a>
 
         <form method="POST" action="{{ route('logout') }}" class="mt-auto">

@@ -3,10 +3,13 @@
 @section('title', 'Users Management')
 
 @section('content')
-<div class="max-w-7xl mx-auto py-6 grid grid-cols-3 gap-6">
+    <div class="max-w-7xl mx-auto py-6 grid  gap-6">
+    <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold">Users</h2>
+     <a href="{{ route('admin.users.create') }}"class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"> + Add User </a>
+    </div>
 
-    {{-- USERS TABLE --}}
-    <div class="col-span-2 bg-white p-6 rounded shadow">
+    <div class=" bg-white p-6 rounded shadow">
         <h2 class="text-xl font-semibold mb-4">Users</h2>
 
         <table class="w-full border">
@@ -26,10 +29,9 @@
                     <td class="p-2">{{ $user->email }}</td>
                     <td class="p-2">{{ $user->role }}</td>
                     <td class="p-2">
-                        <a href="{{ route('admin.users.show', $user) }}"
-                           class="text-blue-600 underline">
-                            View
-                        </a>
+                    <a href="{{ route('admin.users.show', $user) }}"class="text-blue-600 underline">View</a>
+
+        
                     </td>
                 </tr>
                 @endforeach
