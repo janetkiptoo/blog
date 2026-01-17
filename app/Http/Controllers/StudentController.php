@@ -54,6 +54,15 @@ class StudentController extends Controller
         $loan = LoanApplication::with('loanProduct')->where('id', $id)->where('user_id', auth()->id()) ->firstOrFail();
         return view('students.loans.repay', compact('loan'));
     }
+     public function myLoans()
+    {
+        $loans = LoanApplication::with('loanProduct')
+            ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('students.loans.index', compact('loans'));
+    }
 
    
     public function process_repayment(Request $request, $id)

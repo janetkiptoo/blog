@@ -23,7 +23,10 @@
                            loan products
                         </x-nav-link>
 </div>
-
+<div class="hidden  space-x-8 sm:-my-px sm:ms-10 sm:flex text-white">
+                        <x-nav-link :href="route('student.loans.index')" :active="request()->routeIs('student.loans.index')">
+                           My Loans
+                        </x-nav-link>
 
 
         

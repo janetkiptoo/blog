@@ -24,22 +24,22 @@ Route::middleware('auth')->group(function () {
   
     Route::middleware('verified')->name('student.')->prefix('student')->group(function () {
 
-        // Dashboard
+    
         Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('dashboard');
 
-        // Student registration
+        
         Route::get('/create', [StudentController::class, 'create'])->name('create');
         Route::post('/store', [StudentController::class, 'store'])->name('store');
         
-
-        // Loan repayment
+         Route::get('/loans', [StudentController::class, 'myLoans']) ->name('loans.index');
+        
         Route::get('/loans/{id}/repay', [StudentController::class, 'repayLoan'])->name('loans.repay');
        Route::post('/loans/{id}/repay', [StudentController::class, 'process_repayment'])->name('loans.process_repayment')->middleware('auth');
 
-        // Loan products
+        
         Route::get('/loans/products', [LoanProductController::class, 'index'])->name('loans.products');
 
-        // Apply for loan
+        
         Route::get('/loan_products/{productId}/apply', [LoanApplicationController::class, 'index'])->name('loan.apply');
         Route::post('/loan_products/{productId}/apply', [LoanApplicationController::class, 'store'])->name('loan.store');
     });
@@ -56,10 +56,10 @@ Route::middleware('auth')->group(function () {
    
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
 
-        // Dashboard
+        
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-        // Loan management
+        
         Route::get('/loans', [AdminController::class, 'loans'])->name('loans');
         Route::post('/loans/{id}/approve', [AdminController::class, 'approve'])->name('loan.approve');
         Route::post('/loans/{id}/reject', [AdminController::class, 'reject'])->name('loan.reject');

@@ -14,6 +14,13 @@ class LoanProduct extends Model
         'max_loan_amount',
         'min_loan_amount',
     ];
+    // app/Models/LoanProduct.php
+
+public function loanApplications()
+{
+    return $this->hasMany(LoanApplication::class);
+}
+
     //
 }
 

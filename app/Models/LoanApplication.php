@@ -30,7 +30,12 @@ protected $table = 'loan_application';
 
     public function loanProduct()
     {
-        return $this->belongsTo(LoanProduct::class);
+         return $this->belongsTo(LoanProduct::class, 'loan_product_id');
     }
+    // app/Models/LoanApplication.php
+
+
+
+
     //
 }
