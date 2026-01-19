@@ -9,9 +9,7 @@
                 <div class="p-4 border rounded shadow bg-white">
                     <h3 class="font-bold text-lg">{{ $product->product_name }}</h3>
                     <p class="text-gray-700 mt-1">{{ $product->description }}</p>
-                    <p class="mt-2">
-                        <strong>Amount:</strong> KES {{ $product->min_loan_amount }} - KES {{ $product->max_loan_amount }}
-                    </p>
+                    <p class="mt-2"><strong>Amount:</strong> KES {{ $product->min_loan_amount }} - KES {{ $product->max_loan_amount }}</p>
                     <p><strong>Interest:</strong> {{ $product->interest_rate }}%</p>
                     <p><strong>Term:</strong> {{ $product->loan_term_months }} months</p>
                     <a href="{{ route('student.loan.apply', $product->id) }}"

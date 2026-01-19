@@ -1,30 +1,36 @@
-<nav x-data="{ open: false }" class="flex items-center text-black justify-between px-4 py-2 bg-sky-500 ">
+<nav x-data="{ open: false }" class="flex items-center text-white justify-between px-4 py-2 bg-blue-800  ">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-black">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white ">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('student.dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 " />
+                        <x-application-logo class="block h-9 w-auto fill-current text-white-800 " />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('student.dashboard')" :active="request()->routeIs('student.dashboard')">
-                        {{ ('dashboard') }}
+                     Dashboard
                     </x-nav-link>
                     </div>
 
                     
                        <div class="hidden  space-x-8 sm:-my-px sm:ms-10 sm:flex text-white">
                         <x-nav-link :href="route('student.loans.products')" :active="request()->routeIs('student.loans.products')">
-                           loan products
+                           Loan products
                         </x-nav-link>
 </div>
+<div class="hidden  space-x-8 sm:-my-px sm:ms-10 sm:flex text-white">
+                        <x-nav-link :href="route('student.loans.index')" :active="request()->routeIs('student.loans.index')">
+                           My Loans
+                        </x-nav-link>
 
-           
+
+        
+
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -53,7 +59,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                Log Out
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -89,7 +95,7 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    Profile
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->

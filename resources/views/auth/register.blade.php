@@ -18,13 +18,13 @@
 
         <div class="mt-4">
             <x-input-label for="national_id" :value="__('National ID')" />
-            <x-text-input id="national_id" class="block mt-1 w-full" type="text" name="national_id" :value="old('national_id')" required autocomplete="username" />
+            <x-text-input id="national_id" class="block mt-1 w-full" type="number" name="national_id" :value="old('national_id')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('national_id')" class="mt-2" />
         </div>
 
         <div class="mt-4">
             <x-input-label for="phone" :value="__('Phone')" />
-            <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required autocomplete="username" />
+            <x-text-input id="phone" class="block mt-1 w-full" type="number" name="phone" :value="old('phone')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
 
@@ -42,7 +42,7 @@
 
         <div class="mt-4">
             <x-input-label for="year_of_study" :value="__('Year of Study')" />
-            <x-text-input id="year_of_study" class="block mt-1 w-full" type="text" name="year_of_study" :value="old('year_of_study')" required autocomplete="username" />
+            <x-text-input id="year_of_study" class="block mt-1 w-full" type="number" name="year_of_study" :value="old('year_of_study')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('year_of_study')" class="mt-2" />
         </div>
         <div class="mt-4">

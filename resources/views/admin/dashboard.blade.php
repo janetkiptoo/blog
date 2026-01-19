@@ -36,7 +36,8 @@
                         </form>
                         <form action="{{ route('admin.loan.reject', $loan->id) }}" method="POST">
                             @csrf
-                            <button class="bg-red-500 text-white px-2 py-1 rounded">Reject</button>
+                             <button class="bg-blue-500 text-white px-2 py-1 rounded">Reject</button>
+                           
                         </form>
                         @else
                         <p>no action</p>

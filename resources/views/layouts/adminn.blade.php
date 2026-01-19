@@ -9,16 +9,16 @@
 <body class="bg-gray-100 flex min-h-screen">
 
 
-    <nav class="bg-sky-500 w-64 flex-shrink-0 p-6 flex flex-col">
+    <nav class="bg-blue-800 w-64 flex-shrink-0 p-6 flex flex-col">
         <div class="mb-8">
-            <a href="{{ route('admin.dashboard') }}" class="text-black text-2xl font-bold block mb-6">Admin Panel</a>
+            <a href="{{ route('admin.dashboard') }}" class="text-white text-2xl font-bold block mb-6">Admin Panel</a>
         </div>
-
-        <a href="{{ route('admin.loans') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Applications</a>
-        <a href="{{ route('admin.users.index') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Users</a>
-        <a href="{{ route('admin.loan-products.index') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products</a>
-         <a href="{{ route('admin.loan-products.create') }}" class="text-black py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products add</a>
-        <a href="{{ route('profile.edit') }}" class="black py-2 px-3 rounded hover:bg-sky-600 mb-2">Profile</a>
+        
+        <a href="{{ route('admin.users.index') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Users</a>
+        <a href="{{ route('admin.loans') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Applications</a>
+        <a href="{{ route('admin.loan-products.index') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products</a>
+         <a href="{{ route('admin.loan-products.create') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products add</a>
+       
 
         <form method="POST" action="{{ route('logout') }}" class="mt-auto">
             @csrf
@@ -32,6 +32,7 @@
     <main class="flex-1 p-6">
         @yield('content')
     </main>
+    
 
 </body>
 </html>
