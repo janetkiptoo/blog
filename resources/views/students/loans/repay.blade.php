@@ -25,7 +25,7 @@
             @csrf
 
             <label class="block text-sm font-medium mb-2">Amount (KES)</label>
-            <input type="number"name="amount" required min="1" max="{{ $loan->balance }}" class="border rounded px-4 py-2 w-full mb-4">
+            <input type="number"name="amount" placeholder="Enter Amount in Ksh" required min="1" max="{{ $loan->balance }}" class="border rounded px-4 py-2 w-full mb-4 placeholder:text-gray-400">
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded"> Repay Loan </button>
         </form>
     </div>
