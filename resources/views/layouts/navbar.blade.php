@@ -1,4 +1,4 @@
- <div class=" flex items-center justify-between px-4 py-2 bg-sky-500">
+ <div class=" flex items-center justify-between px-4 py-2 bg-blue-800">
         <div class="flex items-center gap-2">
          <img src="https://images.pexels.com/photos/2230796/pexels-photo-2230796.jpeg" class="h-14 w-14 rounded-full object-cover" alt="logo">
         </div>

@@ -34,7 +34,11 @@ protected $table = 'loan_application';
     }
     // app/Models/LoanApplication.php
 
-
+ public function repayments()
+    {
+        return $this->hasMany(LoanRepayment::class);
+    }
+    
 
 
     //

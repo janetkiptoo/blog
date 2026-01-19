@@ -12,7 +12,7 @@ class LoanController extends Controller
             ->where('user_id', auth()->id()) 
             ->findOrFail($id);
 
-    return view('loans.repay', compact('loan'));
+    return view('students.loans.repay', compact('loan'));
 }
 
 public function repay(Request $request, $id)

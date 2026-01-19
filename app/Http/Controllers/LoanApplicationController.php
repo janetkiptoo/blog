@@ -6,46 +6,73 @@ use Illuminate\Http\Request;
 use App\Models\LoanProduct;
 use App\Models\User;
 use App\Models\LoanApplication;
+use App\Models\LoanRepayment;
+
 
 class LoanApplicationController extends Controller
 {
-    public function index($productId)
+   public function index($productId)
     {
         $product = LoanProduct::findOrFail($productId);
-        return view('loans.apply', compact('product'));  
-        $user = auth()->user();
-         $loan=LoanApplication::where('user_id',$user->id)->first();
+        return view('loans.apply', compact('product'));
     }
-
    
 
 public function myLoans()
 {
-    $loans = LoanApplication::with('loanProduct')
-        ->where('user_id', auth()->id())
-        ->orderBy('created_at', 'desc')
-        ->get();
+    $loans = LoanApplication::with('loanProduct')->where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
 
     return view('students.loans.index', compact('loans'));
 }
 
-public function repayLoan(Request $request, LoanApplication $loan)
+
+
+public function process_repayment(Request $request, $id)
 {
+    $user = auth()->user();
+
+    $loan = LoanApplication::where('id', $id)
+        ->where('user_id', $user->id)
+        ->where('status', 'approved')
+        ->firstOrFail();
+
+    $maxAmount = $loan->balance ?? $loan->loan_amount;
+
     $request->validate([
-        'amount' => 'required|numeric|min:1|max:' . $loan->balance
+        'amount' => "required|numeric|min:1|max:$maxAmount",
     ]);
 
-    $loan->balance -= $request->amount;
 
+    LoanRepayment::create([
+        'loan_application_id' => $loan->id,
+        'amount' => $request->amount,
+        'paid_at' => now(), 
+    ]);
+    
+
+ 
+    $loan->balance = $maxAmount - $request->amount;
     if ($loan->balance <= 0) {
         $loan->balance = 0;
         $loan->status = 'paid';
     }
-
     $loan->save();
 
-    return back()->with('success', 'Repayment successful.');
+    return redirect()
+        ->route('student.loans.repay', $loan->id)
+        ->with('success', 'Repayment recorded successfully.');
 }
+
+public function showRepayForm($id)
+{
+    $loan = LoanApplication::with(['loanProduct', 'repayments'])
+        ->where('id', $id)
+        ->where('user_id', auth()->id())
+        ->firstOrFail();
+
+    return view('students.loans.repay', compact('loan'));
+}
+
 
 
 public function store(Request $request, $productId)

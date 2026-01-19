@@ -35,13 +35,15 @@ class AdminController extends Controller
 
     public function approve($id)
     {
-        $loan = LoanApplication::findOrFail($id);
-        $loan->status = 'approved';
-        $loan->approved_amount = $loan->loan_amount;
-        $loan->save();
+    $loan = LoanApplication::findOrFail($id);
+    $loan->status = 'approved';
+    $loan->approved_amount = $loan->loan_amount;
+    $loan->balance = $loan->loan_amount;
+    $loan->save();
 
-        return redirect()->back()->with('success','Loan approved.');
+    return redirect()->back()->with('success','Loan approved.');
     }
+
 
 
     public function reject($id)
