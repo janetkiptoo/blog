@@ -53,9 +53,7 @@ public function process_repayment(Request $request, $id)
     }
     $loan->save();
 
-    return redirect()
-        ->route('student.loans.repay', $loan->id)
-        ->with('success', 'Repayment recorded successfully.');
+    return redirect()->route('student.loans.repay', $loan->id) ->with('success', 'Repayment recorded successfully.');
 }
 
 public function showRepayForm($id)
