@@ -32,6 +32,7 @@
     <main class="flex-1 p-6">
         @yield('content')
     </main>
+    
 
 </body>
 </html>

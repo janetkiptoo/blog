@@ -32,7 +32,7 @@
     @endif
 
    
-@if($loan->repayments->count())
+@if($loan->repayments)
 <div class="mt-6 bg-white shadow rounded p-6">
     <h2 class="text-xl font-semibold mb-4">Repayment History</h2>
 
@@ -46,7 +46,7 @@
         <tbody>
             @foreach($loan->repayments as $repayment)
             <tr>
-                <td class="p-2">{{ optional($repayment->paid_at)->format('d M Y') }}</td>
+                <td class="p-2">{{ ($repayment->paid_at)->format('d M Y') }}</td>
                 <td class="p-2 text-right">{{ number_format($repayment->amount, 2) }}</td>
             </tr>
             @endforeach
@@ -55,16 +55,12 @@
 </div>
 @endif
 
-   
     @if($loan->status === 'paid')
-    <div class="mb-6 p-6 bg-green-100 text-green-800 shadow-lg rounded-lg">
-        This loan has been fully paid. Thank you.
+    <div class="mb-6 p-6 bg-green-100 text-green-800 shadow-lg rounded-lg"> This loan has been fully paid. Thank you.
     </div>
     @endif
 
-    <a href="{{ route('student.dashboard') }}"
-       class="inline-block mt-4 text-blue-600 underline">
-        Back to Dashboard
+    <a href="{{ route('student.dashboard') }}"class="inline-block mt-4 text-blue-600 underline"> Back to Dashboard
     </a>
 
 </div>

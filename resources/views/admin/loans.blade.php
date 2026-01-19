@@ -27,34 +27,12 @@
         <tr>
             <td class="p-3 border">{{ $loan->user->name }}</td>
             <td class="p-3 border">{{ $loan->loanProduct->product_name }}</td>
-
-            {{-- Original Loan --}}
-            <td class="p-3 border">
-                KES {{ number_format($loan->loan_amount, 2) }}
-            </td>
-
-            {{-- Amount Paid --}}
-            <td class="p-3 border text-green-700">
-                KES {{ number_format(
-                    $loan->loan_amount - ($loan->balance ?? $loan->loan_amount), 
-                    2
-                ) }}
-            </td>
-
-            {{-- Remaining Balance --}}
-            <td class="p-3 border text-red-600">
-                KES {{ number_format($loan->balance ?? $loan->loan_amount, 2) }}
-            </td>
-
-            {{-- Status --}}
-            <td class="p-3 border">
-                <span class="px-2 py-1 rounded text-sm
-                    {{ $loan->status === 'paid' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800' }}">
-                    {{ ucfirst($loan->status) }}
+            <td class="p-3 border">KES {{ number_format($loan->loan_amount, 2) }}</td>
+            <td class="p-3 border text-green-700">KES {{ number_format( $loan->loan_amount - ($loan->balance ?? $loan->loan_amount),  2) }}</td>
+            <td class="p-3 border text-red-600"> KES {{ number_format($loan->balance ?? $loan->loan_amount, 2) }}</td>
+            <td class="p-3 border"><span class="px-2 py-1 rounded text-sm {{ $loan->status === 'paid' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800' }}">{{ ucfirst($loan->status) }}
                 </span>
             </td>
-
-            {{-- Actions --}}
            <td class="p-2 flex gap-2">
                         @if($loan->status == 'pending')
                         <form action="{{ route('admin.loan.approve', $loan->id) }}" method="POST">
@@ -73,11 +51,4 @@
         @endforeach
     </tbody>
 </table>
-
-
-
-
-
-
-
-        @endsection
+@endsection

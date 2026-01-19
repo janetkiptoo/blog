@@ -4,7 +4,7 @@
         </div>
 
         <div >
-            <ul class=" text-black flex font-bold items-center gap-9">
+            <ul class=" text-white flex font-bold items-center gap-9">
                 <li><a href="/home" class=" hover:text-blue-200">HOME</a></li>
                 <li><a href="/about" class=" hover:text-blue-200">ABOUT</a></li>
                 <li><a href="/services" class=" hover:text-blue-200">SERVICES</a></li>
@@ -15,7 +15,7 @@
 
                 @if (Auth::check())
 
-            <form method="POST" action="{{ route('logout') }}" class="inline">
+            <form method="POST" action="{{ route('logout') }}" class="inline text-white">
                 @csrf
                 <button type="submit">Logout</button>
             </form>

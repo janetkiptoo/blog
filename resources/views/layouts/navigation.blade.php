@@ -13,14 +13,14 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('student.dashboard')" :active="request()->routeIs('student.dashboard')">
-                        {{ ('dashboard') }}
+                     Dashboard
                     </x-nav-link>
                     </div>
 
                     
                        <div class="hidden  space-x-8 sm:-my-px sm:ms-10 sm:flex text-white">
                         <x-nav-link :href="route('student.loans.products')" :active="request()->routeIs('student.loans.products')">
-                           loan products
+                           Loan products
                         </x-nav-link>
 </div>
 <div class="hidden  space-x-8 sm:-my-px sm:ms-10 sm:flex text-white">
