@@ -7,13 +7,30 @@
 
     <form action="{{ route('admin.loan-products.store') }}" method="POST">
         @csrf
-
-        <input name="product_name" placeholder="Product Name" class="w-full mb-3 border p-2">
-        <textarea name="description" placeholder="Description" class="w-full mb-3 border p-2"></textarea>
-        <input name="min_loan_amount" type="number" placeholder="Min Amount" class="w-full mb-3 border p-2">
-        <input name="max_loan_amount" type="number" placeholder="Max Amount" class="w-full mb-3 border p-2">
-        <input name="interest_rate" type="number" step="0.01" placeholder="Interest Rate" class="w-full mb-3 border p-2">
-        <input name="loan_term_months" type="number" placeholder="Loan Term (Months)" class="w-full mb-3 border p-2">
+        <div>
+        <label for="product_name" class="block text-sm font-medium text-gray-700">Product Name</label>
+        <input name="product_name"  class="w-full mb-3 border p-2">
+        </div>
+         <div>
+        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+        <textarea name="description" class="w-full mb-3 border p-2"></textarea>
+         </div>
+         <div>
+        <label for="min_loan_amount" class="block text-sm font-medium text-gray-700">Minimum Loan Amount</label>
+        <input name="min_loan_amount" type="number" class="w-full mb-3 border p-2">
+         </div>
+         <div>
+        <label for="max_loan_amount" class="block text-sm font-medium text-gray-700">Maximu Loan Amount</label>
+        <input name="max_loan_amount" type="number"  class="w-full mb-3 border p-2">
+         </div>
+         <div>
+        <label for="interest_rate" class="block text-sm font-medium text-gray-700">interest Rate</label>
+        <input name="interest_rate" type="number" step="0.01" class="w-full mb-3 border p-2">
+         </div>
+         <div>
+        <label for="Loan_term_months" class="block text-sm font-medium text-gray-700">loan Term(months)</label>
+        <input name="loan_term_months" type="number" class="w-full mb-3 border p-2">
+         </div>
 
         <button class="bg-blue-600 text-white px-4 py-2 rounded">
             Save Product

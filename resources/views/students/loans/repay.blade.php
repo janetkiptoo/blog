@@ -29,7 +29,7 @@
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded"> Repay Loan </button>
         </form>
     </div>
-    @endif
+ 
 
    
 @if($loan->repayments)
@@ -54,6 +54,7 @@
     </table>
 </div>
 @endif
+   @endif
 
     @if($loan->status === 'paid')
     <div class="mb-6 p-6 bg-green-100 text-green-800 shadow-lg rounded-lg"> This loan has been fully paid. Thank you.
