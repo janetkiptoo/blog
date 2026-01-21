@@ -3,8 +3,8 @@
 use App\Http\Controllers\Admin\LoanProductController as AdminLoanProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\WebController;
 use App\Http\Controllers\AdminRepaymentController;
+use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebController::class, 'home'])->name('web.home');
@@ -13,7 +13,7 @@ Route::get('/about', [WebController::class, 'about'])->name('web.about');
 Route::get('/services', [WebController::class, 'services'])->name('web.services');
 Route::get('/contact', [WebController::class, 'contact'])->name('web.contact');
 
-   Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
@@ -25,9 +25,8 @@ Route::get('/contact', [WebController::class, 'contact'])->name('web.contact');
 
     Route::resource('loan-products', AdminLoanProductController::class);
 
-    Route::get('/repayments', [AdminRepaymentController::class, 'index']) ->name('repayments.index');
+    Route::get('/repayments', [AdminRepaymentController::class, 'index'])->name('repayments.index');
 
     Route::get('/loans/{loan}/repayments', [AdminRepaymentController::class, 'show'])->name('repayments.show');
 
 });
-

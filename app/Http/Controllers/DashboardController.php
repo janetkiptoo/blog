@@ -16,6 +16,8 @@ class DashboardController extends Controller
         return view('dashboard', compact('user', 'loans'));
     }
 
+    
+
      public function showLoan($id)
     {
         $user = auth()->user();

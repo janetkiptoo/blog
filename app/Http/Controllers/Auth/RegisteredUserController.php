@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
             'institution' => ['required', 'string', 'max:255'],
             'course' => ['required', 'string', 'max:255'],
             'year_of_study' => ['required', 'string', 'max:255'],
-            'student_id' => ['required', 'string', 'max:255'],
+            'student_reg_no' => ['required', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller
             'institution' => $request->institution,
             'course' => $request->course,
             'year_of_study' => $request->year_of_study,
-            'student_id' => $request->student_id,
+            'student_reg_no' => $request->student_id,
             'password' => Hash::make($request->password),
         ]);
 

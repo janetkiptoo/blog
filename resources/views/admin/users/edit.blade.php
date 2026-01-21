@@ -14,31 +14,22 @@
 
             <div>
                 <label class="block font-semibold">Name</label>
-                <input type="text" name="name"
-                       value="{{ old('name', $user->name) }}"
-                       class="w-full border p-2 rounded">
+                <input type="text" name="name" value="{{ old('name', $user->name) }}"class="w-full border p-2 rounded">
             </div>
 
             <div>
                 <label class="block font-semibold">Email</label>
-                <input type="email" name="email"
-                       value="{{ old('email', $user->email) }}"
-                       class="w-full border p-2 rounded">
+                <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full border p-2 rounded">
             </div>
 
             <div>
                 <label class="block font-semibold">Phone</label>
-                <input type="text" name="phone"
-                       value="{{ old('phone', $user->phone) }}"
-                       class="w-full border p-2 rounded">
+                <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full border p-2 rounded">
             </div>
 
             <div>
                 <label class="block font-semibold">Student ID</label>
-                <input type="text"
-                       value="{{ $user->student_id }}"
-                       disabled
-                       class="w-full border p-2 rounded bg-gray-100">
+                <input type="text" value="{{ $user->student_id }}" disabled class="w-full border p-2 rounded bg-gray-100">
             </div>
 
             <div>
