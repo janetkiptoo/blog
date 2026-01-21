@@ -16,15 +16,6 @@ class LoanApplicationController extends Controller
         $product = LoanProduct::findOrFail($productId);
         return view('loans.apply', compact('product'));
     }
-   
-
-public function myLoans()
-{
-    $loans = LoanApplication::with('loanProduct')->where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
-
-    return view('students.loans.index', compact('loans'));
-}
-
 
 
 public function process_repayment(Request $request, $id)

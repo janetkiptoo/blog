@@ -46,7 +46,7 @@
         <tbody>
             @foreach($loan->repayments as $repayment)
             <tr>
-                <td class="p-2">{{ ($repayment->paid_at)->format('d M Y') }}</td>
+                <td class="p-2">{{ ($repayment->paid_at)}}</td>
                 <td class="p-2 text-right">{{ number_format($repayment->amount, 2) }}</td>
             </tr>
             @endforeach

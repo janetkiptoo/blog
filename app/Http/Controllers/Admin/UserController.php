@@ -104,8 +104,7 @@ public function store(Request $request)
          $user->delete();
 
         return redirect()
-            ->route('admin.users.index')
-            ->with('success', 'User deleted successfully');
+            ->route('admin.users.index')->with('success', 'User deleted successfully');
         //
     }
 }

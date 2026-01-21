@@ -12,7 +12,7 @@
         <table class="w-full border">
             <thead class="bg-gray-200">
                 <tr>
-                    <th class="p-2">Student</th>
+                    <th class="p-2 ">Student</th>
                     <th class="p-2">Email</th>
                     <th class="p-2">Product</th>
                     <th class="p-2">Amount</th>

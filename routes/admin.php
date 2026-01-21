@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\LoanProductController as AdminLoanProductControll
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WebController;
+use App\Http\Controllers\AdminRepaymentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebController::class, 'home'])->name('web.home');
@@ -24,6 +25,9 @@ Route::get('/contact', [WebController::class, 'contact'])->name('web.contact');
 
     Route::resource('loan-products', AdminLoanProductController::class);
 
+    Route::get('/repayments', [AdminRepaymentController::class, 'index']) ->name('repayments.index');
+
+    Route::get('/loans/{loan}/repayments', [AdminRepaymentController::class, 'show'])->name('repayments.show');
 
 });
 

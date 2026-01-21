@@ -21,8 +21,8 @@ Route::get('/contact', [WebController::class, 'contact'])->name('web.contact');
 
     Route::get('/loans', [StudentController::class, 'myLoans'])->name('loans.index');
     Route::get('/loans/{id}/repay', [LoanApplicationController::class, 'showRepayForm'])->name('loans.repay');
-    Route::get('/loans/{id}/repay', [StudentController::class, 'repayLoan'])->name('loans.repay');
-    Route::post('/loans/{id}/repay', [StudentController::class, 'process_repayment'])->name('loans.process_repayment')->middleware('auth');
+   
+    Route::post('/loans/{id}/repay', [LoanApplicationController::class, 'process_repayment'])->name('loans.process_repayment');
 
     Route::get('/loans/products', [LoanProductController::class, 'index'])->name('loans.products');
 

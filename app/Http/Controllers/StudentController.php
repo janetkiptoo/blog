@@ -48,12 +48,7 @@ class StudentController extends Controller
     }
 
    
-    public function repayLoan($id)
-    {
-        
-        $loan = LoanApplication::with('loanProduct')->where('id', $id)->where('user_id', auth()->id()) ->firstOrFail();
-        return view('students.loans.repay', compact('loan'));
-    }
+
      public function myLoans()
     {
         $loans = LoanApplication::with('loanProduct')
@@ -65,28 +60,5 @@ class StudentController extends Controller
     }
 
    
-    public function process_repayment(Request $request, $id)
-    {
-        $loan = LoanApplication::where('id', $id)
-                ->where('user_id', auth()->id())
-                ->firstOrFail();
-
-        $maxAmount = $loan->balance ?? $loan->loan_amount;
-
-        $request->validate(['amount' => "required|numeric|min:1|max:$maxAmount",
-        ]);
-
-        $payment = $request->amount;
-        $loan->balance = ($loan->balance ?? $loan->loan_amount) - $payment;
-
-        if ($loan->balance <= 0) {
-            $loan->balance = 0;
-            $loan->status = 'paid';
-        }
-
-        $loan->save();
-
-        return redirect()->route('student.loans.repay', $loan->id)
-                         ->with('success', "Payment of KES {$payment} successful.");
-    }
+   
 }
