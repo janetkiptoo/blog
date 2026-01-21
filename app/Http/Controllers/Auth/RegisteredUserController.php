@@ -49,7 +49,7 @@ class RegisteredUserController extends Controller
             'institution' => $request->institution,
             'course' => $request->course,
             'year_of_study' => $request->year_of_study,
-            'student_reg_no' => $request->student_id,
+            'student_reg_no' => $request->student_reg_no,
             'password' => Hash::make($request->password),
         ]);
 

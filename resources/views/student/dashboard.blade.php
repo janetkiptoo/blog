@@ -5,7 +5,7 @@
 
     <h1 class="text-3xl font-bold mb-6 text-center">Student Dashboard</h1>
 
-    <!-- User Info -->
+
     <div class="mb-6 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold mb-4">
             Welcome, {{ Auth::user()->name }}
@@ -43,11 +43,15 @@
                 View All Loans
             </a>
         </div>
+
     @else
         <div class="mb-6 p-6 bg-yellow-100 text-yellow-800 shadow-lg rounded-lg">
             You have no active loans. Apply for a loan to get started.
         </div>
     @endif
 
+    
+
 </div>
+
 @endsection

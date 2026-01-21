@@ -11,10 +11,7 @@
         <p> Welcome to student loan, a student-focused loan platform created to support learners in achieving their academic goals. We provide accessible, affordable, and transparent loan solutions to help students cover tuition, learning materials, and essential academic expenses. </p>
 
 
-    </div>
-    <div >
-        <!-- <img src="https://images.pexels.com/photos/35545648/pexels-photo-35545648.jpeg" class=" w-90  object-cover" alt="students studying"> -->
-    </div>
+   
 </section>
 
 @endsection

@@ -46,9 +46,9 @@
             <x-input-error :messages="$errors->get('year_of_study')" class="mt-2" />
         </div>
         <div class="mt-4">
-            <x-input-label for="student_id" :value="__('Student ID')" />
-            <x-text-input id="student_id" class="block mt-1 w-full" type="text" name="student_id" :value="old('student_id')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('student_id')" class="mt-2" />
+            <x-input-label for="student_reg_no" :value="__('student_reg_no')" />
+            <x-text-input id="student_reg_no" class="block mt-1 w-full" type="text" name="student_reg_no" :value="old('student_reg_no')" required autocomplete="username" />
+            <x-input-error :messages="$errors->get('student_reg_no')" class="mt-2" />
         </div>
 
         <!-- Password -->

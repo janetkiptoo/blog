@@ -62,15 +62,11 @@ public function store(Request $request, $productId)
     ]);
 
    
-    $exists = LoanApplication::where('user_id', $user->id)
-        ->where('loan_product_id', $productId)
-        ->whereIn('status', ['pending', 'approved'])
+    $exists = LoanApplication::where('user_id', $user->id)->where('loan_product_id', $productId)->whereIn('status', [ 'approved'])
         ->exists();
 
     if ($exists) {
-        return back()->withErrors([
-            'loan_amount' => 'You already have an active application for this loan product.'
-        ]);
+         return redirect()->route('student.loans.index') ->with('you have an existing loan prodct application');
     }
 
     
