@@ -44,14 +44,7 @@
             </a>
         </div>
 
-        <form action="/image-upload" method="POST" enctype="multipart/form-data">
-    @csrf
-    <div class="form-group">
-        <label for="image">Choose Image</label>
-        <input type="file" name="image" id="image" class="form-control">
-    </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
+     
 
 
     @else
@@ -60,7 +53,8 @@
         </div>
     @endif
 
-    
+
+ <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="Uploaded Image" style="max-width: 300px;">
 
 </div>
 

@@ -35,5 +35,7 @@
     </div>
     @endif
 
+    <img src="{{ asset('storage/'. $users->image) }}">
+
 </div>
 @endsection

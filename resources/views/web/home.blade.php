@@ -10,7 +10,6 @@
         <h1 class="text-gray-800  font-bold mb-8 text-2xl">Student loans made simple</h1>
         <p> Welcome to student loan, a student-focused loan platform created to support learners in achieving their academic goals. We provide accessible, affordable, and transparent loan solutions to help students cover tuition, learning materials, and essential academic expenses. </p>
 
-
    
 </section>
 

@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" class="grid grid-cols-2 gap-5 min-w-5xl"  enctype="multipart/form-data">
         @csrf
 
         <!-- Name -->
@@ -42,14 +42,25 @@
 
         <div class="mt-4">
             <x-input-label for="year_of_study" :value="__('Year of Study')" />
-            <x-text-input id="year_of_study" class="block mt-1 w-full" type="number" name="year_of_study" :value="old('year_of_study')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('year_of_study')" class="mt-2" />
+             <select name="year_of_study" class="w-full border p-2 rounded">
+                    <option value="year_of_study" >1 </option>
+                     <option value="year_of_study" > 2</option>
+                     <option value="year_of_study" >3</option>
+                     <option value="year_of_study" >4</option>
+                   </select>
         </div>
         <div class="mt-4">
             <x-input-label for="student_reg_no" :value="__('student_reg_no')" />
             <x-text-input id="student_reg_no" class="block mt-1 w-full" type="text" name="student_reg_no" :value="old('student_reg_no')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('student_reg_no')" class="mt-2" />
         </div>
+        
+           <div class="form-group">
+            <label for="image">upload ID Image</label>
+             <input type="file" name="image" id="image" class="form-control">
+            <x-input-error :messages="$errors->get('image')" class="mt-2" />
+           </div>
+             
 
         <!-- Password -->
         <div class="mt-4">

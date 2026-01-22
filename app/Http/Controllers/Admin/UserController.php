@@ -46,8 +46,10 @@ public function store(Request $request)
         'institution' => 'required',
         'course' => 'required',
         'year_of_study' => 'required',
-        'student_reg_no' =>'required'
+        'student_reg_no' =>'required',
+        'image' => 'required|image|mimes:jpeg,png,jpg|max:4096',
     ]);
+    $path = $request->file('image')->store('photos', 'public');
 
     User::create([
         'name' => $request->name,
@@ -60,6 +62,8 @@ public function store(Request $request)
         'course' => $request->course,
         'year_of_study' => $request->year_of_study,
         'student_reg_no' => $request->student_reg_no,
+        'image' => $path,
+        
     ]);
 
     return redirect()
