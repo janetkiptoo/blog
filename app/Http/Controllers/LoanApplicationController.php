@@ -66,7 +66,7 @@ public function store(Request $request, $productId)
         ->exists();
 
     if ($exists) {
-         return redirect()->route('student.loans.index') ->with('you have an existing loan prodct application');
+         return redirect()->route('student.loans.index') ->with('error','you have an existing loan product application');
     }
 
     

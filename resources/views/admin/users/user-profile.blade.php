@@ -3,7 +3,7 @@
 @section('title', 'Users Management')
 
 @section('content')
-    <div class="max-w-7xl mx-auto py-6 grid  gap-6">
+    <div class=" py-6 grid  gap-6">
     <div class="flex justify-between items-center mb-4">
     <h2 class="text-xl font-semibold">Users</h2>
      <a href="{{ route('admin.users.create') }}"class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"> + Add User </a>

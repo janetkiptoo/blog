@@ -3,7 +3,7 @@
 @section('title', 'loans')
 
 @section('content')
-<div class="max-w-3xl mx-auto py-6">
+<div class=" py-6">
 
     
   <div id="loans" class="mb-8 bg-white p-6 rounded shadow">

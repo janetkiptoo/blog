@@ -3,7 +3,7 @@
 @section('title', 'View User')
 
 @section('content')
-<div class="max-w-4xl mx-auto py-6">
+<div class="py-6">
 
     <div class="bg-white p-6 rounded shadow">
         <h2 class="text-2xl font-bold mb-6">User Details</h2>

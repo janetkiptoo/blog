@@ -3,7 +3,7 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-<div class="max-w-7xl mx-auto py-6">
+<div class=" py-6">
 <h1 class="text-2xl font-bold mb-4">Loan Repayment Details</h1>
 
 <p><strong>Student:</strong> {{ $loan->user->name }}</p>

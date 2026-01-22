@@ -44,6 +44,16 @@
             </a>
         </div>
 
+        <form action="/image-upload" method="POST" enctype="multipart/form-data">
+    @csrf
+    <div class="form-group">
+        <label for="image">Choose Image</label>
+        <input type="file" name="image" id="image" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+
     @else
         <div class="mb-6 p-6 bg-yellow-100 text-yellow-800 shadow-lg rounded-lg">
             You have no active loans. Apply for a loan to get started.
