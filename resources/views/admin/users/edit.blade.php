@@ -28,8 +28,8 @@
             </div>
 
             <div>
-                <label class="block font-semibold">Student ID</label>
-                <input type="text" value="{{ $user->student_id }}" disabled class="w-full border p-2 rounded bg-gray-100">
+                <label class="block font-semibold">Student_reg_no</label>
+                <input type="text" value="{{ $user->student_reg_no }}" disabled class="w-full border p-2 rounded bg-gray-100">
             </div>
 
             <div>

@@ -32,6 +32,31 @@
                 <option value="admin">Admin</option>
             </select>
         </div>
+         <div class="mb-4">
+            <label class="block font-medium">national_id</label>
+            <input type="national_id" name="national_id" class="w-full border rounded p-2" required>
+        </div>
+         <div class="mb-4">
+            <label class="block font-medium">phone</label>
+            <input type="phone" name="phone" class="w-full border rounded p-2" required>
+        </div>
+         <div class="mb-4">
+            <label class="block font-medium">institution</label>
+            <input type="institution" name="institution" class="w-full border rounded p-2" required>
+        </div>
+         <div class="mb-4">
+            <label class="block font-medium">course</label>
+            <input type="course" name="course" class="w-full border rounded p-2" required>
+        </div>
+         <div class="mb-4">
+            <label class="block font-medium">year_of_study</label>
+            <input type="year_of_study" name="year_of_study" class="w-full border rounded p-2" required>
+        </div>
+
+         <div class="mb-4">
+            <label class="block font-medium">student_reg_no</label>
+            <input type="student_reg_no" name="student_reg_no" class="w-full border rounded p-2" required>
+        </div>
 
         <button class="bg-blue-600 text-white px-4 py-2 rounded"> Create User</button>
     </form>

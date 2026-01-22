@@ -12,7 +12,7 @@
             <p><strong>Name:</strong> {{ $user->name }}</p>
             <p><strong>Email:</strong> {{ $user->email }}</p>
             <p><strong>Phone:</strong> {{ $user->phone }}</p>
-            <p><strong>Student ID:</strong> {{ $user->student_id }}</p>
+            <p><strong>Nationa_id:</strong> {{ $user->national_id }}</p>
             <p><strong>Role:</strong> {{ $user->role }}</p>
             <p><strong>Created At:</strong> {{ $user->created_at }}</p>
         </div>

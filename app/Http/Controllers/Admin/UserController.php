@@ -40,7 +40,13 @@ public function store(Request $request)
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users',
         'password' => 'required|min:6',
-        'role' => 'required'
+        'role' => 'required',
+        'national_id' => 'required',
+        'phone' =>'required',
+        'institution' => 'required',
+        'course' => 'required',
+        'year_of_study' => 'required',
+        'student_reg_no' =>'required'
     ]);
 
     User::create([
@@ -48,6 +54,12 @@ public function store(Request $request)
         'email' => $request->email,
         'password' => Hash::make($request->password),
         'role' => $request->role,
+        'national_id' =>$request->national_id,
+         'phone' => $request->phone,
+        'institution' => $request->institution,
+        'course' => $request->course,
+        'year_of_study' => $request->year_of_study,
+        'student_reg_no' => $request->student_reg_no,
     ]);
 
     return redirect()

@@ -10,9 +10,7 @@ class AdminRepaymentController extends Controller
 {
       public function index()
     {
-        $repayments = Repayment::with(['loan.user', 'loan.loanProduct'])
-            ->orderBy('paid_at', 'desc')
-            ->paginate(20);
+        $repayments = Repayment::with(['loan.user', 'loan.loanProduct'])->orderBy('paid_at', 'desc')->paginate(20);
 
         return view('admin.repayments.index', compact('repayments'));
     }

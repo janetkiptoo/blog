@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminRepaymentController;
 use App\Http\Controllers\WebController;
+use App\Http\Controllers\AdminDashboardController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebController::class, 'home'])->name('web.home');
@@ -15,7 +17,7 @@ Route::get('/contact', [WebController::class, 'contact'])->name('web.contact');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
 
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/loans', [AdminController::class, 'loans'])->name('loans');
     Route::post('/loans/{id}/approve', [AdminController::class, 'approve'])->name('loan.approve');
