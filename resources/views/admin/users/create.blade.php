@@ -7,7 +7,7 @@
 
     <h2 class="text-xl font-semibold mb-4">Add New User</h2>
 
-    <form method="POST" action="{{ route('admin.users.store') }}">
+    <form method="POST" action="{{ route('admin.users.store') }}"  enctype="multipart/form-data">
         @csrf
 
         <div class="mb-4">
@@ -50,13 +50,22 @@
         </div>
          <div class="mb-4">
             <label class="block font-medium">year_of_study</label>
-            <input type="year_of_study" name="year_of_study" class="w-full border rounded p-2" required>
+             <select name="year_of_study" class="w-full border p-2 rounded">
+                    <option value="year_of_study" >1 </option>
+                     <option value="year_of_study" >2</option>
+                     <option value="year_of_study" >3</option>
+                     <option value="year_of_study" >4</option>
+             </select>
         </div>
 
          <div class="mb-4">
             <label class="block font-medium">student_reg_no</label>
             <input type="student_reg_no" name="student_reg_no" class="w-full border rounded p-2" required>
         </div>
+
+        <div class="mb-4">
+            <label for="image">upload ID Image</label>
+             <input type="file" name="image" id="image" class="form-control">
 
         <button class="bg-blue-600 text-white px-4 py-2 rounded"> Create User</button>
     </form>

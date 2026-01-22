@@ -44,7 +44,7 @@
             <x-input-label for="year_of_study" :value="__('Year of Study')" />
              <select name="year_of_study" class="w-full border p-2 rounded">
                     <option value="year_of_study" >1 </option>
-                     <option value="year_of_study" > 2</option>
+                     <option value="year_of_study" >2</option>
                      <option value="year_of_study" >3</option>
                      <option value="year_of_study" >4</option>
                    </select>

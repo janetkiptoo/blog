@@ -44,9 +44,6 @@
             </a>
         </div>
 
-     
-
-
     @else
         <div class="mb-6 p-6 bg-yellow-100 text-yellow-800 shadow-lg rounded-lg">
             You have no active loans. Apply for a loan to get started.

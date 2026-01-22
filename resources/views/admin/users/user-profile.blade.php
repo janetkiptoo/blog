@@ -29,15 +29,12 @@
                     <td class="p-2">{{ $user->email }}</td>
                     <td class="p-2">{{ $user->role }}</td>
                     <td class="p-2">
-                    <a href="{{ route('admin.users.show', $user) }}"class="text-blue-600 underline">View</a>
-
-        
-                    </td>
+                    <a href="{{ route('admin.users.show', $user) }}"class="text-blue-600 underline">View</a> </td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-    
-
+        
 </div>
+
 @endsection
