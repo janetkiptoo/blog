@@ -26,8 +26,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/loan_products/{productId}/apply', [LoanApplicationController::class, 'index'])->name('loan.apply');
     Route::post('/loan_products/{productId}/apply', [LoanApplicationController::class, 'store'])->name('loan.store');
 
-   
-    
+    Route::delete('/loans/{loan_application}', [LoanApplicationController::class, 'destroy'])->name('loans.destroy');
 
     
 });

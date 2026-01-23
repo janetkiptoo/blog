@@ -14,15 +14,15 @@
  <table class="w-full border bg-white">
         <thead class="bg-gray-200">
         <tr>
-            <th class="p-2 border border-gray-3002">Date</th>
-            <th class="p-2  border border-gray-300text-right">Amount</th>
+            <th class="p-2 border border-gray-300">Date</th>
+            <th class="p-2  border border-gray-300">Amount</th>
         </tr>
     </thead>
     <tbody>
         @foreach($loan->repayments as $repayment)
        <tr class="border-t">
             <td class="p-2 border border-gray-300">{{$repayment->paid_at }}</td>
-            <td class="p-2 border border-gray-300 text-right">{{ number_format($repayment->amount, 2) }}</td>
+            <td class="p-2 border border-gray-300">{{ number_format($repayment->amount, 2) }}</td>
            
         </tr>
         @endforeach

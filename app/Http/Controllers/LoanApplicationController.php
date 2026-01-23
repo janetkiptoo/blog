@@ -90,5 +90,22 @@ public function store(Request $request, $productId)
 
     return redirect()->route('student.dashboard') ->with('success', 'Loan application submitted successfully.');
 }
+public function destroy(LoanApplication $loan_application)
+{
+    $user = auth()->user();
+
+    if ($loan_application->user_id !== $user->id) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    if ($loan_application->status !== 'pending') {
+        return redirect()->route('student.loans.index')->with('error', 'Only pending loan applications can be deleted.');
+    }
+
+    $loan_application->delete();
+
+    return redirect()->route('student.loans.index')->with('success', 'Loan application deleted successfully.');
+}
+
 
 }
