@@ -44,7 +44,8 @@ public function process_repayment(Request $request, $id)
     }
     $loan->save();
 
-    return redirect()->route('student.loans.repay', $loan->id) ->with('success', 'Repayment recorded successfully.');
+    return redirect()->route('student.loans.repay', $loan->id) 
+                      ->with('success', 'Repayment recorded successfully.');
 }
 
 public function showRepayForm($id)
@@ -66,7 +67,8 @@ public function store(Request $request, $productId)
         ->exists();
 
     if ($exists) {
-         return redirect()->route('student.loans.index') ->with('error','you have an existing loan product application');
+         return redirect()->route('student.loans.index') 
+                         ->with('error','you have an existing loan product application');
     }
 
     

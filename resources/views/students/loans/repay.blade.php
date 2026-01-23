@@ -59,6 +59,9 @@
     @if($loan->status === 'paid')
     <div class="mb-6 p-6 bg-green-100 text-green-800 shadow-lg rounded-lg"> This loan has been fully paid. Thank you.
     </div>
+    @else
+   <div class="mb-6 p-6 bg-green-100 text-green-800 shadow-lg rounded-lg"> This loan has been partially paid. Thank you.
+    </div>
     @endif
 
     <a href="{{ route('student.dashboard') }}"class="inline-block mt-4 text-blue-600 underline"> Back to Dashboard
