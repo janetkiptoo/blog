@@ -23,7 +23,7 @@ class AdminController extends Controller
     public function users()
     {
         $users = User::all();
-        return view('admin.users', compact('users'));
+        return view('admin.users.user-profile', compact('users'));
     }
 
     public function products()

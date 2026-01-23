@@ -51,7 +51,7 @@
     @endif
 
 
- <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="Uploaded Image" style="max-width: 300px;">
+
 
 </div>
 @if (session('success'))

@@ -50,12 +50,12 @@
        
         <div class="bg-blue-50 p-6 rounded shadow">
             <p class="text-gray-600">Total Applied Amount</p>
-            <h2 class="text-2xl font-bold text-blue-700">{{$totalappliedAmount}}</h2>
+            <h2 class="text-2xl font-bold text-blue-700">KES:{{$totalappliedAmount}}</h2>
         </div>
 
         <div class="bg-indigo-50 p-6 rounded shadow">
             <p class="text-gray-600">Total Approved Amount</p>
-            <h2 class="text-2xl font-bold text-indigo-700">{{$totalapprovedAmount}}</h2>
+            <h2 class="text-2xl font-bold text-indigo-700">KES:{{$totalapprovedAmount}}</h2>
         </div>
 
     </div>

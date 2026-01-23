@@ -30,7 +30,7 @@
             <td class="p-3 border">KES {{ number_format($loan->loan_amount, 2) }}</td>
             <td class="p-3 border text-green-700">KES {{ number_format( $loan->loan_amount - ($loan->balance ?? $loan->loan_amount),  2) }}</td>
             <td class="p-3 border text-red-600"> KES {{ number_format($loan->balance ?? $loan->loan_amount, 2) }}</td>
-            <td class="p-3 border"><span class="px-2 py-1 rounded text-sm {{ $loan->status === 'paid' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800' }}">{{ ucfirst($loan->status) }}
+            <td class="p-3 border"><span class="px-2 py-1 rounded text-sm {{ $loan->status === 'paid' ? 'bg-green-200 ' : 'bg-yellow-200 ' }} {{ $loan->status === 'rejected' ? 'bg-red-200 ' : ' ' }} ">{{ ucfirst($loan->status) }}
                 </span>
             </td>
            <td class="p-2 flex gap-2">

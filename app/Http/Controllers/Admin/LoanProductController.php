@@ -81,8 +81,7 @@ class LoanProductController extends Controller
 
         $loan_product->update($request->all());
 
-        return redirect()->route('admin.loan-products.index')
-                         ->with('success', 'Loan product updated successfully');
+        return redirect()->route('admin.loan-products.index')->with('success', 'Loan product updated successfully');
         //
     }
 
@@ -93,7 +92,6 @@ class LoanProductController extends Controller
     {
         $loan_product->delete();
 
-        return redirect()->route('admin.loan-products.index')
-                         ->with('success', 'Loan product deleted successfully');
+        return redirect()->route('admin.loan-products.index')->with('success', 'Loan product deleted successfully');
     }
 }
