@@ -28,7 +28,7 @@ class AdminDashboardController extends Controller
         $totalappliedAmount = LoanApplication::sum('loan_amount');
 
         $totalapprovedAmount = LoanApplication::where('status', 'approved')
-            ->sum('loan_amount');
+         ->sum('loan_amount');
 
         return view('admin.dashboard', compact(
             'totalusers',

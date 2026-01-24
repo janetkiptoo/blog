@@ -14,6 +14,26 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
 
+   public function index(Request $request)
+{
+    $query = LoanApplication::with(['user', 'loanProduct']);
+
+    if ($request->filled('student')) {
+        $query->whereHas('user', function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->student . '%')
+              ->orWhere('student_reg_no', 'like', '%' . $request->student . '%');
+        });
+    }
+
+    $applications = $query->latest()->paginate(10)->withQueryString();
+    $loanProducts = LoanProduct::all();
+    $loans = LoanApplication::with(['user', 'loanProduct'])->get();
+
+    return view('admin.loans', compact('applications', 'loanProducts','loans'));
+}
+
+ 
+
     public function loans()
     {
         $loans = LoanApplication::with(['user', 'loanProduct'])->get();

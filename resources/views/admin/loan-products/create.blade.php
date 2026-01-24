@@ -24,11 +24,11 @@
             <input name="max_loan_amount" type="number" class="w-full mb-3 border p-4 rounded-md">
         </div>
         <div>
-            <label for="interest_rate" class="block text-sm font-medium text-black-700">interest Rate</label>
+            <label for="interest_rate" class="block text-sm font-medium text-black-700">Interest Rate(%)</label>
             <input name="interest_rate" type="number" step="0.01" class="w-full mb-3 border p-4 rounded-md">
         </div>
         <div>
-            <label for="Loan_term_months" class="block text-sm font-medium text-black-700">loan Term(months)</label>
+            <label for="Loan_term_months" class="block text-sm font-medium text-black-700">Loan Term(months)</label>
             <input name="loan_term_months" type="number" class="w-full mb-3 border p-4 rounded-md">
         </div>
 

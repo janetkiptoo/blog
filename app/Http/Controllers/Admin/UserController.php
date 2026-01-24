@@ -15,6 +15,7 @@ class UserController extends Controller
     public function index()
     {
          $users = User::all();
+         
         return view('admin.users.user-profile', compact('users'));
         //
     }
@@ -66,9 +67,7 @@ public function store(Request $request)
         
     ]);
 
-    return redirect()
-        ->route('admin.users.index')
-        ->with('success', 'User created successfully');
+    return redirect() ->route('admin.users.index')->with('success', 'User created successfully');
 }
 
 
@@ -107,9 +106,7 @@ public function store(Request $request)
             'name', 'email', 'phone', 'role'
          ]));
 
-        return redirect()
-            ->route('admin.users.show', $user)
-            ->with('success', 'User updated successfully');
+        return redirect() ->route('admin.users.show', $user) ->with('success', 'User updated successfully');
     }
 
     /**

@@ -80,7 +80,7 @@ public function store(Request $request, $productId)
         'institution' => $user->institution,
         'course' => $user->course,
         'year_of_study' => $user->year_of_study,
-        'student_reg_no' => $user->student_id,
+        'student_reg_no' => $user->student_reg_no,
         'user_id' => $user->id,
         'loan_product_id' => $productId,
         'loan_amount' => $request->loan_amount,

@@ -16,6 +16,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/loans', [AdminController::class, 'loans'])->name('loans');
+    Route::get('/loans', [AdminController::class, 'index'])->name('loans');
     Route::post('/loans/{id}/approve', [AdminController::class, 'approve'])->name('loan.approve');
     Route::post('/loans/{id}/reject', [AdminController::class, 'reject'])->name('loan.reject');
 

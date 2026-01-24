@@ -26,7 +26,7 @@ class User extends Authenticatable
         'course',
         'year_of_study',
         'image',
-        'student_id',           
+        'student_reg_no',           
         'password',
     ];
 
