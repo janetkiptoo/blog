@@ -60,6 +60,7 @@ public function store(Request $request, $productId)
     $user = auth()->user();
     $request->validate([
         'loan_amount' => 'required|numeric|min:1',
+         'terms_accepted' => 'accepted',
     ]);
 
    
@@ -72,7 +73,7 @@ public function store(Request $request, $productId)
     }
 
     
-    LoanApplication::create([
+    $loan = LoanApplication::create([
         'name' => $user->name,
         'email' => $user->email,
         'phone' => $user->phone,
@@ -88,7 +89,13 @@ public function store(Request $request, $productId)
         'approved_amount' => null,
     ]);
 
-    return redirect()->route('student.dashboard') ->with('success', 'Loan application submitted successfully.');
+  
+
+
+   
+
+return redirect()->route('student.guarantors.create', $loan->id);
+
 }
 public function destroy(LoanApplication $loan_application)
 {

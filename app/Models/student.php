@@ -15,7 +15,7 @@ class Student extends Model
       'institution',
       'course',
       'year_of_study',
-      'student_reg_no',
+      'student_reg_no'
 
     
     

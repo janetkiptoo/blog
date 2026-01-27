@@ -15,13 +15,25 @@
             <div class="mb-4">
                 <label for="term_months" class="block text-gray-700">Loan Term (months)</label>
                 <input type="number" name="term_months" id="term_months"   class="w-full border rounded px-3 py-2"  value="{{ $product->loan_term_months }}" readonly>            
-                    </div>            
+                    </div>   
+                    
+                        <div class="form-check mb-4">
+    <input type="checkbox" name="terms_accepted" value="1" class="form-check-input" id="terms_accepted" required>
+    <label class="form-check-label" for="terms_accepted">
+        I accept the 
+        <a href="{{ route('terms') }}" target="_blank" class="text-blue-600 underline">
+            Terms & Conditions
+        </a>
+    </label>
+</div>
                  
             <div class="flex justify-end">
                 <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
-                    Submit Application
+                    Continue
                 </button>           
             </div>    
         </form>
+
+       
     </div>
 @endsection

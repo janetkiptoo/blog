@@ -9,6 +9,8 @@ Route::get('/home', [WebController::class, 'home']);
 Route::get('/about', [WebController::class, 'about'])->name('web.about');
 Route::get('/services', [WebController::class, 'services'])->name('web.services');
 Route::get('/contact', [WebController::class, 'contact'])->name('web.contact');
+Route::get('/terms', function () {return view('terms');})->name('terms');
+
 
 Route::middleware('auth')->prefix('profile')->name('profile.')->group(function () {
     Route::get('/', [ProfileController::class, 'edit'])->name('edit');

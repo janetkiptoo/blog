@@ -5,6 +5,7 @@ use App\Http\Controllers\LoanProductController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\GuarantorController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,19 @@ use Illuminate\Support\Facades\Route;
     Route::post('/loan_products/{productId}/apply', [LoanApplicationController::class, 'store'])->name('loan.store');
 
     Route::delete('/loans/{loan_application}', [LoanApplicationController::class, 'destroy'])->name('loans.destroy');
+
+    
+    Route::get('/guarantors/{loan}/create', [GuarantorController::class, 'create'])->name('guarantors.create');
+    Route::post('/guarantors/{loan}', [GuarantorController::class, 'store'])->name('guarantors.store');
+
+     
+      
+   
+
+
+    
+    
+    
 
     
 });
