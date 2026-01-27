@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\GuarantorController;
+use App\Http\Controllers\TermController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -33,7 +34,8 @@ use Illuminate\Support\Facades\Route;
     Route::get('/guarantors/{loan}/create', [GuarantorController::class, 'create'])->name('guarantors.create');
     Route::post('/guarantors/{loan}', [GuarantorController::class, 'store'])->name('guarantors.store');
 
-     
+     Route::get('/terms', [TermController::class, 'show'])->name('terms');
+
       
    
 
