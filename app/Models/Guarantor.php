@@ -15,7 +15,8 @@ class Guarantor extends Model
         'email',
         'consent_given',
         'employment_status',
-        'physical_address'
+        'physical_address',
+        'image',
     ];
 
     public function loan()

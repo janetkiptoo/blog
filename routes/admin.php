@@ -6,7 +6,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminRepaymentController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\AdminDashboardController;
-
+use App\Http\Controllers\AdminGuarantorController;
+use App\Http\Controllers\AdminTermsController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,9 +24,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('users', UserController::class);
 
     Route::resource('loan-products', AdminLoanProductController::class);
+      Route::resource('terms', AdminTermsController::class);
 
     Route::get('/repayments', [AdminRepaymentController::class, 'index'])->name('repayments.index');
 
     Route::get('/loans/{loan}/repayments', [AdminRepaymentController::class, 'show'])->name('repayments.show');
+    Route::get('/loans/{loan}/guarantors', [AdminGuarantorController::class, 'index'])->name('loans.guarantors');
+
+   
+
 
 });

@@ -23,7 +23,7 @@
         </div>
     @endif
 
-    <form action="{{ route('student.guarantors.store', $loan->id) }}" method="POST" class="space-y-5">
+    <form action="{{ route('student.guarantors.store', $loan->id) }}" method="POST" class="space-y-5"  enctype="multipart/form-data" >
         @csrf
 
         <div>
@@ -54,10 +54,34 @@
                    required>
         </div>
 
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Physical Address</label>
+            <input type="text" name="physical_address"
+                   class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                   required>
+        </div>
+
         <div>
             <label class="block text-sm font-medium text-gray-700">Email (Optional)</label>
             <input type="email" name="email"
                    class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        
+
+         <div>
+            <label class="block text-sm font-medium text-gray-700">Employment Status</label>
+            <select name="employment_status"  class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">>
+                <option value="emloyed">Employed</option>
+                <option value="not_employed">Not employed</option>
+            </select>
+        </div>
+
+        
+        <div >
+            <label for="image" class="block text-gray-700 font-semibold">Upload Guarantor  ID Image</label>
+            <input type="file" name="image" id="image" class="w-full border rounded px-3 py-2"  required>
+            
         </div>
 
         <div class="flex items-center">

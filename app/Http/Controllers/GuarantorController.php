@@ -21,6 +21,7 @@ class GuarantorController extends Controller
      */
     public function store(Request $request, LoanApplication $loan)
     {
+        // Validate input including image
         $request->validate([
             'name' => 'required|string|max:255',
             'relationship' => 'required|string|max:100',
@@ -28,9 +29,16 @@ class GuarantorController extends Controller
             'phone' => 'required|string|max:15',
             'email' => 'nullable|email|max:255',
             'consent_given' => 'required|boolean',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:4096', // max 4MB
+            'employment_status' => 'nullable|string|max:100',
+            'physical_address' => 'nullable|string|max:255',
         ]);
 
-        $loan->guarantors()->create([
+        // Handle file upload first
+        $path = $request->file('image')->store('guarantors', 'public');
+
+        // Prepare data for insertion
+        $requestData = [
             'name' => $request->name,
             'relationship' => $request->relationship,
             'national_id' => $request->national_id,
@@ -38,8 +46,12 @@ class GuarantorController extends Controller
             'email' => $request->email,
             'consent_given' => $request->consent_given,
             'employment_status' => $request->employment_status,
-            'physical_address' => $request->physical_address,       
-         ]);
+            'physical_address' => $request->physical_address,
+            'image' => $path,
+        ];
+
+        // Create guarantor linked to this loan
+        $loan->guarantors()->create($requestData);
 
         return redirect()
             ->route('student.guarantors.create', $loan->id)
