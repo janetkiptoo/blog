@@ -17,7 +17,7 @@
         <a href="{{ route('admin.dashboard') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Dashboard</a>
         <a href="{{ route('admin.users.index') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Users</a>
         <a href="{{ route('admin.loans') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Applications</a>
-        <a href="{{ route('admin.terms.index') }}"> Edit Terms & Conditions</a>
+        <a href="{{ route('admin.terms.index') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2"> Edit Terms & Conditions</a>
 
         <a href="{{ route('admin.loan-products.index') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products</a>
         <a href="{{ route('admin.loan-products.create') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products add</a>

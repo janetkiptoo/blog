@@ -98,9 +98,6 @@
  
 
 
-    <div class="mt-6">
-        {{ $applications->links() }}
-    </div>
 
 </div>
 @endsection

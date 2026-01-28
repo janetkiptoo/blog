@@ -10,7 +10,16 @@ class LoanRepayment extends Model
      protected $fillable = [
         'loan_application_id',
         'amount',
-        'paid_at'
+        'interest',
+        'principal',
+        'balance_before',
+        'balance_after',
+        'payment_method',
+        'reference',
+        
+    ];
+     protected $casts = [
+        'paid_at' => 'datetime',
     ];
 
     public function loan()

@@ -22,30 +22,61 @@ public function process_repayment(Request $request, $id)
 {
     $user = auth()->user();
 
-    $loan = LoanApplication::where('id', $id)->where('user_id', $user->id)->where('status', 'approved')->firstOrFail();
+    $loan = LoanApplication::where('id', $id)
+                ->where('user_id', $user->id)
+                ->where('status', 'approved')
+                ->firstOrFail();
 
-    $maxAmount = $loan->balance ?? $loan->loan_amount;
+    $paymentAmount = $request->amount;
+    $balanceBefore = $loan->balance;
 
-    $request->validate([
-        'amount' => "required|numeric|min:1|max:$maxAmount",
-    ]);
+    // interest calculation
+    $interest = $loan->balance * ($loan->interest_rate / 100);
 
+    // Check late payment
+    $penalty = 0;
+    $lastRepayment = $loan->repayments()->latest('paid_at')->first();
 
-    LoanRepayment::create([
-        'loan_application_id' => $loan->id,
-        'amount' => $request->amount,
-        'paid_at' => now(), 
-    ]);
-    
-    $loan->balance = $maxAmount - $request->amount;
-    if ($loan->balance <= 0) {
-        $loan->balance = 0;
-        $loan->status = 'paid';
+    if ($lastRepayment) {
+        $nextDueDate = $lastRepayment->paid_at->addMonth();
+        if (now()->gt($nextDueDate)) {
+            $monthsLate = now()->diffInMonths($nextDueDate);
+            $penalty = $loan->monthly_payment * 0.02 * $monthsLate; // 2% per late month
+        }
     }
+
+    $principalPaid = $paymentAmount - $interest - $penalty;
+
+    if ($principalPaid <= 0) {
+        return back()->withErrors('Payment is too low to cover interest and penalty.');
+    }
+
+    // Update loan
+    $loan->balance -= $principalPaid;
+    if ($loan->balance < 0) {
+        $loan->balance = 0;
+        $loan->status = 'completed';
+    }
+    $loan->total_paid += $paymentAmount;
+    $loan->late_penalty += $penalty;
     $loan->save();
 
-    return redirect()->route('student.loans.repay', $loan->id) 
-                      ->with('success', 'Repayment recorded successfully.');
+    // Record repayment
+    LoanRepayment::create([
+        'loan_application_id' => $loan->id,
+        'amount' => $paymentAmount,
+        'interest' => $interest,
+        'principal' => $principalPaid,
+        'balance_before' => $balanceBefore,
+        'balance_after' => $loan->balance,
+        'payment_method' => $request->payment_method,
+        'reference' => $request->reference,
+        'paid_at' => now(),
+        'late_penalty' => $penalty,
+    ]);
+
+    return redirect()->route('student.loans.repay', $loan->id)
+                     ->with('success', 'Repayment recorded successfully.');
 }
 
 public function showRepayForm($id)
@@ -60,19 +91,23 @@ public function store(Request $request, $productId)
     $user = auth()->user();
     $request->validate([
         'loan_amount' => 'required|numeric|min:1',
-         'terms_accepted' => 'accepted',
+        'term_months' => 'required|integer|min:1',
     ]);
 
+    $loanAmount = $request->loan_amount;
+    $termMonths = $request->term_months;
+    $interestRate =  $request->interest_rate;
+    $gracePeriod = 1;      
+        
+
+    // Interest only during repayment period
+    $totalInterest = $loanAmount * ($interestRate / 100) * $termMonths;
+    $totalPayable = $loanAmount + $totalInterest;
+    $monthlyPayment = $totalPayable / $termMonths;
+
+    $repaymentStartDate = now()->addMonth(); 
    
-    $exists = LoanApplication::where('user_id', $user->id)->where('loan_product_id', $productId)->whereIn('status', [ 'approved'])
-        ->exists();
 
-    if ($exists) {
-         return redirect()->route('student.loans.index') 
-                         ->with('error','you have an existing loan product application');
-    }
-
-    
     $loan = LoanApplication::create([
         'name' => $user->name,
         'email' => $user->email,
@@ -83,10 +118,16 @@ public function store(Request $request, $productId)
         'year_of_study' => $user->year_of_study,
         'student_reg_no' => $user->student_reg_no,
         'user_id' => $user->id,
-        'loan_product_id' => $productId,
+        'loan_product_id' => $productId,   
         'loan_amount' => $request->loan_amount,
+        'term_months' => $request->term_months,
+        'interest_rate' => $request->interest_rate,
+        'balance' => $request->loan_amount,
+        'total_paid' => round($totalPayable, 2),
+        'monthly_payment' => round($monthly_payment, 2),
+        'repayment_start_date' => $repaymentStartDate,
         'status' => 'pending',
-        'approved_amount' => null,
+
     ]);
 
   

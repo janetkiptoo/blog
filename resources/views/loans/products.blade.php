@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="max-w-4xl mx-auto py-6 space-y-4">
+    <div class="max-w-4xl mx-auto py-8 space-y-4">
 
         @if($products->count())
             @foreach($products as $product)

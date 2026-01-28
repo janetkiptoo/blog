@@ -21,6 +21,11 @@ protected $table = 'loan_application';
         'loan_product_id',
         'loan_amount',
         'status',
+        'term_months',
+        'interest_rate',
+        'balance',
+        'monthly_payment',
+        'total_paid',
         'approved_amount',
     ];
     public function user()
