@@ -82,7 +82,8 @@ class AdminController extends Controller
             'min_loan_amount' => 'required|numeric',
             'max_loan_amount' => 'required|numeric',
             'interest_rate' => 'required|numeric',
-            'loan_term_months' => 'required|integer'
+            'loan_term_months' => 'required|integer',
+            'grace_period_months' => 'required|integer'
         ]);
 
         LoanProduct::create($request->all());

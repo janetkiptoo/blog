@@ -48,6 +48,11 @@ protected $table = 'loan_application';
 {
     return $this->hasMany(Guarantor::class);
 }
+
+public function repaymentSchedules()
+{
+    return $this->hasMany(RepaymentSchedule::class);
+}
     
 
 

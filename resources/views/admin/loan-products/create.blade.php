@@ -31,6 +31,10 @@
             <label for="Loan_term_months" class="block text-sm font-medium text-black-700">Loan Term(months)</label>
             <input name="loan_term_months" type="number" class="w-full mb-3 border p-4 rounded-md">
         </div>
+        <div>
+            <label for="grace_period_months" class="block text-sm font-medium text-black-700">Grace Period(months)</label>
+            <input name="grace_period_months" type="number" class="w-full mb-3 border p-4 rounded-md">
+        </div>
 
         <button class="bg-blue-600 text-white px-4 py-1 ">
             Save Product

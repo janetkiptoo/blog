@@ -13,6 +13,7 @@ class LoanProduct extends Model
         'loan_term_months',
         'max_loan_amount',
         'min_loan_amount',
+        'grace_period_months',
     ];
     // app/Models/LoanProduct.php
 

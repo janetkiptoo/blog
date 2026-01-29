@@ -19,7 +19,12 @@ return new class extends Migration
             $table->string('phone');
             $table->string('relationship');
             $table->boolean('consent_given')->default(false);
-            $table->foreign('loan_application_id')->references('id')->on('loan_application')->onDelete('cascade');
+
+            // Foreign key column and constraint
+            $table->foreignId('loan_application_id')
+                ->constrained('loan_application')
+                ->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

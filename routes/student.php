@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/loans/{id}/repay', [LoanApplicationController::class, 'showRepayForm'])->name('loans.repay');
    
     Route::post('/loans/{id}/repay', [LoanApplicationController::class, 'process_repayment'])->name('loans.process_repayment');
+    
 
     Route::get('/loans/products', [LoanProductController::class, 'index'])->name('loans.products');
 

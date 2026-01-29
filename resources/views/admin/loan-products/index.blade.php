@@ -18,6 +18,7 @@
                 <th class="p-2">Max Amount</th>
                 <th class="p-2">Interest</th>
                 <th class="p-2">Term</th>
+                <th class="p-2">Grace_period</th>
                 <th class="p-2">Actions</th>
             </tr>
         </thead>
@@ -29,6 +30,7 @@
                     <td class="p-2">{{number_format($product->max_loan_amount, 2) }}</td>
                     <td class="p-2">{{$product->interest_rate }}%</td>
                     <td class="p-2">{{ $product->loan_term_months }}</td>
+                    <td class="p-2">{{ $product->grace_period_months }}</td>
                     <td class="p-2 space-x-2">
                 <a href="{{ route('admin.loan-products.edit', $product) }}" class="bg-blue-600 text-white px-4 py-2 rounded">Edit</a>
 

@@ -34,6 +34,10 @@
              <label for="loan_term_months" class="block text-sm font-medium text-gray-700">loan_term_amount</label>
             <input type="number" name="loan_term_months" value="{{ old('loan_term_months', $loan_product->loan_term_months) }}" placeholder="Loan Term (months)" class="border rounded px-8 py-2">
             </div>
+            <div>
+             <label for="grace_period_months" class="block text-sm font-medium text-gray-700">grace_period_months</label>
+            <input type="number" name="grace_period_months" value="{{ old('grace_period_months', $loan_product->grace_period_months) }}" placeholder="Grace Period (months)" class="border rounded px-8 py-2">
+            </div>
             <div class="col-span-2">
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update Product</button>
             </div>

@@ -12,6 +12,7 @@
                     <p class="mt-2"><strong>Amount:</strong> KES {{ $product->min_loan_amount }} - KES {{ $product->max_loan_amount }}</p>
                     <p><strong>Interest:</strong> {{ $product->interest_rate }}%</p>
                     <p><strong>Term:</strong> {{ $product->loan_term_months }} months</p>
+                    <p><strong>Grace Period:</strong> {{ $product->grace_period_months }} months</p>
                     <a href="{{ route('student.loan.apply', $product->id) }}"
                        class="mt-2 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                         Apply
