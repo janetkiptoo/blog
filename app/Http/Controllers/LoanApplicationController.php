@@ -61,16 +61,14 @@ class LoanApplicationController extends Controller
 
         // Log repayment
         LoanRepayment::create([
-            'loan_application_id' => $loan->id,
-            'amount' => $paymentAmount,
-            'principal' => $paymentAmount,         
-            'interest' => $loan->total_interest,    
-            'balance_before' => $balanceBefore,
-            'balance_after' => $loan->balance,
-            // 'payment_method' => $request->payment_method,
-            // 'reference' => $request->reference ?? null,
-            'paid_at' => now(),
-            'late_penalty' => 0,                     // Optional
+          'loan_application_id' => $loan->id,
+          'amount' => $paymentAmount,
+          'principal' => $paymentAmount,
+          'interest' => 0, 
+          'balance_before' => $balanceBefore,
+          'balance_after' => $loan->balance,
+          'paid_at' => now(),
+         'late_penalty' => 0,                    
         ]);
 
         return back()->with('success', 'Payment recorded successfully.');
@@ -84,9 +82,10 @@ class LoanApplicationController extends Controller
         ->firstOrFail();
 
     
+    $repaymentMonths = $loan->term_months - $loan->loanProduct->grace_period_months;
     $monthlyPayment = $loan->monthly_payment;
-    $totalPayable = $loan->monthly_payment * $loan->term_months;
-    $totalInterest = $loan->total_interest;
+    $totalPayable = $loan->monthly_payment * $repaymentMonths;
+    $totalInterest = $totalPayable - $loan->loan_amount;
 
     return view('students.loans.repay', compact('loan', 'monthlyPayment', 'totalPayable', 'totalInterest'));
 }
@@ -110,7 +109,7 @@ class LoanApplicationController extends Controller
         $repaymentMonths = $termMonths - $gracePeriod;
 
         // Interest applied AFTER grace period
-        $totalInterest = $loanAmount * ($interestRate / 100) * $repaymentMonths;
+        $totalInterest = ($loanAmount * ($interestRate / 100)) * $repaymentMonths;
         $totalPayable = $loanAmount + $totalInterest;
         $monthlyPayment = $totalPayable / $repaymentMonths;
 
@@ -125,14 +124,15 @@ class LoanApplicationController extends Controller
             'student_reg_no' => $user->student_reg_no,
             'user_id' => $user->id,
             'loan_product_id' => $productId,
-            'loan_amount' => $loanAmount,
-            'term_months' => $termMonths,
-            'interest_rate' => $interestRate,
-            'balance' => $loanAmount,
-            'monthly_payment' => round($monthlyPayment, 2),
-            'total_paid' => 0,
-            'repayment_start_date' => now()->addMonth(),
-            'status' => 'pending',
+           'loan_amount' => $loanAmount,
+           'term_months'  => $termMonths,
+           'interest_rate' => $interestRate,
+           'monthly_payment'=>$monthlyPayment,
+           'total_interest'=>$totalInterest,
+           'total_paid'=> 0,
+           'balance' => $loanAmount,
+           'repayment_start_date' => now()->addMonth(),
+           'status' => 'pending',
         ]);
 
         return redirect()->route('student.guarantors.create', $loan->id);

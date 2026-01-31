@@ -12,6 +12,7 @@
             <p><strong>Loan Amount:</strong> KES {{ number_format($loan->loan_amount, 2) }}</p>
             <p><strong>Interest Rate:</strong> {{ $loan->interest_rate }}% per month</p>
             <p><strong>Monthly Payment:</strong> KES {{ number_format($monthlyPayment, 2) }}</p>
+            <p> <strong>Total Payable: </strong>KES {{ number_format($totalPayable, 2) }}</p>
             <p><strong>Loan Term:</strong> {{ $loan->term_months }} months</p>
             <p><strong>Status:</strong> 
                 <span class="px-2 py-1 rounded text-sm {{ $loan->status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
@@ -44,28 +45,14 @@
             </div>
         @endif
 
-        {{-- Estimated Repayment Summary --}}
-        <div class="mb-4 p-4 bg-gray-100 border rounded-lg">
-            <h4 class="font-semibold text-gray-700 mb-2">Estimated Repayment Summary</h4>
-            <p>Monthly Payment: <strong>KES {{ number_format($monthlyPayment, 2) }}</strong></p>
-            <p>Total Payable: <strong>KES {{ number_format($totalPayable, 2) }}</strong></p>
-            <p>Interest Charged: <strong>KES {{ number_format($totalInterest, 2) }}</strong></p>
-        </div>
+        
 
         <form method="POST" action="{{ route('student.loans.process_repayment', $loan->id) }}">
             @csrf
 
             <div class="mb-4">
                 <label class="block text-gray-700 mb-1">Payment Amount (KES)</label>
-                <input
-                    type="number"
-                    name="amount"
-                    min="1"
-                    max="{{ $loan->balance }}"
-                    value="{{ $monthlyPayment }}"
-                    required
-                    class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
-                >
+                <input type="number" name="amount" min="1" max="{{ $loan->balance }}" value="{{$monthlyPayment }}"required class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500" >
             </div>
 
             <div class="mb-4">
@@ -73,9 +60,11 @@
                 <select name="payment_method" required class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
                     <option value="">Select method</option>
                     <option value="mpesa">Mpesa</option>
-                    <option value="bank">Bank</option>
                     <option value="cash">Cash</option>
                 </select>
+
+           
+
             </div>
 
             <div class="mb-4">
@@ -84,9 +73,9 @@
             </div>
 
             {{-- Hidden fields for stored values --}}
-            <input type="hidden" name="monthly_payment" value="{{ $monthlyPayment }}">
-            <input type="hidden" name="total_interest" value="{{ $totalInterest }}">
-            <input type="hidden" name="total_payable" value="{{ $totalPayable }}">
+            <input type="hidden" name="monthly_payment" value="{{$monthlyPayment}}">
+            <input type="hidden" name="total_interest" value="{{$totalInterest}}">
+            <input type="hidden" name="total_payable" value="{{$totalPayable}}">
 
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
                 Submit Payment
@@ -107,7 +96,7 @@
                         <th class="px-4 py-2 text-left">Date</th>
                         <th class="px-4 py-2 text-left">Amount Paid</th>
                         <th class="px-4 py-2 text-left">Balance After</th>
-                        <th class="px-4 py-2 text-left">Total Interest</th>
+            
                         <th class="px-4 py-2 text-left">Late Penalty</th>
                     </tr>
                 </thead>
@@ -117,7 +106,7 @@
                         <td class="px-4 py-2">{{ $repayment->paid_at ? $repayment->paid_at->format('d M Y') : '-' }}</td>
                         <td class="px-4 py-2">KES {{ number_format($repayment->amount, 2) }}</td>
                         <td class="px-4 py-2">KES {{ number_format($repayment->balance_after, 2) }}</td>
-                        <td class="px-4 py-2">KES {{ number_format($totalInterest, 2) }}</td>
+                        
                         <td class="px-4 py-2">KES {{ number_format($repayment->late_penalty ?? 0, 2) }}</td>
                     </tr>
                     @endforeach

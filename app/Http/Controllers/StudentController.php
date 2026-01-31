@@ -21,6 +21,11 @@ class StudentController extends Controller
         return view('student.dashboard', compact('student', 'loan'));
     }
 
+    public function pay()
+    {
+        return view('student.pay');
+    }
+
    
     public function create()
     {

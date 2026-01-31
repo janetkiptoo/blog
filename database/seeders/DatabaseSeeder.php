@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             LoanProductSeeder::class,
             SettingsSeeder::class,
+            
         ]);
         // User::factory(10)->create();
 
@@ -29,6 +30,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             LoanProductSeeder::class,
+        ]);
+        $this->call([
+            PaymentMethodSeeder::class,
         ]);
 
     }

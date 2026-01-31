@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
   Route::middleware(['auth', 'verified', 'student'])->name('student.')->prefix('student')->group(function () {
 
     Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('dashboard');
-
+    Route::get('/pay', [StudentController::class, 'pay'])->name('pay');
     Route::get('/create', [StudentController::class, 'create'])->name('create');
     Route::post('/store', [StudentController::class, 'store'])->name('store');
 
