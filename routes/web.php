@@ -10,7 +10,10 @@ Route::get('/home', [WebController::class, 'home']);
 Route::get('/about', [WebController::class, 'about'])->name('web.about');
 Route::get('/services', [WebController::class, 'services'])->name('web.services');
 Route::get('/contact', [WebController::class, 'contact'])->name('web.contact');
-Route::post('/payments/mpesa', [MpesaController::class, 'stkPush'])->middleware('auth');
+Route::post('/payments/mpesa', [MpesaController::class, 'stkPush'])->middleware('auth')->name('mpesa.stkpush');
+
+
+
 
 
 

@@ -1,10 +1,7 @@
 <?php
-
-use App\Http\Controllers\MpesaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MpesaController;
 
-Route::post('/mpesa/stkpush', [MpesaController::class, 'STKPush'])
-    ->name('mpesa.stkpush');
-Route::post('/mpesa/callback', [MpesaController::class, 'callback'])
 
-    ->name('mpesa.callback');   
+
+Route::post('/mpesa/callback', [MpesaController::class, 'callback']);  

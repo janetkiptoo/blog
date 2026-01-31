@@ -2,12 +2,15 @@
 
 @section('content')
 
+<h2>Make Payment</h2>
+
 <form action="{{ route('mpesa.stkpush') }}" method="POST">
+
     @csrf
 
     <div>
         <label>Phone Number</label>
-        <input type="text" name="phonenumber" placeholder="2547XXXXXXXX" required>
+        <input type="text" name="phonenumber" placeholder="254712345678" required>
     </div>
 
     <div>
@@ -22,5 +25,9 @@
 
     <button type="submit">Pay Now</button>
 </form>
+
+@if(session('message'))
+    <p>{{ session('message') }}</p>
+@endif
 
 @endsection
