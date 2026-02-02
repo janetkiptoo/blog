@@ -137,7 +137,8 @@ document.getElementById('repaymentForm').addEventListener('submit', function (e)
                         <th class="px-4 py-2 text-left">Date</th>
                         <th class="px-4 py-2 text-left">Amount Paid</th>
                         <th class="px-4 py-2 text-left">Balance After</th>
-            
+                        <th class="px-4 py-2 text-left">Channel</th>
+                         <th class="px-4 py-2 text-left">Channel</th>
                         <th class="px-4 py-2 text-left">Late Penalty</th>
                     </tr>
                 </thead>
@@ -147,6 +148,7 @@ document.getElementById('repaymentForm').addEventListener('submit', function (e)
                         <td class="px-4 py-2">{{ $repayment->paid_at ? $repayment->paid_at->format('d M Y') : '-' }}</td>
                         <td class="px-4 py-2">KES {{ number_format($repayment->amount, 2) }}</td>
                         <td class="px-4 py-2">KES {{ number_format($repayment->balance_after, 2) }}</td>
+                        <td class="px-4 py-2">{{ $repayment->payment?->channel?->value ?? 'N/A' }}</td>
                         
                         <td class="px-4 py-2">KES {{ number_format($repayment->late_penalty ?? 0, 2) }}</td>
                     </tr>

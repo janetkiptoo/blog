@@ -17,9 +17,11 @@ class MpesaPayment extends Model
         'result_code',
         'result_desc',
         'paid_at',
+
         
     ];
         protected $dates = ['paid_at'];
+        
 
 
     public function payment()

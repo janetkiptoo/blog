@@ -8,6 +8,7 @@ use App\Models\LoanRepayment;
 use App\Models\MpesaPayment;
 use Illuminate\Support\Facades\Auth;
 use App\Services\MpesaServices;
+use App\Enums\PaymentChannel;
 use Illuminate\Http\Request;
 
 class LoanApplicationController extends Controller
@@ -60,6 +61,7 @@ class LoanApplicationController extends Controller
             'result_code' => null,
             'result_desc' => null,
             'paid_at' => null,
+
         ]);
 
         return back()->with('success', 'Mpesa STK Push initiated. Check your phone to complete payment.');
@@ -88,6 +90,7 @@ class LoanApplicationController extends Controller
         'balance_after' => $loan->balance,
         'paid_at' => now(),
         'late_penalty' => 0,
+        'channel' => PaymentChannel::MPESA,
     ]);
 
     return back()->with('success', 'Payment recorded successfully.');
@@ -95,10 +98,7 @@ class LoanApplicationController extends Controller
 
     public function showRepayForm($id)
 {
-    $loan = LoanApplication::with('repayments')
-        ->where('id', $id)
-        ->where('user_id', auth()->id())
-        ->firstOrFail();
+    $loan = LoanApplication::with('repayments')->where('id', $id)->where('user_id', auth()->id())->firstOrFail();
 
     
     $repaymentMonths = $loan->term_months - $loan->loanProduct->grace_period_months;
