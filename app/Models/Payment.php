@@ -13,8 +13,9 @@ class Payment extends Model
 
     protected $casts = [
         'channel' => PaymentChannel::class,
-        'status' => PaymentStatus::class,
+        // 'status' => PaymentStatus::class,
     ];
+    
 
     public function mpesa()
     {

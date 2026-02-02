@@ -8,6 +8,9 @@ use App\Models\MpesaPayment;
 use App\Services\MpesaServices;
 use App\Enums\PaymentChannel; //
 use App\Enums\PaymentStatus; //
+use App\Models\LoanApplication;
+use App\Models\LoanRepayment;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class MpesaController extends Controller
@@ -19,93 +22,158 @@ class MpesaController extends Controller
         $this->mpesa = $mpesa;
     }
 
-    //
-    public function stkPush(Request $request)
-    {
-        $request->validate([
-            'amount' => 'required|numeric|min:1',
-            'phonenumber' => 'required|string',
-            'account_number' => 'required|string',
+  public function stkPush(Request $request)
+{
+    $request->validate([
+        'amount' => 'required|numeric|min:1',
+        'phonenumber' => 'required|string',
+        'account_number' => 'required|integer', // loan_id
+    ]);
+
+    $amount = (int) round($request->amount);
+    $phone = preg_replace('/^0/', '254', $request->phonenumber);
+    $loanId = $request->account_number;
+
+    $loan = LoanApplication::where('id', $loanId)->where('user_id', auth()->id())->firstOrFail();
+
+    DB::beginTransaction();
+    try {
+        // 1️ Create generic payment
+        $payment = Payment::create([
+            'user_id' => auth()->id(),
+            'amount' => $amount,
+            'channel' => 'mpesa',
+            'status' => 'pending',
         ]);
 
-        $amount = (int) round($request->amount); // integer required by Mpesa
-        $phone = $request->phonenumber;
-        $account_number = $request->account_number;
+        // 2️Send STK Push
+        $result = $this->mpesa->stkPush($phone, $amount, $payment->id);
 
-        // Send STK push
-        $result = $this->mpesa->stkPush($phone, $amount, $account_number);
+        if (($result['ResponseCode'] ?? 1) != 0) {
+            throw new \Exception($result['ResponseDescription'] ?? 'STK Push failed');
+        }
 
-        // Save payment as pending
-      Payment::create([
-        'user_id' => auth()->id() ?? null,
-        'payment_method_id' => 1, // Mpesa
-        'merchant_request_id' => $result['MerchantRequestID'] ?? null,
+      
+    DB::transaction(function () use ($payment, $loan, $phone, $result) {
+    MpesaPayment::create([
+        'payment_id' => $payment->id,
+        'loan_id' => $loan->id,
+        'phone' => $phone,
         'checkout_request_id' => $result['CheckoutRequestID'] ?? null,
-        'amount' => $amount,
-        'phone' => preg_replace('/^0/', '254', $phone),
-        'status' => PaymentStatus::PENDING, // Enum instance
-        'channel' => PaymentChannel::MPESA, // Enum instance
-        'ref_id' => $account_number,
-]);
+        'merchant_request_id' => $result['MerchantRequestID'] ?? null,
+        'mpesa_receipt_number' => null,
+        'amount' => $payment->amount,
+       
+    ]);
+});
 
 
-        return response()->json($result);
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'STK Push sent. Please complete payment on your phone.',
+        ]);
+
+    } catch (\Throwable $e) {
+        DB::rollBack();
+        Log::error('Mpesa STK Push Error', ['error' => $e->getMessage()]);
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
     }
-
-
-    // Safaricom callback for STK Push
-    public function callback(Request $request)
+}
+public function callback(Request $request)
 {
-     Log::info('MPESA CALLBACK HIT', $request->all());
-    $callback = $request->input('Body.stkCallback');
+    Log::info('MPESA CALLBACK HIT', $request->all());
 
+    $callback = $request->input('Body.stkCallback');
     if (!$callback) {
         return response()->json(['message' => 'Invalid callback'], 400);
     }
 
-    $checkoutRequestID = $callback['CheckoutRequestID'];
-    $resultCode        = $callback['ResultCode'];
-    $resultDesc        = $callback['ResultDesc'] ?? null;
+    $checkoutRequestID = $callback['CheckoutRequestID'] ?? null;
+    $resultCode = (int) ($callback['ResultCode'] ?? 1); // Add null coalescing operator
+    $items = $callback['CallbackMetadata']['Item'] ?? [];
 
-    $payment = Payment::where('checkout_request_id', $checkoutRequestID)->first();
+    if (!$checkoutRequestID) {
+        Log::error('Missing CheckoutRequestID in callback');
+        return response()->json(['message' => 'Invalid callback data'], 400);
+    }
 
-    if (!$payment) {
+    $mpesaPayment = MpesaPayment::where('checkout_request_id', $checkoutRequestID)->first();
+    if (!$mpesaPayment) {
+        Log::error('MpesaPayment not found', ['checkoutRequestID' => $checkoutRequestID]);
         return response()->json(['message' => 'Payment not found'], 404);
     }
 
-    if ($resultCode == 0) {
-        $payment->status = PaymentStatus::SUCCESS;
+    $payment = Payment::find($mpesaPayment->payment_id);
+    $loan = LoanApplication::find($mpesaPayment->loan_id);
 
-        $metadata = collect($callback['CallbackMetadata']['Item'] ?? []);
+    DB::transaction(function () use ($mpesaPayment, $payment, $loan, $resultCode, $items, $callback) {
 
-        $receipt = $metadata->firstWhere('Name', 'MpesaReceiptNumber')['Value'] ?? null;
-        $amount  = $metadata->firstWhere('Name', 'Amount')['Value'] ?? null;
+        if ($resultCode === 0) {
+            // Rest of your success code...
+            $amount = 0;
+            $receipt = null;
 
-        // ✅ WRITE TO mpesa_payments
-        MpesaPayment::updateOrCreate(
-            ['checkout_request_id' => $checkoutRequestID],
-            [
-                'payment_id'           => $payment->id,
-                'phone'                => $payment->phone,
-                'merchant_request_id'  => $callback['MerchantRequestID'] ?? null,
+            foreach ($items as $item) {
+                if ($item['Name'] === 'Amount') {
+                    $amount = (float) $item['Value'];
+                }
+                if ($item['Name'] === 'MpesaReceiptNumber') {
+                    $receipt = $item['Value'];
+                }
+            }
+
+            $mpesaPayment->update([
                 'mpesa_receipt_number' => $receipt,
-                'result_code'          => $resultCode,
-                'result_desc'          => $resultDesc,
-                'paid_at'              => now(),
-            ]
-        );
+                'result_code' => 0,
+                'result_desc' => 'Success',
+                'paid_at' => now(),
+            ]);
 
-        if ($amount) {
-            $payment->amount = $amount;
+            $payment->update([
+                'status' => 'success',
+            ]);
+
+            $balanceBefore = $loan->balance;
+            $loan->balance -= $amount;
+            $loan->total_paid += $amount;
+
+            if ($loan->balance <= 0) {
+                $loan->balance = 0;
+                $loan->status = 'completed';
+            }
+
+            $loan->save();
+
+            LoanRepayment::create([
+                'loan_application_id' => $loan->id,
+                'amount' => $amount,
+                'principal' => $amount,
+                'interest' => 0,
+                'balance_before' => $balanceBefore,
+                'balance_after' => $loan->balance,
+                'paid_at' => now(),
+                'late_penalty' => 0,
+            ]);
+
+        } else {
+            $mpesaPayment->update([
+                'result_code' => $resultCode,
+                'result_desc' => $callback['ResultDesc'] ?? 'Cancelled',
+                'paid_at' => now(),
+            ]);
+
+            $payment->update([
+                'status' => 'failed',
+            ]);
         }
-    } else {
-        $payment->status = PaymentStatus::FAILED;
-    }
-
-    $payment->save();
+    });
 
     return response()->json(['message' => 'Callback processed']);
 }
+
+
 }
 
 

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\LoanApplication;
 use App\Models\LoanProduct;
 use App\Models\LoanRepayment;
+use App\Models\MpesaPayment;
+use Illuminate\Support\Facades\Auth;
+use App\Services\MpesaServices;
 use Illuminate\Http\Request;
 
 class LoanApplicationController extends Controller
@@ -16,63 +19,79 @@ class LoanApplicationController extends Controller
         return view('loans.apply', compact('product'));
     }
 
-    public function process_repayment(Request $request, $id)
-    {
-        $request->validate([
-            'amount' => 'required|numeric|min:1',
-            'payment_method' => 'required|string',
-        ]);
+   public function process_repayment(Request $request, $id)
+{
+    $request->validate([
+        'amount' => 'required|numeric|min:1',
+        'payment_method' => 'required|string',
+        'reference' => 'nullable|string',
+    ]);
 
-        // Get the approved loan
-        $loan = LoanApplication::where('id', $id)
-            ->where('user_id', auth()->id())
-            ->where('status', 'approved')
-            ->firstOrFail();
+    $loan = LoanApplication::where('id', $id)
+        ->where('user_id', auth()->id())
+        ->where('status', 'approved')
+        ->firstOrFail();
 
-        // Check grace period
-        if ($loan->repayment_start_date && now()->lt($loan->repayment_start_date)) {
-            return back()->withErrors('Loan is still in grace period.');
-        }
-
-        // Already fully paid?
-        if ($loan->balance <= 0) {
-            return back()->withErrors('Loan is already fully paid.');
-        }
-
-        $paymentAmount = $request->amount;
-        $balanceBefore = $loan->balance;
-
-        // Prevent overpayment
-        if ($paymentAmount > $loan->balance) {
-            $paymentAmount = $loan->balance;
-        }
-
-        // Reduce balance and increase total paid
-        $loan->balance -= $paymentAmount;
-        $loan->total_paid += $paymentAmount;
-
-        // Update loan status if fully paid
-        if ($loan->balance <= 0) {
-            $loan->balance = 0;
-            $loan->status = 'completed';
-        }
-
-        $loan->save();
-
-        // Log repayment
-        LoanRepayment::create([
-          'loan_application_id' => $loan->id,
-          'amount' => $paymentAmount,
-          'principal' => $paymentAmount,
-          'interest' => 0, 
-          'balance_before' => $balanceBefore,
-          'balance_after' => $loan->balance,
-          'paid_at' => now(),
-         'late_penalty' => 0,                    
-        ]);
-
-        return back()->with('success', 'Payment recorded successfully.');
+    if ($loan->repayment_start_date && now()->lt($loan->repayment_start_date)) {
+        return back()->withErrors('Loan is still in grace period.');
     }
+
+    if ($loan->balance <= 0) {
+        return back()->withErrors('Loan is already fully paid.');
+    }
+
+    $paymentAmount = $request->amount;
+    $reference = $request->reference;
+
+    // Mpesa payment flow
+    if ($request->payment_method === 'mpesa') {
+        $phone = Auth::user()->phone;
+
+        // Trigger STK push
+        $result = (new MpesaServices())->stkPush($phone, $paymentAmount, $reference);
+
+        // Save pending payment to mpesa_payments
+        MpesaPayment::create([
+            'payment_id' => $loan->id, // Or generate unique reference
+            'phone' => preg_replace('/^0/', '254', $phone),
+            'checkout_request_id' => $result['CheckoutRequestID'] ?? null,
+            'merchant_request_id' => $result['MerchantRequestID'] ?? null,
+            'amount' => $paymentAmount,
+            'result_code' => null,
+            'result_desc' => null,
+            'paid_at' => null,
+        ]);
+
+        return back()->with('success', 'Mpesa STK Push initiated. Check your phone to complete payment.');
+    }
+
+    // Cash payment flow
+    if ($paymentAmount > $loan->balance) {
+        $paymentAmount = $loan->balance;
+    }
+
+    $balanceBefore = $loan->balance;
+    $loan->balance -= $paymentAmount;
+    $loan->total_paid += $paymentAmount;
+    if ($loan->balance <= 0) {
+        $loan->balance = 0;
+        $loan->status = 'completed';
+    }
+    $loan->save();
+
+    LoanRepayment::create([
+        'loan_application_id' => $loan->id,
+        'amount' => $paymentAmount,
+        'principal' => $paymentAmount,
+        'interest' => 0,
+        'balance_before' => $balanceBefore,
+        'balance_after' => $loan->balance,
+        'paid_at' => now(),
+        'late_penalty' => 0,
+    ]);
+
+    return back()->with('success', 'Payment recorded successfully.');
+}
 
     public function showRepayForm($id)
 {

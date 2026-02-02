@@ -28,22 +28,22 @@ class MpesaServices
             // 2️⃣ Generate password
             $timestamp = now()->format('YmdHis');
             $password = base64_encode(
-                env('MPESA_SHORTCODE') .
-                env('MPESA_PASSKEY') .
+                env('LIPA_NA_MPESA_SHORTCODE') .
+                env('LIPA_NA_MPESA_PASSKEY') .
                 $timestamp
             );
 
-            // 3️⃣ Send STK Push
+            // 3️ Send STK Push
             $response = Http::withToken($accessToken)->post(
                 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest',
                 [
-                    'BusinessShortCode' => env('MPESA_SHORTCODE'),
+                    'BusinessShortCode' => env('LIPA_NA_MPESA_SHORTCODE'),
                     'Password' => $password,
                     'Timestamp' => $timestamp,
                     'TransactionType' => 'CustomerPayBillOnline',
                     'Amount' => $amount,
                     'PartyA' => $phone,
-                    'PartyB' => env('MPESA_SHORTCODE'),
+                    'PartyB' => env('LIPA_NA_MPESA_SHORTCODE'),
                     'PhoneNumber' => $phone,
                     'CallBackURL' => env('MPESA_CALLBACK_URL'),
                     'AccountReference' => $reference,

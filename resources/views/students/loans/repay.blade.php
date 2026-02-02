@@ -47,40 +47,81 @@
 
         
 
-        <form method="POST" action="{{ route('student.loans.process_repayment', $loan->id) }}">
-            @csrf
+     <form id="repaymentForm">
+    @csrf
 
-            <div class="mb-4">
-                <label class="block text-gray-700 mb-1">Payment Amount (KES)</label>
-                <input type="number" name="amount" min="1" max="{{ $loan->balance }}" value="{{$monthlyPayment }}"required class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500" >
-            </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 mb-1">Payment Amount (KES)</label>
+        <input
+            type="number"
+            name="amount"
+            min="1"
+            max="{{ $loan->balance }}"
+            value="{{ $monthlyPayment }}"
+            required
+            class="w-full border rounded-lg px-4 py-2"
+        >
+    </div>
 
-            <div class="mb-4">
-                <label class="block text-gray-700 mb-1">Payment Method</label>
-                <select name="payment_method" required class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
-                    <option value="">Select method</option>
-                    <option value="mpesa">Mpesa</option>
-                    <option value="cash">Cash</option>
-                </select>
+    <div class="mb-4">
+        <label class="block text-gray-700 mb-1">Payment Method</label>
+        <select id="paymentMethod" class="w-full border rounded-lg px-4 py-2" required>
+            <option value="">Select method</option>
+            <option value="mpesa">Mpesa</option>
+            <option value="cash">Cash</option>
+        </select>
+    </div>
 
-           
+    {{-- REQUIRED FOR MPESA --}}
+    <input type="hidden" name="phonenumber" value="{{ auth()->user()->phone }}">
+    <input type="hidden" name="account_number" value="{{ $loan->id }}">
 
-            </div>
+    <button
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+    >
+        Submit Payment
+    </button>
+</form>
 
-            <div class="mb-4">
-                <label class="block text-gray-700 mb-1">Reference (optional)</label>
-                <input type="text" name="reference" class="w-full border rounded-lg px-4 py-2">
-            </div>
 
-            {{-- Hidden fields for stored values --}}
-            <input type="hidden" name="monthly_payment" value="{{$monthlyPayment}}">
-            <input type="hidden" name="total_interest" value="{{$totalInterest}}">
-            <input type="hidden" name="total_payable" value="{{$totalPayable}}">
+<script>
+document.getElementById('repaymentForm').addEventListener('submit', function (e) {
+    e.preventDefault();
 
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
-                Submit Payment
-            </button>
-        </form>
+    const method = document.getElementById('paymentMethod').value;
+
+    if (method !== 'mpesa') {
+        alert('Only Mpesa is supported here.');
+        return;
+    }
+
+    const formData = new FormData(this);
+
+    fetch("{{ route('mpesa.stkpush') }}", {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            "Accept": "application/json"
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(" STK Push sent. Enter your M-Pesa PIN on your phone.");
+        } else {
+            alert("Failed to send STK push: " + (data.message ?? "Unknown error"));
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        alert(" Network or server error.");
+    });
+});
+</script>
+
+
     </div>
     @endif
 

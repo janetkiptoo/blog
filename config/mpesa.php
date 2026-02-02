@@ -71,7 +71,7 @@ return [
     | Callback URL for Lipa na Mpesa transactions
     |
     */
-    'lipaNaMpesaCallbackURL' => env('LIPA_NA_MPESA_CALLBACK_URL'),
+    'lipaNaMpesaCallbackURL' => env('MPESA_CALLBACK_URL'),
 
     /*
     |--------------------------------------------------------------------------
