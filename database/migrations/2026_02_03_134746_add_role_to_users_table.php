@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('loan_repayments', function (Blueprint $table) {
-            $table->decimal('late_penalty', 10, 2)->default(0)->after('interest');
-            //
+        Schema::table('users', function (Blueprint $table) {
+           
+            $table->enum('role', ['student', 'admin'])->default('student')->after('email');
         });
     }
 
@@ -22,7 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('loan_repayments', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
             //
         });
     }

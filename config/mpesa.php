@@ -152,4 +152,5 @@ return [
     |
     */
     'resultURL' => env('MPESA_RESULT_URL'),
+    
 ];

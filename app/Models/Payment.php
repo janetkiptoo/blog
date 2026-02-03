@@ -13,7 +13,7 @@ class Payment extends Model
 
     protected $casts = [
         'channel' => PaymentChannel::class,
-        // 'status' => PaymentStatus::class,
+        'status' => PaymentStatus::class,
     ];
     
 
@@ -25,6 +25,10 @@ class Payment extends Model
     public function cash()
     {
         return $this->hasOne(CashPayment::class);
+    }
+    public function loan()
+    {
+        return $this->hasOneThrough(LoanApplication::class, MpesaPayment::class, 'payment_id', 'id', 'id', 'loan_id');
     }
 }
 

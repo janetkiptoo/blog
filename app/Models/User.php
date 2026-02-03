@@ -28,6 +28,7 @@ class User extends Authenticatable
         'image',
         'student_reg_no',           
         'password',
+        'role',
     ];
 
     /**
@@ -56,5 +57,19 @@ class User extends Authenticatable
     public function student()
     {
         return $this->hasOne(Student::class);
-    }   
+    } 
+    
+    public function loanApplications()
+    {
+        return $this->hasMany(LoanApplication::class);
+    }
+    public function loanDisbursements()
+    {
+        return $this->hasMany(LoanDisbursement::class);
+    }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+    
 }

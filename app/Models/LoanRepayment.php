@@ -2,7 +2,6 @@
 
 namespace App\Models;
 use App\Enums\PaymentChannel;
-
 use Illuminate\Database\Eloquent\Model;
 
 

@@ -10,10 +10,10 @@ class MpesaServices
     public function stkPush($phone, $amount, $reference)
     {
         try {
-            // Format phone to 2547XXXXXXXX
+            
             $phone = preg_replace('/^0/', '254', $phone);
 
-            // 1️⃣ Get access token
+            // 1️ Get access token
             $tokenResponse = Http::withBasicAuth(
                 env('MPESA_CONSUMER_KEY'),
                 env('MPESA_CONSUMER_SECRET')
@@ -25,7 +25,7 @@ class MpesaServices
 
             $accessToken = $tokenResponse['access_token'];
 
-            // 2️⃣ Generate password
+            // 2 Generate password
             $timestamp = now()->format('YmdHis');
             $password = base64_encode(
                 env('LIPA_NA_MPESA_SHORTCODE') .
@@ -66,4 +66,54 @@ class MpesaServices
             ];
         }
     }
+    public function b2cPayment($phone, $amount, $remarks = 'Student Loan Disbursement')
+{
+    try {
+        
+        $phone = preg_replace('/^0/', '254', $phone);
+
+        // 1️Get access token
+        $tokenResponse = Http::withBasicAuth(
+            env('MPESA_CONSUMER_KEY'),
+            env('MPESA_CONSUMER_SECRET')
+        )->get('https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials');
+
+        if ($tokenResponse->failed()) {
+            throw new \Exception('Failed to get access token from Safaricom');
+        }
+
+        $accessToken = $tokenResponse['access_token'];
+
+        $response = Http::withToken($accessToken)->post(
+            'https://sandbox.safaricom.co.ke/mpesa/b2c/v1/paymentrequest',
+            [
+                'InitiatorName'      => env('MPESA_INITIATOR_USERNAME'),
+                'SecurityCredential' => env('MPESA_SECURITY_CREDENTIAL'),
+                'CommandID'          => 'BusinessPayment',
+                'Amount'             => $amount,
+                'PartyA'             => env('LIPA_NA_MPESA_SHORTCODE'),
+                'PartyB'             => $phone,
+                'Remarks'            => $remarks,
+                'QueueTimeOutURL'    => env('MPESA_B2C_TIMEOUT_URL'),
+                'ResultURL'          => env('MPESA_B2C_RESULT_URL'),
+                'Occasion'           => 'LoanDisbursement',
+            ]
+        );
+
+        if ($response->failed()) {
+            throw new \Exception('B2C request failed');
+        }
+
+        return $response->json();
+
+    } catch (\Exception $e) {
+        \Log::error('Mpesa B2C Error: ' . $e->getMessage());
+
+        return [
+            'ResponseCode' => '1',
+            'ResponseDescription' => $e->getMessage(),
+        ];
+    }
+}
+
 }

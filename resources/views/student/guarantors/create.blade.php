@@ -23,9 +23,8 @@
         </div>
     @endif
 
-    <form action="{{ route('student.guarantors.store', $loan->id) }}" method="POST" class="space-y-5"  enctype="multipart/form-data" >
-        @csrf
-
+    <form action="{{ route('student.guarantors.store', $loan->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
         <div>
             <label class="block text-sm font-medium text-gray-700">Guarantor Name</label>
             <input type="text" name="name"
@@ -67,13 +66,11 @@
                    class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
 
-        
-
          <div>
             <label class="block text-sm font-medium text-gray-700">Employment Status</label>
             <select name="employment_status"  class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">>
-                <option value="emloyed">Employed</option>
-                <option value="not_employed">Not employed</option>
+                <option value="employed">Employed</option>
+                <option value="not employed">Not employed</option>
             </select>
         </div>
 

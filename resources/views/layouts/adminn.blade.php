@@ -22,7 +22,7 @@
         <a href="{{ route('admin.loan-products.index') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products</a>
         <a href="{{ route('admin.loan-products.create') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Loan Products add</a>
         <a href="{{ route('admin.repayments.index') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Repayments history</a>
-        <a href="{{ route('admin.payment-methods.index') }}" class="text-white py-2 px-3 rounded hover:bg-sky-600 mb-2">Payment Methods</a>
+       
 
        
 

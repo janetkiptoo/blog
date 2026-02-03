@@ -36,7 +36,7 @@
             <input name="grace_period_months" type="number" class="w-full mb-3 border p-4 rounded-md">
         </div>
 
-        <button class="bg-blue-600 text-white px-4 py-1 ">
+        <button class="bg-blue-600 text-white px-3 py-1 ">
             Save Product
         </button>
     </form>

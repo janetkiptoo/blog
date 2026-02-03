@@ -17,12 +17,18 @@ class Repayment extends Model
 
     protected $casts = [
         'paid_at' => 'datetime',
+        
     ];
 
     public function loan()
     {
         return $this->belongsTo(LoanApplication::class, 'loan_application_id');
     }
+    public function payment()
+{
+    return $this->belongsTo(Payment::class);
+}
+
 }
 
     //

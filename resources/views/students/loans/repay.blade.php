@@ -137,7 +137,6 @@ document.getElementById('repaymentForm').addEventListener('submit', function (e)
                         <th class="px-4 py-2 text-left">Date</th>
                         <th class="px-4 py-2 text-left">Amount Paid</th>
                         <th class="px-4 py-2 text-left">Balance After</th>
-                        <th class="px-4 py-2 text-left">Channel</th>
                          <th class="px-4 py-2 text-left">Channel</th>
                         <th class="px-4 py-2 text-left">Late Penalty</th>
                     </tr>

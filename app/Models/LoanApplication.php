@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class LoanApplication extends Model
 {
 
@@ -27,6 +28,7 @@ protected $table = 'loan_application';
         'monthly_payment',
         'total_paid',
         'approved_amount',
+        'disbursed_at',
     ];
     public function user()
     {
@@ -53,6 +55,11 @@ public function repaymentSchedules()
 {
     return $this->hasMany(RepaymentSchedule::class);
 }
+
+public function disbursement()
+    {
+        return $this->hasOne(LoanDisbursement::class);
+    }
     
 
 

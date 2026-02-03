@@ -9,13 +9,19 @@ class RepaymentSchedule extends Model
     protected $table = 'repayment_schedules';
     protected $fillable = [
         'loan_application_id',
-        'month_number',
+        'amount_due',
         'due_date',
-        'principal_amount',
-        'interest_amount',
-        'total_payment',
-        'is_paid',
+        'status',
         'paid_at',
     ];
+
+    protected $casts = [
+        'due_date' => 'datetime',
+        'paid_at' => 'datetime',
+    ];
+    public function loan()
+    {
+        return $this->belongsTo(LoanApplication::class, 'loan_application_id');
+    }
     //
 }

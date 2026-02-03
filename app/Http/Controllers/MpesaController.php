@@ -9,6 +9,7 @@ use App\Services\MpesaServices;
 use App\Models\LoanApplication;
 use App\Models\LoanRepayment;
 use App\Enums\PaymentChannel;
+use App\Enums\PaymentStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -43,8 +44,8 @@ class MpesaController extends Controller
             $payment = Payment::create([
                 'user_id' => auth()->id(),
                 'amount' => $amount,
-                'channel' => 'mpesa',
-                'status' => 'pending',
+                'channel' => PaymentChannel::MPESA,
+                'status' => PaymentStatus::PENDING,
             ]);
 
             $result = $this->mpesa->stkPush($phone, $amount, $payment->id);
@@ -60,6 +61,7 @@ class MpesaController extends Controller
                 'checkout_request_id' => $result['CheckoutRequestID'] ?? null,
                 'merchant_request_id' => $result['MerchantRequestID'] ?? null,
                 'amount' => $payment->amount,
+                'status' => 'pending',
             ]);
 
             DB::commit();
@@ -153,6 +155,7 @@ class MpesaController extends Controller
                     'paid_at' => now(),
                     'late_penalty' => 0,
                     'channel' => PaymentChannel::MPESA,
+
                 ]);
 
             } else {

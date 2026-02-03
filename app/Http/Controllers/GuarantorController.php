@@ -30,7 +30,7 @@ class GuarantorController extends Controller
             'email' => 'nullable|email|max:255',
             'consent_given' => 'required|boolean',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:4096', // max 4MB
-            'employment_status' => 'nullable|string|max:100',
+            'employment_status' => 'required|in:employed,not employed',
             'physical_address' => 'nullable|string|max:255',
         ]);
 
