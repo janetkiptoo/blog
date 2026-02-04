@@ -111,7 +111,7 @@ return [
     | Username for initiating M-Pesa transactions
     |
     */
-    'initiatorUsername' => env('MPESA_INITIATOR_USERNAME'),
+    'initiatorUsername' => env('MPESA_INITIATOR_NAME'),
 
     /*
     |--------------------------------------------------------------------------
@@ -152,5 +152,8 @@ return [
     |
     */
     'resultURL' => env('MPESA_RESULT_URL'),
+    'b2cResultURL' => env('MPESA_B2C_RESULT_URL'),
+    'b2cTimeoutURL' => env('MPESA_B2C_QUEUE_TIMEOUT_URL'),
+    
     
 ];

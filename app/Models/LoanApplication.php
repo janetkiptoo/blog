@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class LoanApplication extends Model
 {
-
+    const STATUS_PENDING   = 'pending';
+    const STATUS_APPROVED  = 'approved';
+    const STATUS_REJECTED  = 'rejected';
+    const STATUS_DISBURSED = 'disbursed';
+    const STATUS_PAID      = 'paid';
 protected $table = 'loan_application';                                                                              
     protected $fillable = [
         'name',
@@ -30,6 +34,10 @@ protected $table = 'loan_application';
         'approved_amount',
         'disbursed_at',
     ];
+
+  
+
+   
     public function user()
     {
         return $this->belongsTo(User::class);

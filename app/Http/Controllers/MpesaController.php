@@ -8,6 +8,7 @@ use App\Models\MpesaPayment;
 use App\Services\MpesaServices;
 use App\Models\LoanApplication;
 use App\Models\LoanRepayment;
+use App\Models\LoanDisbursement;
 use App\Enums\PaymentChannel;
 use App\Enums\PaymentStatus;
 use Illuminate\Support\Facades\DB;
@@ -75,10 +76,7 @@ class MpesaController extends Controller
             DB::rollBack();
             Log::error('Mpesa STK Push Error', ['error' => $e->getMessage()]);
 
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(['success' => false,'message' => $e->getMessage(),], 500);
         }
     }
 
@@ -170,5 +168,105 @@ class MpesaController extends Controller
         });
 
         return response()->json(['message' => 'Callback processed']);
+    }
+
+
+
+    
+    public function b2cResult(Request $request)
+    {
+        Log::info('B2C RESULT CALLBACK', $request->all());
+
+        $result = $request->input('Result');
+        if (!$result) {
+            return response()->json(['message' => 'Invalid result'], 400);
+        }
+
+        $conversationID = $result['ConversationID'] ?? null;
+        $resultCode = (int) ($result['ResultCode'] ?? 1);
+
+        if (!$conversationID) {
+            Log::error('Missing ConversationID in B2C result');
+            return response()->json(['message' => 'Invalid result data'], 400);
+        }
+
+        $disbursement = LoanDisbursement::where('conversation_id', $conversationID)->first();
+        if (!$disbursement) {
+            Log::error('Disbursement not found', ['conversationID' => $conversationID]);
+            return response()->json(['message' => 'Disbursement not found'], 404);
+        }
+
+        $loan = LoanApplication::find($disbursement->loan_application_id);
+
+        DB::transaction(function () use ($disbursement, $loan, $resultCode, $result) {
+
+            if ($resultCode === 0) {
+                // Success
+                $resultParameters = $result['ResultParameters']['ResultParameter'] ?? [];
+                $transactionReceipt = null;
+                $transactionAmount = 0;
+
+                foreach ($resultParameters as $param) {
+                    if ($param['Key'] === 'TransactionReceipt') {
+                        $transactionReceipt = $param['Value'];
+                    }
+                    if ($param['Key'] === 'TransactionAmount') {
+                        $transactionAmount = (float) $param['Value'];
+                    }
+                }
+
+                $disbursement->update([
+                    'status' => 'success',
+                    'mpesa_receipt_number' => $transactionReceipt,
+                    'result_code' => 0,
+                    'result_desc' => 'Success',
+                    'disbursed_at' => now(),
+                ]);
+
+                
+                $loan->update([
+                    'status' => 'disbursed',
+                    'disbursed_at' => now(),
+                    'balance' => $loan->approved_amount, // Set initial balance
+                ]);
+
+            } else {
+               
+                $disbursement->update([
+                    'status' => 'failed',
+                    'result_code' => $resultCode,
+                    'result_desc' => $result['ResultDesc'] ?? 'Failed',
+                ]);
+            }
+        });
+
+        return response()->json(['message' => 'B2C result processed']);
+    }
+
+
+    //   B2C Timeout Callback
+    public function b2cTimeout(Request $request)
+    {
+        Log::info('B2C TIMEOUT CALLBACK', $request->all());
+
+        $result = $request->input('Result');
+        if (!$result) {
+            return response()->json(['message' => 'Invalid timeout'], 400);
+        }
+
+        $conversationID = $result['ConversationID'] ?? null;
+
+        if ($conversationID) {
+            $disbursement = LoanDisbursement::where('conversation_id', $conversationID)->first();
+            
+            if ($disbursement) {
+                $disbursement->update([
+                    'status' => 'timeout',
+                    'result_desc' => 'Request timeout',
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'B2C timeout processed']);
     }
 }

@@ -4,17 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LoanDisbursment extends Model
+class LoanDisbursement extends Model
 {
     protected $table = 'loan_disbursements';
     protected $fillable = [
         'loan_application_id',
         'user_id',
+        'conversation_id',
+        'originator_conversation_id',
+        'result_code',
+        'result_desc',
+        'status',
         'amount',
         'phone_number',
-        'mpesa_transaction_id',
-        'status',
+        'transaction_id',
+        'result_type',
+        'disbursed_at',
         
+    ];
+
+    protected $casts = [
+        'disbursed_at' => 'datetime',
     ];
     //
     public function loanApplication()
@@ -26,4 +36,6 @@ class LoanDisbursment extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    
 }

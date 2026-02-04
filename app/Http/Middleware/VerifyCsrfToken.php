@@ -15,6 +15,10 @@ class VerifyCsrfToken
      */
      protected $except = [
         'mpesa/callback',
+        'mpesa/b2c/result',
+        'mpesa/b2c/timeout',
+
+
     ];
     public function handle(Request $request, Closure $next): Response
     {

@@ -16,13 +16,18 @@ return new class extends Migration
             $table->unsignedBigInteger('loan_application_id');
             $table->foreign('loan_application_id')->references('id')->on('loan_application')->onDelete('cascade');
             $table->foreignId('user_id') ->constrained('users') ->onDelete('cascade');
-            $table->decimal('amount', 12, 2);
+            $table->decimal('amount', 10, 2);
             $table->string('phone_number');
-            $table->string('mpesa_transaction_id')->nullable();
-            $table->enum('status', ['pending', 'success', 'failed'])->default('pending');
+            $table->string('conversation_id')->nullable();
+            $table->string('originator_conversation_id')->nullable();
+            $table->string('mpesa_receipt_number')->nullable();
+            $table->integer('result_code')->nullable();
+            $table->text('result_desc')->nullable();
+            $table->enum('status', ['pending', 'success', 'failed', 'timeout'])->default('pending');
+            $table->timestamp('disbursed_at')->nullable();
             $table->timestamps();
-});
-
+        });
+        
     }
 
     /**
@@ -31,5 +36,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('loan_disbursements');
+    
     }
 };

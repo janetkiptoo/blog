@@ -7,42 +7,68 @@ use Illuminate\Http\Request;
 use App\Models\LoanApplication;
 use App\Models\RepaymentSchedule;
 use App\Models\LoanDisbursement;
+use App\Services\MpesaServices;
 use Carbon\Carbon;
 
 class LoanController extends Controller
 {
     
-    public function approveLoan($loanId)
-    {
-        $loan = LoanApplication::findOrFail($loanId);
+   public function approveLoan($loanId)
+{
+    $loan = LoanApplication::findOrFail($loanId);
 
-        if ($loan->status !== LoanApplication::STATUS_PENDING) {
-            return response()->json(['error' => 'Loan not pending approval'], 400);
-        }
-
-        $loan->update([
-            'status' => LoanApplication::STATUS_APPROVED,
-            'approved_at' => now(),
-        ]);
-
-        return response()->json(['message' => 'Loan approved']);
+    if ($loan->status !== LoanApplication::STATUS_PENDING) {
+        return response()->json(['error' => 'Loan not pending approval'], 400);
     }
 
-    
-    public function disburseLoan($loanId)
-    {
-        $loan = LoanApplication::with('user')->findOrFail($loanId);
+    $loan->update([
+        'status' => LoanApplication::STATUS_APPROVED,
+        'approved_amount' => $loan->loan_amount,
+        'approved_at' => now(),
+    ]);
 
-        if ($loan->status !== LoanApplication::STATUS_APPROVED) {
-            return response()->json(['error' => 'Loan must be approved before disbursement'], 400);
-        }
+    return response()->json(['message' => 'Loan approved']);
+}
+
+ public function disburse($id)
+{
+    $loan = LoanApplication::findOrFail($id);
+
+    if ($loan->status !== LoanApplication::STATUS_APPROVED) {
+        return back()->with('error', 'Only approved loans can be disbursed');
+    }
+
+    try {
+        $mpesa = new MpesaServices();
+        $phone = $loan->user->phone;
+        $formattedPhone = preg_replace('/^0/', '254', $phone);
+        $amount = $loan->approved_amount ?? $loan->loan_amount;
 
         $disbursement = LoanDisbursement::create([
             'loan_application_id' => $loan->id,
-            'user_id' => $loan->user->id,
-            'amount' => $loan->amount,
-            'phone_number' => $loan->user->phone,
-            'status' => 'pending', 
+            'user_id' => $loan->user_id,
+            'amount' => $amount,
+            'phone_number' => $formattedPhone,
+            'status' => 'pending',
+            'transaction_id' => null,
+            'result_type' => null,
+            'disbursed_at' => now(),
+        ]);
+
+        $result = $mpesa->b2c($formattedPhone, $amount, $disbursement->id);
+
+        if (($result['ResponseCode'] ?? 1) != 0) {
+            $disbursement->update([
+                'status' => 'failed',
+                'result_desc' => $result['ResponseDescription'] ?? 'B2C request failed',
+            ]);
+            throw new \Exception($result['ResponseDescription'] ?? 'B2C request failed');
+        }
+
+        $disbursement->update([
+            'conversation_id' => $result['ConversationID'] ?? null,
+            'originator_conversation_id' => $result['OriginatorConversationID'] ?? null,
+            'status' => 'success',
         ]);
 
         $loan->update([
@@ -50,30 +76,23 @@ class LoanController extends Controller
             'disbursed_at' => now(),
         ]);
 
-        $this->generateRepaymentSchedule($loan);
+        return back()->with(
+            'success',
+            'Disbursement initiated successfully to ' . $formattedPhone
+        );
 
-        return response()->json([
-            'message' => 'Loan disbursed and repayment schedule created',
-            'disbursement_id' => $disbursement->id
+    } catch (\Exception $e) {
+        \Log::error('Disbursement Error', [
+            'loan_id' => $loan->id,
+            'error' => $e->getMessage(),
         ]);
+
+        return back()->with('error', 'Disbursement failed. Check logs.');
     }
+}
+
+
+
     
-
-    protected function generateRepaymentSchedule(LoanApplication $loan)
-    {
-        $monthlyPayment = $loan->amount / $loan->term_months; 
-        $dueDate = Carbon::now()->addMonth();
-
-        for ($i = 1; $i <= $loan->term_months; $i++) {
-            RepaymentSchedule::create([
-                'loan_application_id' => $loan->id,
-                'amount_due' => $monthlyPayment,
-                'due_date' => $dueDate->copy(),
-                'status' => 'pending',
-            ]);
-
-            $dueDate->addMonth();
-        }
-    }
 }
 

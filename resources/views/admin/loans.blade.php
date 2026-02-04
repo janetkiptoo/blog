@@ -57,35 +57,47 @@
                                 {{ $loan->status === 'paid' ? 'bg-green-100 text-green-700' : '' }}
                                 {{ $loan->status === 'approved' ? 'bg-yellow-100 text-yellow-700' : '' }}
                                 {{ $loan->status === 'pending' ? 'bg-orange-100 text-orange-700' : '' }}
-                                {{ $loan->status === 'rejected' ? 'bg-red-100 text-red-700' : '' }}">
+                                {{ $loan->status === 'rejected' ? 'bg-red-100 text-red-700' : '' }}
+                                {{ $loan->status === 'disbursed' ? 'bg-blue-100 text-blue-700' : '' }}">
+
                                 {{ ucfirst($loan->status) }}
                             </span>
                         </td>
+<td class="px-4 py-3 border text-center">
+    @if ($loan->status === 'pending')
+        <div class="flex justify-center gap-2">
+            <form action="{{ route('admin.loan.approve', $loan->id) }}" method="POST">
+                @csrf
+                <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                    Approve
+                </button>
+            </form>
 
-                        <td class="px-4 py-3 border text-center">
-                            @if ($loan->status === 'pending')
-                                <div class="flex justify-center gap-2">
-                                    <form action="{{ route('admin.loan.approve', $loan->id) }}" method="POST">
-                                        @csrf
-                                        <button
-                                            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
-                                            Approve
-                                        </button>
-                                    </form>
+            <form action="{{ route('admin.loan.reject', $loan->id) }}" method="POST">
+                @csrf
+                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
+                    Reject
+                </button>
+            </form>
+        </div>
 
-                                    <form action="{{ route('admin.loan.reject', $loan->id) }}" method="POST">
-                                        @csrf
-                                        <button
-                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
-                                            Reject
-                                        </button>
-                                    </form>
-                                </div>
-                            @else
-                                <span class="text-gray-400 text-sm">No action</span>
-                            @endif
-                        </td>
-                    </tr>
+             @elseif ($loan->status === 'approved')
+              <form action="{{ route('admin.loan.disburse', $loan->id) }}" method="POST"
+              onsubmit="return confirm('Are you sure you want to disburse this loan?');">
+            @csrf
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                Disburse
+            </button>
+        </form>
+
+    @elseif ($loan->status === 'disbursed')
+        <span class="text-blue-600 text-sm font-semibold">Disbursed</span>
+
+    @else
+        <span class="text-gray-400 text-sm">No action</span>
+    @endif
+</td>
+ </tr>
                 @empty
                     <tr>
                         <td colspan="8" class="px-4 py-6 text-center text-gray-500"> No loan applications found </td>

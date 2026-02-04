@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminGuarantorController;
 use App\Http\Controllers\AdminTermsController;
 use App\Http\Controllers\Admin\PaymentMethodController;
+Use App\Http\Controllers\Admin\LoanController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/loans/{loan}/repayments', [AdminRepaymentController::class, 'show'])->name('repayments.show');
     Route::get('/loans/{loan}/guarantors', [AdminGuarantorController::class, 'index'])->name('loans.guarantors');
     Route::resource('payment-methods', PaymentMethodController::class);
+    Route::post('/loans/{id}/disburse', [LoanController::class, 'disburse'])->name('loan.disburse');
+
    
 
 
