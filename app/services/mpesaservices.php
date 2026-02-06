@@ -4,6 +4,8 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 
 class MpesaServices
 {
@@ -15,7 +17,7 @@ class MpesaServices
         $response = Http::withBasicAuth(
             env('MPESA_CONSUMER_KEY'),
             env('MPESA_CONSUMER_SECRET')
-        )->get(env('MPESA_BASE_URL') . '/oauth/v1/generate?grant_type=client_credentials');
+        )->get(env('MPESA_BASE_URL').'/oauth/v1/generate?grant_type=client_credentials');
 
         if ($response->failed()) {
             throw new \Exception('Failed to get access token from Safaricom');
@@ -24,24 +26,34 @@ class MpesaServices
         return $response['access_token'];
     }
 
-
-    private function getSecurityCredential()
-    {
-        
-        
-        if (env('MPESA_ENVIRONMENT') === 'sandbox') {
-            return env('MPESA_INITIATOR_PASSWORD');
-        }
-
-        // For production, encrypt the password
-        $publicKey = file_get_contents(storage_path('certificates/safaricom_production.cer'));
-        $plaintext = env('MPESA_INITIATOR_PASSWORD');
-        
-        openssl_public_encrypt($plaintext, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
-        
-        return base64_encode($encrypted);
+   private function getSecurityCredential()
+{
+    if (env('MPESA_ENVIRONMENT') === 'sandbox') {
+        $certPath = storage_path('certificates/safaricom_sandbox.cer');
+    } else {
+        $certPath = storage_path('certificates/safaricom_production.cer');
+    }
+    
+    if (!file_exists($certPath)) {
+        \Log::error('Certificate not found', ['path' => $certPath]);
+        throw new \Exception("Certificate file not found at: $certPath");
     }
 
+    $certContent = file_get_contents($certPath);
+    $publicKey = openssl_pkey_get_public($certContent);
+    
+    if (!$publicKey) {
+        \Log::error('Failed to load public key from certificate');
+        throw new \Exception('Invalid certificate file');
+    }
+
+    $plaintext = env('MPESA_B2C_INITIATOR_PASSWORD');
+    $encrypted = '';
+    
+    openssl_public_encrypt($plaintext, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
+    
+    return base64_encode($encrypted);
+}
     /**
      * STK Push for Customer Payments
      */
@@ -53,14 +65,14 @@ class MpesaServices
             // Generate password
             $timestamp = now()->format('YmdHis');
             $password = base64_encode(
-                env('LIPA_NA_MPESA_SHORTCODE') .
-                env('LIPA_NA_MPESA_PASSKEY') .
+                env('LIPA_NA_MPESA_SHORTCODE').
+                env('LIPA_NA_MPESA_PASSKEY').
                 $timestamp
             );
 
             // Send STK Push
             $response = Http::withToken($accessToken)->post(
-                env('MPESA_BASE_URL') . '/mpesa/stkpush/v1/processrequest',
+                env('MPESA_BASE_URL').'/mpesa/stkpush/v1/processrequest',
                 [
                     'BusinessShortCode' => env('LIPA_NA_MPESA_SHORTCODE'),
                     'Password' => $password,
@@ -83,7 +95,7 @@ class MpesaServices
             return $response->json();
 
         } catch (\Exception $e) {
-            Log::error('Mpesa STK Push Error: ' . $e->getMessage());
+            Log::error('Mpesa STK Push Error: '.$e->getMessage());
 
             return [
                 'ResponseCode' => '1',
@@ -99,36 +111,47 @@ class MpesaServices
     {
         try {
             $accessToken = $this->getAccessToken();
-            $securityCredential = $this->getSecurityCredential();
+            $securityCredential = $this->getSecurityCredential(); 
+            // $securityCredential = env('MPESA_SECURITY_CREDENTIAL'); // This will now return base64 encoded
 
-            // Send B2C request
+            // $payload = [
+            //     'InitiatorName' => env('MPESA_B2C_INITIATOR_NAME'),
+            //     'SecurityCredential' => $securityCredential,  // Use the base64 encoded version
+            //     'CommandID' => 'BusinessPayment',
+            //     'Amount' => $amount,
+            //     'PartyA' => env('MPESA_B2C_SHORTCODE'),
+            //     'PartyB' => $phone,
+            //     'Remarks' => 'Loan Disbursement',
+            //     'QueueTimeOutURL' => env('MPESA_B2C_QUEUE_TIMEOUT_URL'),
+            //     'ResultURL' => env('MPESA_B2C_RESULT_URL'),
+            //     'Occasion' => 'Loan Disbursement - '.$reference,
+            // ];
+$payload = [
+    // ... your existing
+    'Amount' => '10',  // small for sandbox
+    'PartyA' => '174379',
+    'PartyB' => '254708374149',  // or pass as param
+    // ...
+];
+
+            Log::info('B2C Request Payload', $payload);
+
             $response = Http::withToken($accessToken)->post(
-                env('MPESA_BASE_URL') . '/mpesa/b2c/v1/paymentrequest',
-                [
-                    'InitiatorName' => env('MPESA_INITIATOR_NAME'),
-                    'SecurityCredential' => $securityCredential,
-                    'CommandID' => env('MPESA_B2C_COMMAND_ID', 'BusinessPayment'),
-                    'Amount' => $amount,
-                    'PartyA' => env('MPESA_B2C_SHORTCODE'),
-                    'PartyB' => $phone,
-                    'Remarks' => 'Loan Disbursement',
-                    'QueueTimeOutURL' => env('MPESA_B2C_QUEUE_TIMEOUT_URL'),
-                    'ResultURL' => env('MPESA_B2C_RESULT_URL'),
-                    'Occasion' => 'Loan Disbursement - ' . $reference,
-                ]
+                env('MPESA_BASE_URL').'/mpesa/b2c/v1/paymentrequest',
+                $payload
             );
+
+            Log::info('B2C Response', $response->json());
 
             if ($response->failed()) {
                 Log::error('B2C Request Failed', $response->json());
                 throw new \Exception('B2C request failed');
             }
 
-            Log::info('B2C Request Successful', $response->json());
-
             return $response->json();
 
         } catch (\Exception $e) {
-            Log::error('Mpesa B2C Error: ' . $e->getMessage());
+            Log::error('Mpesa B2C Error: '.$e->getMessage());
 
             return [
                 'ResponseCode' => '1',
@@ -136,6 +159,4 @@ class MpesaServices
             ];
         }
     }
-
-   
 }

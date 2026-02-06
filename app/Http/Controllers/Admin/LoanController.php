@@ -30,7 +30,7 @@ class LoanController extends Controller
     return response()->json(['message' => 'Loan approved']);
 }
 
- public function disburse($id)
+public function disburse($id)
 {
     $loan = LoanApplication::findOrFail($id);
 
@@ -40,46 +40,38 @@ class LoanController extends Controller
 
     try {
         $mpesa = new MpesaServices();
-        $phone = $loan->user->phone;
-        $formattedPhone = preg_replace('/^0/', '254', $phone);
+        $phone = preg_replace('/^0/', '254', $loan->user->phone);
         $amount = $loan->approved_amount ?? $loan->loan_amount;
 
         $disbursement = LoanDisbursement::create([
             'loan_application_id' => $loan->id,
             'user_id' => $loan->user_id,
             'amount' => $amount,
-            'phone_number' => $formattedPhone,
+            'phone_number' => $phone,
             'status' => 'pending',
             'transaction_id' => null,
             'result_type' => null,
             'disbursed_at' => now(),
         ]);
 
-        $result = $mpesa->b2c($formattedPhone, $amount, $disbursement->id);
+        $result = $mpesa->b2c($phone, $amount, $disbursement->id);
+
+        // Update conversation IDs and check initial result
+        $disbursement->update([
+            'conversation_id' => $result['ConversationID'] ?? null,
+            'originator_conversation_id' => $result['OriginatorConversationID'] ?? null,
+        ]);
 
         if (($result['ResponseCode'] ?? 1) != 0) {
             $disbursement->update([
                 'status' => 'failed',
                 'result_desc' => $result['ResponseDescription'] ?? 'B2C request failed',
+                'result_type' => $result['ResultType'] ?? null,
             ]);
             throw new \Exception($result['ResponseDescription'] ?? 'B2C request failed');
         }
 
-        $disbursement->update([
-            'conversation_id' => $result['ConversationID'] ?? null,
-            'originator_conversation_id' => $result['OriginatorConversationID'] ?? null,
-            'status' => 'success',
-        ]);
-
-        $loan->update([
-            'status' => LoanApplication::STATUS_DISBURSED,
-            'disbursed_at' => now(),
-        ]);
-
-        return back()->with(
-            'success',
-            'Disbursement initiated successfully to ' . $formattedPhone
-        );
+        return back()->with('success', 'Disbursement initiated! Check callback for confirmation.');
 
     } catch (\Exception $e) {
         \Log::error('Disbursement Error', [
