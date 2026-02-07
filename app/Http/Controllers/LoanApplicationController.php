@@ -6,10 +6,14 @@ use App\Models\LoanApplication;
 use App\Models\LoanProduct;
 use App\Models\LoanRepayment;
 use App\Models\MpesaPayment;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 use App\Services\MpesaServices;
 use App\Enums\PaymentChannel;
 use Illuminate\Http\Request;
+use App\Models\CashPayment;
+
+
 
 class LoanApplicationController extends Controller
 {
@@ -20,19 +24,15 @@ class LoanApplicationController extends Controller
         return view('loans.apply', compact('product'));
     }
 
-   public function process_repayment(Request $request, $id)
+  public function process_repayment(Request $request, $id)
 {
     $request->validate([
         'amount' => 'required|numeric|min:1',
-        'payment_method' => 'required|string',
+        'channel' => 'required|in:mpesa,cash',
         'reference' => 'nullable|string',
     ]);
 
-    $loan = LoanApplication::where('id', $id)
-        ->where('user_id', auth()->id())
-        ->where('status', 'approved')
-        ->firstOrFail();
-
+    $loan = LoanApplication::where('id', $id) ->where('user_id', auth()->id())->where('status', 'approved')->firstOrFail();
     if ($loan->repayment_start_date && now()->lt($loan->repayment_start_date)) {
         return back()->withErrors('Loan is still in grace period.');
     }
@@ -41,60 +41,52 @@ class LoanApplicationController extends Controller
         return back()->withErrors('Loan is already fully paid.');
     }
 
-    $paymentAmount = $request->amount;
-    $reference = $request->reference;
+    $amount = min($request->amount, $loan->balance);
 
-    // Mpesa payment flow
-    if ($request->payment_method === 'mpesa') {
+    if ($request->channel === 'mpesa') {
+
         $phone = Auth::user()->phone;
+        $result = (new MpesaServices())->stkPush($phone, $amount, $request->reference);
 
-        // Trigger STK push
-        $result = (new MpesaServices())->stkPush($phone, $paymentAmount, $reference);
-
-        // Save pending payment to mpesa_payments
         MpesaPayment::create([
-            'payment_id' => $loan->id, // Or generate unique reference
+            'payment_id' => $loan->id,
             'phone' => preg_replace('/^0/', '254', $phone),
             'checkout_request_id' => $result['CheckoutRequestID'] ?? null,
             'merchant_request_id' => $result['MerchantRequestID'] ?? null,
-            'amount' => $paymentAmount,
-            'result_code' => null,
-            'result_desc' => null,
-            'paid_at' => null,
-
+            'amount' => $amount,
         ]);
 
-        return back()->with('success', 'Mpesa STK Push initiated. Check your phone to complete payment.');
+        return back()->with('success', 'Mpesa STK Push initiated.');
     }
 
-    // Cash payment flow
-    if ($paymentAmount > $loan->balance) {
-        $paymentAmount = $loan->balance;
+   
+    if ($request->channel === 'cash') {
+
+       
+         $loan = Payment::create([
+            'user_id' => auth()->id(),
+            'loan_application_id' => $loan->id,
+            'amount' => $amount,
+            'channel' => 'cash',
+            'status' => 'pending',
+        ]);
+
+       
+        CashPayment::create([
+            'loan_application_id' => $loan->id,
+            'user_id' => auth()->id(),
+            'amount' => $amount,
+            'status' => 'pending',
+            
+        ]);
+
+        return back()->with(
+            'success',
+            'Cash payment submitted. Awaiting admin approval.'
+        );
     }
-
-    $balanceBefore = $loan->balance;
-    $loan->balance -= $paymentAmount;
-    $loan->total_paid += $paymentAmount;
-    if ($loan->balance <= 0) {
-        $loan->balance = 0;
-        $loan->status = 'completed';
-    }
-    $loan->save();
-
-    LoanRepayment::create([
-        'loan_application_id' => $loan->id,
-        'amount' => $paymentAmount,
-        'principal' => $paymentAmount,
-        'interest' => 0,
-        'balance_before' => $balanceBefore,
-        'balance_after' => $loan->balance,
-        'paid_at' => now(),
-        'late_penalty' => 0,
-        'channel' => PaymentChannel::MPESA,
-    ]);
-
-    return back()->with('success', 'Payment recorded successfully.');
 }
+
 
     public function showRepayForm($id)
 {

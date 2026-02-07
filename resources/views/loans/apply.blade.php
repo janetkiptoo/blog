@@ -12,16 +12,8 @@
         {{-- Loan Amount --}}
         <div class="mb-4">
             <label class="block text-gray-700 font-medium mb-1">Loan Amount (KES)</label>
-            <input
-                type="number"
-                name="loan_amount"
-                id="loan_amount"
-                min="{{ $product->min_loan_amount }}"
-                max="{{ $product->max_loan_amount }}"
-                required
-                oninput="calculateLoan()"
-                class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
-            >
+            <input type="number" name="loan_amount" id="loan_amount" min="{{ $product->min_loan_amount }}" max="{{ $product->max_loan_amount }}" required oninput="calculateLoan()"
+                class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
         </div>
 
         {{-- Term Months --}}

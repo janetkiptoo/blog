@@ -5,7 +5,6 @@
 
     <h2 class="text-2xl font-semibold text-gray-800 mb-6">Loan Repayment Dashboard</h2>
 
-    {{-- Loan Details --}}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div class="p-4 border rounded-lg bg-gray-50">
             <h3 class="font-semibold text-gray-700 mb-2">Loan Details</h3>
@@ -34,7 +33,6 @@
         </div>
     </div>
 
-    {{-- Repayment Form --}}
     @if($loan->status !== 'completed' && (!$loan->repayment_start_date || now()->gte($loan->repayment_start_date)))
     <div class="mb-10 border rounded-lg p-6 bg-gray-50">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Make a Repayment</h3>
@@ -45,22 +43,11 @@
             </div>
         @endif
 
-        
-
      <form id="repaymentForm">
     @csrf
-
     <div class="mb-4">
         <label class="block text-gray-700 mb-1">Payment Amount (KES)</label>
-        <input
-            type="number"
-            name="amount"
-            min="1"
-            max="{{ $loan->balance }}"
-            value="{{ $monthlyPayment }}"
-            required
-            class="w-full border rounded-lg px-4 py-2"
-        >
+        <input type="number" name="amount" min="1" max="{{ $loan->balance }}" value="{{ $monthlyPayment }}"required class="w-full border rounded-lg px-4 py-2">
     </div>
 
     <div class="mb-4">
@@ -70,40 +57,32 @@
             <option value="mpesa">Mpesa</option>
             <option value="cash">Cash</option>
         </select>
+    <p id="cashNote" class="hidden text-sm text-blue-600 mt-2">Cash payments are subject to admin approval.</p>
     </div>
 
-    {{-- REQUIRED FOR MPESA --}}
     <input type="hidden" name="phonenumber" value="{{ auth()->user()->phone }}">
     <input type="hidden" name="account_number" value="{{ $loan->id }}">
 
-    <button
-        type="submit"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
-    >
+    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
         Submit Payment
     </button>
 </form>
 
-
 <script>
-document.getElementById('repaymentForm').addEventListener('submit', function (e) {
-    e.preventDefault();
 
+document.getElementById('paymentMethod').addEventListener('change', function () {
+document.getElementById('cashNote').classList.toggle('hidden', this.value !== 'cash'); });    
+document.getElementById('repaymentForm').addEventListener('submit', function (e) {e.preventDefault();
     const method = document.getElementById('paymentMethod').value;
 
-    if (method !== 'mpesa') {
-        alert('Only Mpesa is supported here.');
-        return;
-    }
+            if (method === 'cash') {
+                alert("Cash payment submitted. Awaiting admin approval.");
+                return;
+            }
+             e.preventDefault();
 
     const formData = new FormData(this);
-
-    fetch("{{ route('mpesa.stkpush') }}", {
-        method: "POST",
-        headers: {
-            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-            "Accept": "application/json"
-        },
+    fetch("{{ route('mpesa.stkpush') }}", { method: "POST",headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}", "Accept": "application/json" },
         body: formData
     })
     .then(res => res.json())
@@ -120,12 +99,9 @@ document.getElementById('repaymentForm').addEventListener('submit', function (e)
     });
 });
 </script>
-
-
     </div>
     @endif
 
-    {{-- Repayment History --}}
     <div class="overflow-x-auto">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Repayment History</h3>
         @if($loan->repayments->isEmpty())
@@ -137,7 +113,7 @@ document.getElementById('repaymentForm').addEventListener('submit', function (e)
                         <th class="px-4 py-2 text-left">Date</th>
                         <th class="px-4 py-2 text-left">Amount Paid</th>
                         <th class="px-4 py-2 text-left">Balance After</th>
-                         <th class="px-4 py-2 text-left">Channel</th>
+                        <th class="px-4 py-2 text-left">Channel</th>
                         <th class="px-4 py-2 text-left">Late Penalty</th>
                     </tr>
                 </thead>
@@ -148,7 +124,6 @@ document.getElementById('repaymentForm').addEventListener('submit', function (e)
                         <td class="px-4 py-2">KES {{ number_format($repayment->amount, 2) }}</td>
                         <td class="px-4 py-2">KES {{ number_format($repayment->balance_after, 2) }}</td>
                         <td class="px-4 py-2">{{ $repayment->payment?->channel?->value ?? 'N/A' }}</td>
-                        
                         <td class="px-4 py-2">KES {{ number_format($repayment->late_penalty ?? 0, 2) }}</td>
                     </tr>
                     @endforeach
@@ -156,6 +131,5 @@ document.getElementById('repaymentForm').addEventListener('submit', function (e)
             </table>
         @endif
     </div>
-
 </div>
 @endsection

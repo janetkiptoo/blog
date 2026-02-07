@@ -10,14 +10,11 @@ use Illuminate\Support\Str;
 
 class PaymentMethodController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
          $methods = PaymentMethod::latest()->get();
         return view('admin.payment-methods.index', compact('methods'));
-        //
+        
     }
 
     /**

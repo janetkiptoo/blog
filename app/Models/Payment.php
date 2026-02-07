@@ -1,21 +1,26 @@
 <?php
 
 namespace App\Models;
+
 use App\Enums\PaymentChannel;
 use App\Enums\PaymentStatus;
-
-
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    protected $fillable = ['user_id', 'amount', 'channel', 'status'];
+    protected $fillable = [
+        'user_id',
+        'loan_application_id',
+        'amount',
+        'channel',
+        'status',
+    ];
 
     protected $casts = [
         'channel' => PaymentChannel::class,
-        'status' => PaymentStatus::class,
+        'status'  => PaymentStatus::class,
     ];
-    
+
 
     public function mpesa()
     {
@@ -26,10 +31,17 @@ class Payment extends Model
     {
         return $this->hasOne(CashPayment::class);
     }
+
     public function loan()
     {
-        return $this->hasOneThrough(LoanApplication::class, MpesaPayment::class, 'payment_id', 'id', 'id', 'loan_id');
+        return $this->belongsTo(LoanApplication::class, 'loan_application_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
+
 
 

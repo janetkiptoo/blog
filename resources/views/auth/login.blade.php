@@ -7,7 +7,7 @@
 
 
     
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" class="grid  gap-3 min-w-3xl bg-gray-100 p-4 rounded-lg shadow">
         @csrf
 
         <!-- Email Address -->

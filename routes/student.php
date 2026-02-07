@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Route;
 
      Route::get('/terms', [TermController::class, 'show'])->name('terms');
 
+
       
    
 

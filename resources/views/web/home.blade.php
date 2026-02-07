@@ -5,7 +5,7 @@
 @section('content')
 
 <section 
-class="flex flex-col md:flex-row items-center bg-[url('{{ asset('assets/bg.jpg') }}')] bg-cover bg-center py-6 gap-2 ">
+class="flex flex-col md:flex-row items-center  bg-center py-6 gap-2 ">
     
     
 
@@ -65,8 +65,12 @@ class="flex flex-col md:flex-row items-center bg-[url('{{ asset('assets/bg.jpg')
 </section>
 
 
-<section class="px-6 md:px-16 py-16 bg-white">
-    <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">How It Works</h2>
+<section
+  class="px-6 md:px-16 py-16 bg-cover bg-center"
+  
+>
+
+    <h2 class="text-3xl font-bold text-black text-center mb-12">How It Works</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
         <div class="p-6 border rounded-lg shadow hover:shadow-lg transition">
@@ -109,7 +113,9 @@ class="flex flex-col md:flex-row items-center bg-[url('{{ asset('assets/bg.jpg')
 </section>
 
 
-<section class="bg-sky-600 text-white px-6 md:px-16 py-16 text-center">
+<section class="bg-cover text-white px-6 md:px-16 py-16 text-center"
+style="background-image: url('{{ asset('assets/bg.jpg') }}');">
+    
     <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to start your student loan?</h2>
     <p class="text-lg mb-8">Apply today and take the first step toward achieving your academic goals with ease and confidence.</p> 
 </section>

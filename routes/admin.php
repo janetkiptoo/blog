@@ -9,7 +9,8 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminGuarantorController;
 use App\Http\Controllers\AdminTermsController;
 use App\Http\Controllers\Admin\PaymentMethodController;
-Use App\Http\Controllers\Admin\LoanController;
+use App\Http\Controllers\Admin\LoanController;
+use App\Http\Controllers\Admin\AdminCashPaymentController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +37,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('payment-methods', PaymentMethodController::class);
     Route::post('/loans/{id}/disburse', [LoanController::class, 'disburse'])->name('loan.disburse');
 
-   
+    Route::get('/cash-payments', [AdminCashPaymentController::class, 'index'])->name('cash-payments.index');
+    Route::post('/cash-payments/{id}/approve', [AdminCashPaymentController::class, 'approve'])->name('cash-payments.approve');
+    Route::post('/cash-payments/{id}/reject', [AdminCashPaymentController::class, 'reject'])->name('cash-payments.reject');
+
 
 
 });

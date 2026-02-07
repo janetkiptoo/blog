@@ -56,7 +56,7 @@ public function disburse($id)
 
         $result = $mpesa->b2c($phone, $amount, $disbursement->id);
 
-        // Update conversation IDs and check initial result
+       
         $disbursement->update([
             'conversation_id' => $result['ConversationID'] ?? null,
             'originator_conversation_id' => $result['OriginatorConversationID'] ?? null,
@@ -82,6 +82,8 @@ public function disburse($id)
         return back()->with('error', 'Disbursement failed. Check logs.');
     }
 }
+
+
 
 
 

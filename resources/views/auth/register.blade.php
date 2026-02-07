@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}" class="grid grid-cols-2 gap-5 min-w-5xl"  enctype="multipart/form-data">
+    <form method="POST" action="{{ route('register') }}" class="grid grid-cols-2 gap-5 min-w-5xl bg-gray-100 p-6 rounded-lg shadow"  enctype="multipart/form-data">
         @csrf
 
         <!-- Name -->
@@ -54,12 +54,7 @@
             <x-text-input id="student_reg_no" class="block mt-1 w-full" type="text" name="student_reg_no" :value="old('student_reg_no')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('student_reg_no')" class="mt-2" />
         </div>
-        
-           <div class="form-group">
-            <label for="image">upload ID Image</label>
-             <input type="file" name="image" id="image" class="form-control">
-            <x-input-error :messages="$errors->get('image')" class="mt-2" />
-           </div>
+    
              
 
         <!-- Password -->
@@ -84,6 +79,12 @@
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
+
+        <div class="form-group">
+            <label for="image">upload ID Image</label>
+             <input type="file" name="image" id="image" class="form-control">
+            <x-input-error :messages="$errors->get('image')" class="mt-2" />
+           </div>
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 " href="{{ route('login') }}">
