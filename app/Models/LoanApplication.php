@@ -47,9 +47,8 @@ protected $table = 'loan_application';
     {
          return $this->belongsTo(LoanProduct::class, 'loan_product_id');
     }
-    // app/Models/LoanApplication.php
 
- public function repayments()
+    public function repayments()
     {
         return $this->hasMany(LoanRepayment::class);
     }
@@ -59,17 +58,24 @@ protected $table = 'loan_application';
     return $this->hasMany(Guarantor::class);
 }
 
-public function repaymentSchedules()
+    public function repaymentSchedules()
 {
     return $this->hasMany(RepaymentSchedule::class);
 }
 
-public function disbursement()
+   public function disbursement()
     {
         return $this->hasOne(LoanDisbursement::class);
     }
-    
 
+public function payments()
+{
+    return $this->hasMany(Payment::class);
+}  
+ 
+public function cashPayments()
+    {
+        return $this->hasMany(CashPayment::class);
+    }
 
-    //
 }

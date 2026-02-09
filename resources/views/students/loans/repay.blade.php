@@ -43,25 +43,24 @@
             </div>
         @endif
 
-     <form id="repaymentForm">
+<form id="repaymentForm" method="POST" action="{{ route('student.loans.process_repayment', $loan->id) }}">
     @csrf
     <div class="mb-4">
         <label class="block text-gray-700 mb-1">Payment Amount (KES)</label>
-        <input type="number" name="amount" min="1" max="{{ $loan->balance }}" value="{{ $monthlyPayment }}"required class="w-full border rounded-lg px-4 py-2">
+        <input type="number" name="amount" min="1" max="{{ $loan->balance }}" value="{{ $monthlyPayment }}" required class="w-full border rounded-lg px-4 py-2">
     </div>
 
     <div class="mb-4">
         <label class="block text-gray-700 mb-1">Payment Method</label>
-        <select id="paymentMethod" class="w-full border rounded-lg px-4 py-2" required>
+        <select id="paymentMethod" name="channel" class="w-full border rounded-lg px-4 py-2" required>
             <option value="">Select method</option>
             <option value="mpesa">Mpesa</option>
             <option value="cash">Cash</option>
         </select>
-    <p id="cashNote" class="hidden text-sm text-blue-600 mt-2">Cash payments are subject to admin approval.</p>
+        <p id="cashNote" class="hidden text-sm text-blue-600 mt-2">Cash payments are subject to admin approval.</p>
     </div>
 
-    <input type="hidden" name="phonenumber" value="{{ auth()->user()->phone }}">
-    <input type="hidden" name="account_number" value="{{ $loan->id }}">
+    <input type="hidden" name="reference" value="{{ $loan->id }}">
 
     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
         Submit Payment
@@ -69,34 +68,62 @@
 </form>
 
 <script>
-
 document.getElementById('paymentMethod').addEventListener('change', function () {
-document.getElementById('cashNote').classList.toggle('hidden', this.value !== 'cash'); });    
-document.getElementById('repaymentForm').addEventListener('submit', function (e) {e.preventDefault();
+    document.getElementById('cashNote').classList.toggle('hidden', this.value !== 'cash');
+});
+
+document.getElementById('repaymentForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    
     const method = document.getElementById('paymentMethod').value;
-
-            if (method === 'cash') {
-                alert("Cash payment submitted. Awaiting admin approval.");
-                return;
-            }
-             e.preventDefault();
-
     const formData = new FormData(this);
-    fetch("{{ route('mpesa.stkpush') }}", { method: "POST",headers: { "X-CSRF-TOKEN": "{{ csrf_token() }}", "Accept": "application/json" },
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            alert(" STK Push sent. Enter your M-Pesa PIN on your phone.");
-        } else {
-            alert("Failed to send STK push: " + (data.message ?? "Unknown error"));
-        }
-    })
-    .catch(error => {
-        console.error(error);
-        alert(" Network or server error.");
-    });
+
+    if (method === 'cash') {
+        // Submit cash payment to your Laravel backend
+        fetch("{{ route('student.loans.process_repayment', $loan->id) }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                "Accept": "application/json"
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("Cash payment submitted. Awaiting admin approval.");
+                window.location.reload();
+            } else {
+                alert("Failed to submit cash payment: " + (data.message ?? "Unknown error"));
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Network or server error.");
+        });
+    } else if (method === 'mpesa') {
+        // M-Pesa STK Push
+        fetch("{{ route('student.loans.process_repayment', $loan->id) }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                "Accept": "application/json"
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("M-Pesa STK Push sent. Enter your PIN on your phone.");
+            } else {
+                alert("Failed to send STK push: " + (data.message ?? "Unknown error"));
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Network or server error.");
+        });
+    }
 });
 </script>
     </div>

@@ -17,7 +17,7 @@
         @foreach($cashPayments as $payment)
         <tr>
             <td>{{ $payment->user->name }}</td>
-            <td>{{ $payment->application->loan->id }}</td>
+            <td>{{ $payment->loanApplication->id }}</td>  
             <td>{{ number_format($payment->amount, 2) }}</td>
             <td>{{ $payment->created_at }}</td>
             <td class="flex gap-2">
