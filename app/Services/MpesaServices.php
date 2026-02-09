@@ -59,7 +59,7 @@ class MpesaServices
      */
     public function stkPush($phone, $amount, $reference)
     {
-        try {
+        try {   
             $accessToken = $this->getAccessToken();
 
             // Generate password
@@ -112,27 +112,21 @@ class MpesaServices
         try {
             $accessToken = $this->getAccessToken();
             $securityCredential = $this->getSecurityCredential(); 
-            // $securityCredential = env('MPESA_SECURITY_CREDENTIAL'); // This will now return base64 encoded
+            $securityCredential = env('MPESA_SECURITY_CREDENTIAL'); // This will now return base64 encoded
 
-            // $payload = [
-            //     'InitiatorName' => env('MPESA_B2C_INITIATOR_NAME'),
-            //     'SecurityCredential' => $securityCredential,  // Use the base64 encoded version
-            //     'CommandID' => 'BusinessPayment',
-            //     'Amount' => $amount,
-            //     'PartyA' => env('MPESA_B2C_SHORTCODE'),
-            //     'PartyB' => $phone,
-            //     'Remarks' => 'Loan Disbursement',
-            //     'QueueTimeOutURL' => env('MPESA_B2C_QUEUE_TIMEOUT_URL'),
-            //     'ResultURL' => env('MPESA_B2C_RESULT_URL'),
-            //     'Occasion' => 'Loan Disbursement - '.$reference,
-            // ];
-$payload = [
-    // ... your existing
-    'Amount' => '10',  // small for sandbox
-    'PartyA' => '174379',
-    'PartyB' => '254708374149',  // or pass as param
-    // ...
-];
+            $payload = [
+                'InitiatorName' => env('MPESA_B2C_INITIATOR_NAME'),
+                'SecurityCredential' => $securityCredential,  // Use the base64 encoded version
+                'CommandID' => 'BusinessPayment',
+                'Amount' => $amount,
+                'PartyA' => env('MPESA_B2C_SHORTCODE'),
+                'PartyB' => $phone,
+                'Remarks' => 'Loan Disbursement',
+                'QueueTimeOutURL' => env('MPESA_B2C_QUEUE_TIMEOUT_URL'),
+                'ResultURL' => env('MPESA_B2C_RESULT_URL'),
+                'Occasion' => 'Loan Disbursement - '.$reference,
+            ];
+
 
             Log::info('B2C Request Payload', $payload);
 

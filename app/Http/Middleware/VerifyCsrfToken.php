@@ -13,13 +13,14 @@ class VerifyCsrfToken
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-     protected $except = [
-        'mpesa/callback',
-        'mpesa/b2c/result',
-        'mpesa/b2c/timeout',
+    protected $except = [
+    'api/mpesa/callback',       
+    'api/mpesa/b2c/result',
+    'api/mpesa/b2c/timeout',
+];
 
 
-    ];
+    
     public function handle(Request $request, Closure $next): Response
     {
         return $next($request);

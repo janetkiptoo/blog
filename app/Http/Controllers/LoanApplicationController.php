@@ -54,6 +54,7 @@ class LoanApplicationController extends Controller
             'checkout_request_id' => $result['CheckoutRequestID'] ?? null,
             'merchant_request_id' => $result['MerchantRequestID'] ?? null,
             'amount' => $amount,
+            
         ]);
 
         return back()->with('success', 'Mpesa STK Push initiated.');
