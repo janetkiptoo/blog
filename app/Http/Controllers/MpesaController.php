@@ -35,9 +35,7 @@ class MpesaController extends Controller
         $phone = preg_replace('/^0/', '254', $request->phonenumber);
         $loanId = $request->account_number;
 
-        $loan = LoanApplication::where('id', $loanId)
-            ->where('user_id', auth()->id())
-            ->firstOrFail();
+        $loan = LoanApplication::where('id', $loanId)->where('user_id', auth()->id())->firstOrFail();
 
         DB::beginTransaction();
 

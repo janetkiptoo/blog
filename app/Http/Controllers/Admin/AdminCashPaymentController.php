@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\LoanApplication;
 use App\Models\LoanRepayment;
 use App\Enums\PaymentChannel;
+use App\Enums\PaymentStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -40,12 +41,11 @@ public function approve(Request $request, $id)
 
         if ($loan->balance <= 0) {
             $loan->balance = 0;
-            $loan->status = 'completed'; 
+            $loan->status = 'paid'; 
         }
 
         $loan->save();
-
-       
+        
         LoanRepayment::create([
             'loan_application_id' => $loan->id,
             'amount' => $amount,
@@ -56,6 +56,8 @@ public function approve(Request $request, $id)
             'paid_at' => now(),
             'late_penalty' => 0,
             'channel' => PaymentChannel::CASH,
+            'status' => PaymentStatus::SUCCESS,
+            'processed_by' => auth()->id(),
         ]);
 
         
@@ -84,6 +86,7 @@ public function reject(Request $request, $id)
         'status' => 'rejected',
         'processed_by' => auth()->id(),
         'processed_at' => now(),
+        'rejected_reason' => $request->reason,
     ]);
 
     return back()->with('success', 'Cash payment rejected.');

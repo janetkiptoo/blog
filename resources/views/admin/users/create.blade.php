@@ -67,7 +67,7 @@
             <label for="image">upload ID Image</label>
              <input type="file" name="image" id="image" class="form-control">
 
-        <button class="bg-blue-600 text-white px-4 py-2 rounded"> Create User</button>
+        <button class="bg-primary-100 hover:bg-primary-200 text-white px-4 py-2 rounded"> Create User</button>
     </form>
 
 </div>

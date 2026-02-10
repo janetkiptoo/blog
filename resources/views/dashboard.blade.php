@@ -24,7 +24,7 @@
 
         @if($loan->status !== 'paid')
         <a href="{{ route('student.loans.repay', $loan->id) }}"
-           class="mt-4 inline-block bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
+           class="mt-4 inline-block bg-primary-100 text-white px-6 py-2 rounded hover:bg-primary-100">
             Repay Loan
         </a>
         @endif

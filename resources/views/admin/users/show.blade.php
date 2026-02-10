@@ -19,7 +19,7 @@
         </div>
 
         <div class="mt-6 flex gap-4">
-            <a href="{{ route('admin.users.edit', $user) }}" class="bg-blue-600 text-white px-4 py-2 rounded">Edit </a>
+            <a href="{{ route('admin.users.edit', $user) }}" class="bg-primary-100 hover:bg-primary-200 text-white px-4 py-2 rounded">Edit </a>
 
             <form method="POST" action="{{ route('admin.users.destroy', $user) }}">
                 @csrf

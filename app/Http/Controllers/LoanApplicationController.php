@@ -10,6 +10,7 @@ use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 use App\Services\MpesaServices;
 use App\Enums\PaymentChannel;
+use App\Enums\PaymentStatus;
 use Illuminate\Http\Request;
 use App\Models\CashPayment;
 
@@ -60,7 +61,7 @@ public function process_repayment(Request $request, $id)
     }
 
     if ($request->channel === 'cash') {
-        // Create Payment record
+      
         $payment = Payment::create([
             'user_id' => auth()->id(),
             'loan_application_id' => $loanApplication->id,
@@ -69,7 +70,7 @@ public function process_repayment(Request $request, $id)
             'status' => 'pending',
         ]);
 
-        // Create CashPayment record
+      
         CashPayment::create([
             'payment_id' => $payment->id,
             'loan_application_id' => $loanApplication->id,

@@ -1,7 +1,7 @@
-<nav x-data="{ open: false }" class="flex items-center text-white justify-between px-4 py-2 bg-blue-800  ">
+<nav x-data="{ open: false }" class="flex items-center text-white justify-between px-8 py-6 bg-primary-50">  ">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white ">
-        <div class="flex justify-between h-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 text-white ">
+        <div class="flex justify-between h-30">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">

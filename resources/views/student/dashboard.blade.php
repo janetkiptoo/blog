@@ -39,7 +39,7 @@
             </p>
 
             <a href="{{ route('student.loans.index') }}"
-               class="mt-4 inline-block bg-blue-600 text-white px-6 py-2 rounded">
+               class="mt-4 inline-block bg-primary-100 hover:bg-primary-200 text-white px-6 py-2 rounded">
                 View All Loans
             </a>
         </div>

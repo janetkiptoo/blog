@@ -34,10 +34,10 @@ class GuarantorController extends Controller
             'physical_address' => 'nullable|string|max:255',
         ]);
 
-        // Handle file upload first
+        
         $path = $request->file('image')->store('guarantors', 'public');
 
-        // Prepare data for insertion
+        
         $requestData = [
             'name' => $request->name,
             'relationship' => $request->relationship,
@@ -55,7 +55,7 @@ class GuarantorController extends Controller
 
         return redirect()
             ->route('student.guarantors.create', $loan->id)
-            ->with('success', 'Guarantor added successfully.');
+            ->with('success', 'Guarantor added successfully and loan application submitted successfully.');
     }
 
     /**

@@ -27,43 +27,32 @@
     @csrf
         <div>
             <label class="block text-sm font-medium text-gray-700">Guarantor Name</label>
-            <input type="text" name="name"
-                   class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                   required>
+            <input type="text" name="name"class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"required>
         </div>
 
         <div>
             <label class="block text-sm font-medium text-gray-700">Relationship</label>
-            <input type="text" name="relationship"
-                   class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                   required>
+            <input type="text" name="relationship"class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"required>
         </div>
 
         <div>
             <label class="block text-sm font-medium text-gray-700">National ID</label>
-            <input type="text" name="national_id"
-                   class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                   required>
+            <input type="text" name="national_id" class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
         </div>
 
         <div>
             <label class="block text-sm font-medium text-gray-700">Phone Number</label>
-            <input type="text" name="phone"
-                   class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                   required>
+            <input type="text" name="phone" class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"required>
         </div>
 
           <div>
             <label class="block text-sm font-medium text-gray-700">Physical Address</label>
-            <input type="text" name="physical_address"
-                   class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                   required>
+            <input type="text" name="physical_address"class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"required>
         </div>
 
         <div>
             <label class="block text-sm font-medium text-gray-700">Email (Optional)</label>
-            <input type="email" name="email"
-                   class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <input type="email" name="email"class="mt-1 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
         </div>
 
          <div>
@@ -82,15 +71,11 @@
         </div>
 
         <div class="flex items-center">
-            <input type="checkbox" name="consent_given" value="1"
-                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                   required>
+            <input type="checkbox" name="consent_given" value="1"class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"required>
             <label class="ml-2 text-sm text-gray-700">
                 Guarantor consent given
             </label>
         </div>
-
-    
 
 
         <div class="flex justify-between items-center pt-4">
@@ -100,8 +85,8 @@
             </a>
 
             <button type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded">
-                Add Guarantor
+                    class="bg-primary-100 hover:bg-primary-200 text-white font-semibold px-6 py-2 rounded">
+                Add Guarantor and Submit for Application
             </button>
         </div>
     </form>

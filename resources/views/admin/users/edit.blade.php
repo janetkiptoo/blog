@@ -45,7 +45,7 @@
             </div>
 
             <div class="flex gap-4 mt-6">
-                <button class="bg-blue-600 text-white px-4 py-2 rounded">
+                <button class="bg-primary-100 hover:bg-primary-200 text-white px-4 py-2 rounded">
                     Update User
                 </button>
 

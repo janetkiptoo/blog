@@ -9,7 +9,7 @@
 <body class="bg-gray-100 flex min-h-screen">
 
 
-    <nav class="bg-blue-800 w-64 flex-shrink-0 p-6 flex flex-col">
+    <nav class="bg-primary-50 w-64 flex-shrink-0 p-6 flex flex-col">
         <div class="mb-8">
             <a href="{{ route('admin.dashboard') }}" class="text-white text-2xl font-bold block mb-6">Admin Panel</a>
         </div>

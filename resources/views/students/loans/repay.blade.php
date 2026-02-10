@@ -59,10 +59,11 @@
         </select>
         <p id="cashNote" class="hidden text-sm text-blue-600 mt-2">Cash payments are subject to admin approval.</p>
     </div>
-
+     <input type="hidden" name="phonenumber" value="{{ auth()->user()->phone }}">
+    <input type="hidden" name="account_number" value="{{ $loan->id }}">
     <input type="hidden" name="reference" value="{{ $loan->id }}">
 
-    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+    <button type="submit" class="bg-primary-100 hover:bg-primary-200 text-white px-6 py-2 rounded-lg">
         Submit Payment
     </button>
 </form>
@@ -79,7 +80,7 @@ document.getElementById('repaymentForm').addEventListener('submit', function (e)
     const formData = new FormData(this);
 
     if (method === 'cash') {
-        // Submit cash payment to your Laravel backend
+        
         fetch("{{ route('student.loans.process_repayment', $loan->id) }}", {
             method: "POST",
             headers: {

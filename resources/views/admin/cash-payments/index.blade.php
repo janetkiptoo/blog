@@ -10,6 +10,7 @@
             <th>Loan ID</th>
             <th>Amount</th>
             <th>Submitted At</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -20,6 +21,7 @@
             <td>{{ $payment->loanApplication->id }}</td>  
             <td>{{ number_format($payment->amount, 2) }}</td>
             <td>{{ $payment->created_at }}</td>
+            <td>{{ ucfirst($payment->status) }}</td>
             <td class="flex gap-2">
                 <form method="POST" action="{{ url('/admin/cash-payments/'.$payment->id.'/approve') }}">
                     @csrf

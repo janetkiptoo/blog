@@ -75,7 +75,9 @@ public function payments()
  
 public function cashPayments()
     {
-        return $this->hasMany(CashPayment::class);
+      return $this->hasMany(CashPayment::class);
     }
+
+    
 
 }

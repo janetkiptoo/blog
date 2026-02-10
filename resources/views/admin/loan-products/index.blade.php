@@ -6,7 +6,7 @@
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Loan Products Available</h2>
 
-        <a href="{{ route('admin.loan-products.create') }}" class="bg-blue-600 text-white px-3 py-1 rounded"> +Add Product
+        <a href="{{ route('admin.loan-products.create') }}" class="bg-primary-100 hover:bg-primary-200 text-white px-3 py-1 rounded"> +Add Product
         </a>
     </div>
 
@@ -32,7 +32,7 @@
                     <td class="p-2">{{ $product->loan_term_months }}</td>
                     <td class="p-2">{{ $product->grace_period_months }}</td>
                     <td class="p-2 space-x-2">
-                <a href="{{ route('admin.loan-products.edit', $product) }}" class="bg-blue-600 text-white px-3 py-1 rounded">Edit</a>
+                <a href="{{ route('admin.loan-products.edit', $product) }}" class="bg-primary-100 text-white px-3 py-1 rounded">Edit</a>
 
                         <form action="{{ route('admin.loan-products.destroy', $product) }}"method="POST"class="inline">
                             @csrf

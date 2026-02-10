@@ -15,7 +15,7 @@
             <input type="text" name="student" value="{{ request('student') }}" placeholder="Student name or Reg No" class="border border-gray-300 p-2 rounded focus:ring focus:ring-blue-200">
 
             <div class="md:col-span-4 flex items-end gap-3">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"> Filter </button>
+                <button type="submit" class="bg-primary-100 hover:bg-primary-200 text-white px-4 py-2 rounded"> Filter </button>
                 <a href="{{ route('admin.loans') }}" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Reset </a>
             </div>
         </form>
@@ -45,7 +45,7 @@
                         <td class="px-4 py-3 border">{{ $loan->user->student_reg_no }} </td>
                         <td class="px-4 py-3 border">{{ $loan->loanProduct->product_name }}</td>
                          <td class="px-4 py-3 border">   <a href="{{ route('admin.loans.guarantors', $loan->id) }}"
-   class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+   class="bg-primary-100 text-white px-4 py-2 rounded hover:bg-primary-200">
    View Guarantors
 </a></td>
                         <td class="px-4 py-3 border text-right"> KES {{ number_format($loan->loan_amount, 2) }} </td>
@@ -85,7 +85,7 @@
               <form action="{{ route('admin.loan.disburse', $loan->id) }}" method="POST"
               onsubmit="return confirm('Are you sure you want to disburse this loan?');">
             @csrf
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+            <button class="bg-primary-100 hover:bg-primary-200 text-white px-3 py-1 rounded text-sm">
                 Disburse
             </button>
         </form>
@@ -106,10 +106,6 @@
             </tbody>
         </table>
     </div>
-
- 
-
-
 
 </div>
 @endsection
