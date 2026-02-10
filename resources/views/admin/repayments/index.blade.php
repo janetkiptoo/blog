@@ -59,7 +59,7 @@
 
                         <td class="px-4 py-4 text-center">
                             <a href="{{ route('admin.repayments.show', $repayment->loan->id) }}"
-                               class="inline-block bg-primary-100 hover:bg-primary-200  text-white px-4 py-2 rounded-lg text-xs font-semibold transition">
+                               class="inline-block bg-primary-700 hover:bg-primary-500  text-white px-4 py-2 rounded-lg text-xs font-semibold transition">
                                 View Loan Repayments
                             </a>
                         </td>

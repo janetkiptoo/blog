@@ -30,7 +30,7 @@
                 <input type="text" id="student_reg_no" name="student_reg_no" required class="w-full border border-gray-300 rounded px-3 py-2">
             </div>
 
-            <button type="submit" class="bg-primary-100 hover:bg-primary-200 text-white px-40 py-2 rounded mt-4 w-full">
+            <button type="submit" class="bg-primary-700 hover:bg-primary-500 text-white px-40 py-2 rounded mt-4 w-full">
                 Register
             </button>
             

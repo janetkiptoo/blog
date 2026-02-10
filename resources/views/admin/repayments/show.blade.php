@@ -29,7 +29,7 @@
     </tbody>
 </table>
 </div>
-<a href="{{ route('admin.repayments.index') }}"class="bg-primary-100 hover:bg-primary-200 text-white px-10 py-2 rounded">
+<a href="{{ route('admin.repayments.index') }}"class="bg-primary-700 hover:bg-primary-500 text-white px-10 py-2 rounded">
    Back
 </a>
 @endsection

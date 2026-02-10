@@ -32,40 +32,41 @@ public function approve(Request $request, $id)
             abort(400, 'Payment already processed.');
         }
         
-        $loan = $cashPayment->loanApplication;
-        $amount = min($cashPayment->amount, $loan->balance);
-        $balanceBefore = $loan->balance;
+       $loan = $cashPayment->loanApplication;
 
-        $loan->balance -= $amount;
-        $loan->total_paid += $amount;
 
-        if ($loan->balance <= 0) {
-            $loan->balance = 0;
-            $loan->status = 'paid'; 
-        }
+$amount = min($cashPayment->amount, $loan->balance);
+$balanceBefore = $loan->balance;
+$loan->total_paid += $amount;
+$loan->balance = $loan->total_payable - $loan->total_paid;
 
-        $loan->save();
-        
-        LoanRepayment::create([
-            'loan_application_id' => $loan->id,
-            'amount' => $amount,
-            'principal' => $amount,
-            'interest' => 0,
-            'balance_before' => $balanceBefore,
-            'balance_after' => $loan->balance,
-            'paid_at' => now(),
-            'late_penalty' => 0,
-            'channel' => PaymentChannel::CASH,
-            'status' => PaymentStatus::SUCCESS,
-            'processed_by' => auth()->id(),
-        ]);
 
-        
-        $cashPayment->update([
-            'status' => 'approved',
-            'processed_by' => auth()->id(),
-            'processed_at' => now(),
-        ]);
+if ($loan->balance <= 0) {
+    $loan->balance = 0;
+    $loan->status = 'paid';
+}
+
+$loan->save();
+
+LoanRepayment::create([
+    'loan_application_id' => $loan->id,
+    'payment_id' => $cashPayment->payment->id,
+    'amount' => $amount,
+    'principal' => $amount, 
+    'interest' => 0,        
+    'balance_before' => $balanceBefore,
+    'balance_after' => $loan->balance,
+    'paid_at' => now(),
+    'late_penalty' => 0,
+    'channel' => PaymentChannel::CASH,
+]);
+
+
+$cashPayment->update([
+    'status' => 'approved',
+    'paid_at' => now(),
+]);
+
     });
 
     return redirect()->back()->with('success', 'Cash payment approved successfully.');

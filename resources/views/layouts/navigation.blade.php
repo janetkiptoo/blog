@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="flex items-center text-white justify-between px-8 py-6 bg-primary-50">  ">
+<nav x-data="{ open: false }" class="flex items-center text-white justify-between px-8 py-6 bg-primary">  
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 text-white ">
         <div class="flex justify-between h-30">

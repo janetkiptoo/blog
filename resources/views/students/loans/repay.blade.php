@@ -14,7 +14,7 @@
             <p> <strong>Total Payable: </strong>KES {{ number_format($totalPayable, 2) }}</p>
             <p><strong>Loan Term:</strong> {{ $loan->term_months }} months</p>
             <p><strong>Status:</strong> 
-                <span class="px-2 py-1 rounded text-sm {{ $loan->status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
+                <span class="px-2 py-1 rounded text-sm {{ $loan->status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
                     {{ ucfirst($loan->status) }}
                 </span>
             </p>
@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    @if($loan->status !== 'completed' && (!$loan->repayment_start_date || now()->gte($loan->repayment_start_date)))
+    @if($loan->status !== 'paid' && (!$loan->repayment_start_date || now()->gte($loan->repayment_start_date)))
     <div class="mb-10 border rounded-lg p-6 bg-gray-50">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">Make a Repayment</h3>
 
@@ -63,70 +63,55 @@
     <input type="hidden" name="account_number" value="{{ $loan->id }}">
     <input type="hidden" name="reference" value="{{ $loan->id }}">
 
-    <button type="submit" class="bg-primary-100 hover:bg-primary-200 text-white px-6 py-2 rounded-lg">
+    <button type="submit" class="bg-primary-700 hover:bg-primary-500 text-white px-6 py-2 rounded-lg">
         Submit Payment
     </button>
 </form>
 
 <script>
-document.getElementById('paymentMethod').addEventListener('change', function () {
-    document.getElementById('cashNote').classList.toggle('hidden', this.value !== 'cash');
+const paymentMethod = document.getElementById('paymentMethod');
+const repaymentForm = document.getElementById('repaymentForm');
+const cashNote = document.getElementById('cashNote');
+
+paymentMethod.addEventListener('change', function () {
+    cashNote.classList.toggle('hidden', this.value !== 'cash');
 });
 
-document.getElementById('repaymentForm').addEventListener('submit', function (e) {
+repaymentForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    
-    const method = document.getElementById('paymentMethod').value;
+
+    const method = paymentMethod.value;
     const formData = new FormData(this);
 
-    if (method === 'cash') {
-        
-        fetch("{{ route('student.loans.process_repayment', $loan->id) }}", {
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                "Accept": "application/json"
-            },
-            body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert("Cash payment submitted. Awaiting admin approval.");
-                window.location.reload();
-            } else {
-                alert("Failed to submit cash payment: " + (data.message ?? "Unknown error"));
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            alert("Network or server error.");
-        });
-    } else if (method === 'mpesa') {
-        // M-Pesa STK Push
-        fetch("{{ route('student.loans.process_repayment', $loan->id) }}", {
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                "Accept": "application/json"
-            },
-            body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert("M-Pesa STK Push sent. Enter your PIN on your phone.");
-            } else {
-                alert("Failed to send STK push: " + (data.message ?? "Unknown error"));
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            alert("Network or server error.");
-        });
-    }
+    fetch("{{ route('student.loans.process_repayment', $loan->id) }}", {
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            "Accept": "application/json"
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) {
+            alert((method === 'cash' ? "Failed to submit cash payment: " : "Failed to send STK push: ") + (data.message ?? "Unknown error"));
+            return;
+        }
+
+        if (method === 'cash') {
+            alert("Cash payment submitted. Awaiting admin approval.");
+            window.location.reload();
+        } else if (method === 'mpesa') {
+            alert("M-Pesa STK Push sent. Enter your PIN on your phone.");
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        alert("Network or server error.");
+    });
 });
 </script>
+
     </div>
     @endif
 
@@ -151,7 +136,7 @@ document.getElementById('repaymentForm').addEventListener('submit', function (e)
                         <td class="px-4 py-2">{{ $repayment->paid_at ? $repayment->paid_at->format('d M Y') : '-' }}</td>
                         <td class="px-4 py-2">KES {{ number_format($repayment->amount, 2) }}</td>
                         <td class="px-4 py-2">KES {{ number_format($repayment->balance_after, 2) }}</td>
-                        <td class="px-4 py-2">{{ $repayment->payment?->channel?->value ?? 'N/A' }}</td>
+                        <td class="px-4 py-2">{{ $repayment->channel_name }}</td>
                         <td class="px-4 py-2">KES {{ number_format($repayment->late_penalty ?? 0, 2) }}</td>
                     </tr>
                     @endforeach

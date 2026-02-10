@@ -85,7 +85,7 @@
             </a>
 
             <button type="submit"
-                    class="bg-primary-100 hover:bg-primary-200 text-white font-semibold px-6 py-2 rounded">
+                    class="bg-primary-700 hover:bg-primary-500 text-white font-semibold px-6 py-2 rounded">
                 Add Guarantor and Submit for Application
             </button>
         </div>

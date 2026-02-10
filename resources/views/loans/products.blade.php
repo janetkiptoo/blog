@@ -14,7 +14,7 @@
                     <p><strong>Term:</strong> {{ $product->loan_term_months }} months</p>
                     <p><strong>Grace Period:</strong> {{ $product->grace_period_months }} months</p>
                     <a href="{{ route('student.loan.apply', $product->id) }}"
-                       class="mt-2 inline-block bg-primary-100 hover:bg-primary-200 text-white px-4 py-2 rounded">
+                       class="mt-2 inline-block bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded">
                         Apply
                     </a>
                 </div>

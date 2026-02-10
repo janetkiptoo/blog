@@ -22,7 +22,7 @@
             </div>
 
             <a href="{{ route('admin.terms.edit', $term) }}"
-               class="inline-block bg-primary-100 hover:bg-primary-200 text-white px-4 py-2 rounded">
+               class="inline-block bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded">
                 Edit Terms & Conditions
             </a>
         </div>

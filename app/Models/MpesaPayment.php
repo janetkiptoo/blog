@@ -17,6 +17,7 @@ class MpesaPayment extends Model
         'result_code',
         'result_desc',
         'paid_at',
+       
 
         
     ];

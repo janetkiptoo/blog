@@ -5,7 +5,7 @@
      <div class="flex justify-between items-center mb-4">
 <h2 class="text-xl font-semibold ">Payment Methods</h2>
 
-<a href="{{ route('admin.payment-methods.create') }}" class="bg-primary-100 hover:bg-primary-200 text-white px-4 py-2 rounded"> 
+<a href="{{ route('admin.payment-methods.create') }}" class="bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded"> 
     +Add Payment Method
 </a>
 </div>
@@ -28,7 +28,7 @@
             <td class="p-2">{{ $method->requires_reference ? 'Yes' : 'No' }}</td>
             <td class="p-2">{{ $method->is_active ? 'Active' : 'Disabled' }}</td>
             <td class="p-2 space-x-2">
-                <a href="{{ route('admin.payment-methods.edit', $method) }}" class="bg-primary-100 hover:bg-primary-200 text-white px-4 py-2 rounded">Edit</a>
+                <a href="{{ route('admin.payment-methods.edit', $method) }}" class="bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded">Edit</a>
 
                 <form action="{{ route('admin.payment-methods.destroy', $method) }}" method="POST" class="d-inline">
                     @csrf

@@ -39,7 +39,7 @@
             <input type="number" name="grace_period_months" value="{{ old('grace_period_months', $loan_product->grace_period_months) }}" placeholder="Grace Period (months)" class="border rounded px-8 py-2">
             </div>
             <div class="col-span-2">
-                <button type="submit" class="bg-primary-100 hover:bg-primary-200 text-white px-3 py-1 rounded">Update Product</button>
+                <button type="submit" class="bg-primary-700 hover:bg-primary-500 text-white px-3 py-1 rounded">Update Product</button>
             </div>
         </form>
     </div>

@@ -33,35 +33,57 @@ public function process_repayment(Request $request, $id)
         'reference' => 'nullable|string',
     ]);
 
-    $loanApplication = LoanApplication::where('id', $id)->where('user_id', auth()->id())->where('status', 'approved')->firstOrFail();
-        
+    $loanApplication = LoanApplication::where('id', $id)
+        ->where('user_id', auth()->id())
+        ->where('status', 'approved')
+        ->firstOrFail();
+
     if ($loanApplication->repayment_start_date && now()->lt($loanApplication->repayment_start_date)) {
-        return response()->json(['success' => false, 'message' => 'Loan is still in grace period.'], 400);
+        return response()->json([
+            'success' => false,
+            'message' => 'Loan is still in grace period.'
+        ], 400);
     }
 
     if ($loanApplication->balance <= 0) {
-        return response()->json(['success' => false, 'message' => 'Loan is already fully paid.'], 400);
+        return response()->json([
+            'success' => false,
+            'message' => 'Loan is already fully paid.'
+        ], 400);
     }
 
     $amount = min($request->amount, $loanApplication->balance);
 
     if ($request->channel === 'mpesa') {
-        $phone = Auth::user()->phone;
-        $result = (new MpesaServices())->stkPush($phone, $amount, $request->reference);
+        $phone = preg_replace('/^0/', '254', Auth::user()->phone);
+        $reference = $request->reference ?? 'Loan-'.$loanApplication->id;
+
+        $result = (new MpesaServices())->stkPush($phone, $amount, $reference);
+        \Log::info('STK Push Response', $result);
+
+        if (empty($result['CheckoutRequestID'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'STK Push failed: ' . ($result['ResponseDescription'] ?? 'No CheckoutRequestID returned.')
+            ], 500);
+        }
 
         MpesaPayment::create([
             'payment_id' => $loanApplication->id,
-            'phone' => preg_replace('/^0/', '254', $phone),
-            'checkout_request_id' => $result['CheckoutRequestID'] ?? null,
+            'phone' => $phone,
+            'checkout_request_id' => $result['CheckoutRequestID'],
             'merchant_request_id' => $result['MerchantRequestID'] ?? null,
             'amount' => $amount,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Mpesa STK Push initiated.']);
+        return response()->json([
+            'success' => true,
+            'message' => 'M-Pesa STK Push sent. Enter your PIN on your phone.'
+        ]);
     }
 
+   
     if ($request->channel === 'cash') {
-      
         $payment = Payment::create([
             'user_id' => auth()->id(),
             'loan_application_id' => $loanApplication->id,
@@ -70,7 +92,6 @@ public function process_repayment(Request $request, $id)
             'status' => 'pending',
         ]);
 
-      
         CashPayment::create([
             'payment_id' => $payment->id,
             'loan_application_id' => $loanApplication->id,
@@ -79,9 +100,13 @@ public function process_repayment(Request $request, $id)
             'status' => 'pending',
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Cash payment submitted. Awaiting admin approval.']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Cash payment submitted. Awaiting admin approval.'
+        ]);
     }
 }
+
 
     public function showRepayForm($id)
 {

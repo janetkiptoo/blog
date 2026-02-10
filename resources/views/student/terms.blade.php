@@ -10,7 +10,7 @@
             {!! nl2br(e($term->content)) !!}
         </div>
   <a href="{{ route('student.dashboard') }}"
-                       class="mt-2 inline-block bg-primary-100 hover:bg-primary-200 text-white px-4 py-2 rounded">
+                       class="mt-2 inline-block bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded">
                         Back To Apply
                     </a>
 
