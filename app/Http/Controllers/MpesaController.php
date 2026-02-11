@@ -22,8 +22,7 @@ class MpesaController extends Controller
     {
         $this->mpesa = $mpesa;
     }
-
-    public function stkPush(Request $request)
+public function stkPush(Request $request)
 {
     $request->validate([
         'amount' => 'required|numeric|min:1',
@@ -31,27 +30,24 @@ class MpesaController extends Controller
         'account_number' => 'required|integer',
     ]);
 
-    $amount = (int) round($request->amount);
+    $amount =  round($request->amount);
     $phone = preg_replace('/^0/', '254', $request->phonenumber);
     $loanId = $request->account_number;
 
-    $loan = LoanApplication::where('id', $loanId)
-        ->where('user_id', auth()->id())
-        ->firstOrFail();
+    $loan = LoanApplication::findOrFail($loanId);
 
     DB::beginTransaction();
 
     try {
-       
         $payment = Payment::create([
             'user_id' => auth()->id(),
             'amount' => $amount,
             'channel' => PaymentChannel::MPESA,
             'status' => PaymentStatus::PENDING,
+            'loan_id' => $loan->id,
         ]);
 
-      
-        $result = $this->mpesa->stkPush($phone, $amount, $payment->id);
+        $result = (new MpesaServices())->stkPush($phone, $amount, $payment->id);
 
         if (($result['ResponseCode'] ?? 1) != 0) {
             $payment->update(['status' => PaymentStatus::FAILED]);
@@ -63,7 +59,6 @@ class MpesaController extends Controller
             throw new \Exception('STK Push did not return CheckoutRequestID');
         }
 
-        
         MpesaPayment::create([
             'payment_id' => $payment->id,
             'loan_id' => $loan->id,
@@ -92,101 +87,94 @@ class MpesaController extends Controller
     }
 }
 
+
 public function callback(Request $request)
 {
-    Log::info('MPESA CALLBACK HIT', $request->all());
-
     $callback = $request->input('Body.stkCallback');
+
     if (!$callback) {
-        return response()->json(['message' => 'Invalid callback'], 400);
+        return response()->json(['ResultCode' => 0]);
     }
 
-    $checkoutRequestID = $callback['CheckoutRequestID'] ?? null;
-    $resultCode = (int) ($callback['ResultCode'] ?? 1);
-    $items = $callback['CallbackMetadata']['Item'] ?? [];
+    $checkoutId = $callback['CheckoutRequestID'];
+    $resultCode = $callback['ResultCode'];
 
-    if (!$checkoutRequestID) {
-        Log::error('Missing CheckoutRequestID in callback');
-        return response()->json(['message' => 'Invalid callback data'], 400);
-    }
+    $mpesaPayment = MpesaPayment::where('checkout_request_id', $checkoutId)->first();
 
-    $mpesaPayment = MpesaPayment::where('checkout_request_id', $checkoutRequestID)->first();
     if (!$mpesaPayment) {
-        Log::error('MpesaPayment not found', ['checkoutRequestID' => $checkoutRequestID]);
-        return response()->json(['message' => 'Payment not found'], 404);
+        return response()->json(['ResultCode' => 0]);
     }
 
-    $payment = Payment::find($mpesaPayment->payment_id);
-    if (!$payment) {
-        Log::error('Payment not found for MpesaPayment', ['payment_id' => $mpesaPayment->payment_id]);
-        return response()->json(['message' => 'Payment record missing'], 404);
+    
+    if ($mpesaPayment->status === PaymentStatus::SUCCESS) {
+        return response()->json(['ResultCode' => 0]);
     }
 
-    $loan = LoanApplication::find($mpesaPayment->loan_id);
-    if (!$loan) {
-        Log::error('Loan not found for MpesaPayment', ['loan_id' => $mpesaPayment->loan_id]);
-        return response()->json(['message' => 'Loan record missing'], 404);
-    }
+    DB::transaction(function () use ($mpesaPayment, $callback, $resultCode) {
 
-    DB::transaction(function () use ($mpesaPayment, $payment, $loan, $resultCode, $items, $callback) {
+        $payment = $mpesaPayment->payment;
+        $loan = $mpesaPayment->loanApplication;  
 
-        if ($resultCode === 0) {
-            $amount = 0;
-            $receipt = null;
-
-            foreach ($items as $item) {
-                if ($item['Name'] === 'Amount') $amount = (float) $item['Value'];
-                if ($item['Name'] === 'MpesaReceiptNumber') $receipt = $item['Value'];
-            }
-
-            $mpesaPayment->update([
-                'mpesa_receipt_number' => $receipt,
-                'result_code' => 0,
-                'result_desc' => 'Success',
-                'paid_at' => now(),
-                'status' => 'success',
-            ]);
-
-            $payment->update(['status' => PaymentStatus::SUCCESS]);
-
-            $balanceBefore = $loan->balance;
-            $loan->balance -= $amount;
-            $loan->total_paid += $amount;
-
-            if ($loan->balance <= 0) {
-                $loan->balance = 0;
-                $loan->status = 'completed';
-            }
-
-            $loan->save();
-
-            LoanRepayment::create([
-                'loan_application_id' => $loan->id,
-                'payment_id' => $payment->id,
-                'amount' => $amount,
-                'principal' => $amount,
-                'interest' => 0,
-                'balance_before' => $balanceBefore,
-                'balance_after' => $loan->balance,
-                'paid_at' => now(),
-                'late_penalty' => 0,
-                'channel' => PaymentChannel::MPESA,
-            ]);
-
-        } else {
-            $mpesaPayment->update([
-                'result_code' => $resultCode,
-                'result_desc' => $callback['ResultDesc'] ?? 'Cancelled',
-                'paid_at' => now(),
-                'status' => 'failed',
-            ]);
-
+        if ($resultCode != 0) {
+            $mpesaPayment->update(['status' => PaymentStatus::FAILED]);
             $payment->update(['status' => PaymentStatus::FAILED]);
+            return;
         }
+
+       
+        $items = collect($callback['CallbackMetadata']['Item']);
+        $amount  = (float) $items->firstWhere('Name', 'Amount')['Value'];
+        $receipt = $items->firstWhere('Name', 'MpesaReceiptNumber')['Value'];
+        $balanceBefore = $loan->balance;
+        $loan->total_paid += $amount;
+        $loan->balance = max(0,($loan->loan_amount + $loan->total_interest) - $loan->total_paid
+);
+
+$interestRemaining = max(0,$loan->total_interest - max(0, $loan->total_paid - $loan->loan_amount)
+);
+
+$interestPaid  = min($amount, $interestRemaining);
+$principalPaid = $amount - $interestPaid;
+
+if ($loan->balance == 0) {
+    $loan->status = 'paid';
+}
+
+$loan->save();
+ 
+
+        $payment->update(['status' => PaymentStatus::SUCCESS]);
+
+        $mpesaPayment->update([
+            'status' => PaymentStatus::SUCCESS,
+            'mpesa_receipt_number' => $receipt,
+            'paid_at' => now(),
+            'result_code' => 0,
+            'result_desc' => 'Payment successful',
+            
+        ]);
+
+       
+        LoanRepayment::create([
+            'loan_application_id' => $loan->id,
+            'payment_id' => $payment->id,
+            'amount' => $amount,
+            'principal' => $principalPaid,
+            'interest' => $interestPaid,
+            'balance_before' => $balanceBefore,
+            'balance_after' => $loan->balance,
+            'channel' => PaymentChannel::MPESA,
+            'paid_at' => now(),                   
+            'late_penalty' => 0,                 
+            'status' => 'completed',               
+            'payment_method' => 'mpesa',           
+            'reference' => $receipt, 
+        ]);
     });
 
-    return response()->json(['message' => 'Callback processed']);
+    return response()->json(['ResultCode' => 0]);
 }
+
 
 
 
@@ -224,7 +212,7 @@ public function b2cResult(Request $request)
     DB::transaction(function () use ($disbursement, $loan, $resultCode, $result) {
 
         if ($resultCode === 0) {
-            // Successful B2C Payment
+           
             $transactionAmount = 0;
             $transactionReceipt = null;
 
@@ -246,7 +234,7 @@ public function b2cResult(Request $request)
             $loan->update([
                 'status' => 'disbursed',
                 'disbursed_at' => now(),
-                'balance' => $transactionAmount,
+                
             ]);
 
         } else {

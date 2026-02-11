@@ -13,22 +13,12 @@ use Carbon\Carbon;
 class LoanController extends Controller
 {
     
-   public function approveLoan($loanId)
-{
-    $loan = LoanApplication::findOrFail($loanId);
+        public function show($id)
+        {
+            $loan = LoanApplication::with(['user', 'loanProduct', 'repaymentSchedules'])->findOrFail($id);
+            return view('admin.loans.show', compact('loan'));
+        }
 
-    if ($loan->status !== LoanApplication::STATUS_PENDING) {
-        return response()->json(['error' => 'Loan not pending approval'], 400);
-    }
-
-    $loan->update([
-        'status' => LoanApplication::STATUS_APPROVED,
-        'approved_amount' => $loan->loan_amount,
-        'approved_at' => now(),
-    ]);
-
-    return response()->json(['message' => 'Loan approved']);
-}
 
 public function disburse($id)
 {

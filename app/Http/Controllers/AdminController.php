@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\LoanApplication;
+use App\Models\RepaymentSchedule;
+use App\Models\LoanDisbursement;
+use App\Services\MpesaServices;
+use Carbon\Carbon;;
 use App\Models\LoanProduct;
 
 class AdminController extends Controller
@@ -53,16 +57,26 @@ class AdminController extends Controller
     }
 
 
-    public function approve($id)
-    {
+   public function approve($id)
+{
     $loan = LoanApplication::findOrFail($id);
-    $loan->status = 'approved';
-    $loan->approved_amount = $loan->loan_amount;
-    $loan->balance = $loan->loan_amount;
-    $loan->save();
 
-    return redirect()->back()->with('success','Loan approved.');
+    if ($loan->status !== LoanApplication::STATUS_PENDING) {
+        return response()->json(['error' => 'Loan not pending approval'], 400);
     }
+
+    $loan->update([
+        'status' => LoanApplication::STATUS_APPROVED,
+        'approved_amount' => $loan->loan_amount,
+        'balance' => $loan->loan_amount + $loan->total_interest, 
+        'approved_at' => now(),
+    ]);
+
+    return response()->json(['message' => 'Loan approved']);
+}
+
+
+
 
 
 

@@ -102,7 +102,7 @@ repaymentForm.addEventListener('submit', function (e) {
             alert("Cash payment submitted. Awaiting admin approval.");
             window.location.reload();
         } else if (method === 'mpesa') {
-            alert("M-Pesa STK Push sent. Enter your PIN on your phone.");
+            alert("Please Enter your PIN on your phone to complete the payment.");
         }
     })
     .catch(error => {

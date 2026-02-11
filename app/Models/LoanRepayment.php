@@ -29,7 +29,7 @@ class LoanRepayment extends Model
     protected $casts = [
         'paid_at' => 'datetime',
         'channel' => PaymentChannel::class,
-        'status'  => 'string', // keep string OR convert to enum later
+        'status'  => 'string',
     ];
 
     public function loan()

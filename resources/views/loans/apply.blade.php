@@ -80,27 +80,34 @@
 
 <script>
 function calculateLoan() {
-    const P = parseFloat(document.getElementById('loan_amount').value); // principal
-    const T = parseInt(document.getElementById('term_months').value);  // total months
-    const r = {{ $product->interest_rate }} / 100;                    // monthly rate
-    const grace = {{ $product->grace_period_months }} || 0;           // grace months
+    const P = parseFloat(document.getElementById('loan_amount').value);
+    const T = parseInt(document.getElementById('term_months').value);
+    const r = {{ $product->interest_rate }} / 100;
+    const grace = {{ $product->grace_period_months }} || 0;
 
     if (!P || !T || T <= grace) return;
 
-    const repayMonths = T - grace; // subtract grace period from repayment months
+    const repaymentMonths = T - grace;
 
-    // Monthly payment using amortization formula
-    const emi = (P * r * Math.pow(1 + r, repayMonths)) / (Math.pow(1 + r, repayMonths) - 1);
+    const totalInterest = P * r * repaymentMonths;
+    const totalPayable  = P + totalInterest;
+    const monthlyPayment = totalPayable / repaymentMonths;
 
-    const totalPayable = emi * repayMonths;
-    const totalInterest = totalPayable - P;
+    
+    document.getElementById('monthly_payment_display').innerText =
+        'KES ' + monthlyPayment.toFixed(2);
 
-    // Display
-    document.getElementById('monthly_payment').value = emi.toFixed(2);
-    document.getElementById('monthly_payment_display').innerText = 'KES ' + emi.toFixed(2);
-    document.getElementById('total_interest_display').innerText = 'KES ' + totalInterest.toFixed(2);
-    document.getElementById('total_payable_display').innerText = 'KES ' + totalPayable.toFixed(2);
+    document.getElementById('total_interest_display').innerText =
+        'KES ' + totalInterest.toFixed(2);
+
+    document.getElementById('total_payable_display').innerText =
+        'KES ' + totalPayable.toFixed(2);
+
+    document.getElementById('monthly_payment').value = monthlyPayment.toFixed(2);
+    document.getElementById('total_interest').value = totalInterest.toFixed(2);
+    document.getElementById('total_payable').value = totalPayable.toFixed(2);
 }
 </script>
+
 
 @endsection

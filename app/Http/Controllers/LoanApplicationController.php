@@ -55,38 +55,21 @@ public function process_repayment(Request $request, $id)
     $amount = min($request->amount, $loanApplication->balance);
 
     if ($request->channel === 'mpesa') {
-        $phone = preg_replace('/^0/', '254', Auth::user()->phone);
-        $reference = $request->reference ?? 'Loan-'.$loanApplication->id;
+    $mpesaController = app(\App\Http\Controllers\MpesaController::class);
 
-        $result = (new MpesaServices())->stkPush($phone, $amount, $reference);
-        \Log::info('STK Push Response', $result);
+    $stkResponse = $mpesaController->stkPush(new \Illuminate\Http\Request([
+        'amount' => $amount,
+        'phonenumber' => auth()->user()->phone,
+        'account_number' => $loanApplication->id
+    ]));
 
-        if (empty($result['CheckoutRequestID'])) {
-            return response()->json([
-                'success' => false,
-                'message' => 'STK Push failed: ' . ($result['ResponseDescription'] ?? 'No CheckoutRequestID returned.')
-            ], 500);
-        }
+    return $stkResponse;
+}
 
-        MpesaPayment::create([
-            'payment_id' => $loanApplication->id,
-            'phone' => $phone,
-            'checkout_request_id' => $result['CheckoutRequestID'],
-            'merchant_request_id' => $result['MerchantRequestID'] ?? null,
-            'amount' => $amount,
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'M-Pesa STK Push sent. Enter your PIN on your phone.'
-        ]);
-    }
-
-   
     if ($request->channel === 'cash') {
         $payment = Payment::create([
             'user_id' => auth()->id(),
-            'loan_application_id' => $loanApplication->id,
+            'loan_id' => $loanApplication->id,
             'amount' => $amount,
             'channel' => 'cash',
             'status' => 'pending',
@@ -112,7 +95,6 @@ public function process_repayment(Request $request, $id)
 {
     $loan = LoanApplication::with('repayments')->where('id', $id)->where('user_id', auth()->id())->firstOrFail();
 
-    
     $repaymentMonths = $loan->term_months - $loan->loanProduct->grace_period_months;
     $monthlyPayment = $loan->monthly_payment;
     $totalPayable = $loan->monthly_payment * $repaymentMonths;
@@ -138,10 +120,8 @@ public function process_repayment(Request $request, $id)
         $interestRate = $product->interest_rate;
         $gracePeriod = $product->grace_period_months;
         $repaymentMonths = $termMonths - $gracePeriod;
-
-        // Interest applied AFTER grace period
         $totalInterest = ($loanAmount * ($interestRate / 100)) * $repaymentMonths;
-        $totalPayable = $loanAmount + $totalInterest;
+        $totalPayable  = $loanAmount + $totalInterest;
         $monthlyPayment = $totalPayable / $repaymentMonths;
 
         $loan = LoanApplication::create([
@@ -161,7 +141,7 @@ public function process_repayment(Request $request, $id)
            'monthly_payment'=>$monthlyPayment,
            'total_interest'=>$totalInterest,
            'total_paid'=> 0,
-           'balance' => $loanAmount,
+           'balance' => $totalPayable,
            'repayment_start_date' => now()->addMonth(),
            'status' => 'pending',
         ]);

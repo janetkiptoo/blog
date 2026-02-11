@@ -17,6 +17,7 @@ class MpesaPayment extends Model
         'result_code',
         'result_desc',
         'paid_at',
+        'status',
        
 
         
@@ -29,5 +30,12 @@ class MpesaPayment extends Model
     {
         return $this->belongsTo(Payment::class);
     }
+
+    public function loanApplication()
+    {
+        return $this->belongsTo(LoanApplication::class, 'loan_id');
+    }  
+    
+    
 }
 

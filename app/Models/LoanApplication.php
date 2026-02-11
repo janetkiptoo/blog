@@ -31,6 +31,7 @@ protected $table = 'loan_application';
         'balance',
         'monthly_payment',
         'total_paid',
+        'total_interest',
         'approved_amount',
         'disbursed_at',
     ];
