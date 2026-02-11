@@ -9,7 +9,6 @@
         <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
         <p><strong>Institution:</strong> {{ Auth::user()->institution }}</p>
         <p><strong>Course:</strong> {{ Auth::user()->course }}</p>
-        <p><strong>Year of Study:</strong> {{ Auth::user()->year_of_study }}</p>
        <p><strong>Student Reg No:</strong> {{  Auth::user()->student_reg_no }}</p>
     </div>
 

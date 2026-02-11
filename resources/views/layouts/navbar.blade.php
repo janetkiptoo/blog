@@ -1,6 +1,6 @@
  <div class=" flex items-center justify-between px-4 py-2 bg-primary">
         <div class="flex items-center gap-2">
-         <img src="https://images.pexels.com/photos/2230796/pexels-photo-2230796.jpeg" class="h-14 w-14 rounded-full object-cover" alt="logo">
+         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu_LjE_ntilN9e8hzWjvBW8TwnUStrRxss1oKkJPq4U41SGXvLFfFGNME&s" class="h-14 w-14 rounded-full object-cover" alt="logo">
         </div>
 
         <div >
@@ -22,10 +22,10 @@
                 @else
               <div class="flex gap-6  ">
                 <a href="/login">
-                 <button class="bg-primary-700 hover:bg-primary-500 text-white  px-4 rounded">login</button>
+                 <button class=" text-white  px-4 rounded">login</button>
                 </a>
                 <a href="/register">
-                <button class="bg-primary-700 hover:bg-primary-500 text-white px-4 rounded">sign up</button>
+                <button class=" text-white px-4 rounded">sign up</button>
                 </a>
                 </div>
 @endif

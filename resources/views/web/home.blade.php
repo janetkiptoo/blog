@@ -34,29 +34,29 @@ class="flex flex-col md:flex-row items-center  bg-center py-6 gap-2 ">
     <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">Why Choose Us?</h2>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div class="p-6 border rounded-lg bg-sky-400 shadow hover:shadow-lg transition">
-            <h3 class="font-semibold text-gray-800 text-xl mb-2">Easy Application</h3>
+        <div class="p-6 border rounded-lg bg-primary-400 shadow hover:shadow-lg transition">
+            <h3 class="font-semibold text-black text-xl mb-2">Easy Application</h3>
             <p class="text-gray-700 text-sm">
                 Apply for a loan online in minutes with minimal paperwork.
             </p>
         </div>
 
         <div class="p-6 border rounded-lg bg-gradient-to-bl from-violet-500 to-fuchsia-500 shadow hover:shadow-lg transition">
-            <h3 class="font-semibold text-gray-800 text-xl mb-2">Fast Approval</h3>
+            <h3 class="font-semibold text-black text-xl mb-2">Fast Approval</h3>
             <p class="text-gray-700 text-sm">
                 Quick review and approval so you can focus on your studies.
             </p>
         </div>
 
-        <div class="p-6 border rounded-lg bg-yellow-300 shadow hover:shadow-lg transition">
-            <h3 class="font-semibold text-gray-800 text-xl mb-2">Flexible Repayment</h3>
+        <div class="p-6 border rounded-lg bg-primary-500 shadow hover:shadow-lg transition">
+            <h3 class="font-semibold text-black text-xl mb-2">Flexible Repayment</h3>
             <p class="text-gray-700 text-sm">
                 Student-friendly repayment plans designed for your convenience.
             </p>
         </div>
 
-        <div class="p-6 border rounded-lg bg-pink-300 shadow hover:shadow-lg transition">
-            <h3 class="font-semibold text-gray-800 text-xl mb-2">Secure & Transparent</h3>
+        <div class="p-6 border rounded-lg bg-primary-600 shadow hover:shadow-lg transition">
+            <h3 class="font-semibold text-black text-xl mb-2">Secure & Transparent</h3>
             <p class="text-gray-700 text-sm">
                 No hidden charges. Track your loan and repayments anytime.
             </p>

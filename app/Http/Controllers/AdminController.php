@@ -61,10 +61,6 @@ class AdminController extends Controller
 {
     $loan = LoanApplication::findOrFail($id);
 
-    if ($loan->status !== LoanApplication::STATUS_PENDING) {
-        return response()->json(['error' => 'Loan not pending approval'], 400);
-    }
-
     $loan->update([
         'status' => LoanApplication::STATUS_APPROVED,
         'approved_amount' => $loan->loan_amount,
@@ -72,7 +68,7 @@ class AdminController extends Controller
         'approved_at' => now(),
     ]);
 
-    return response()->json(['message' => 'Loan approved']);
+    return redirect()->back()->with('success','Loan approved.');
 }
 
 

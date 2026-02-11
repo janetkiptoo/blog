@@ -16,7 +16,7 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-white">
             <div>
-                <img src="https://images.pexels.com/photos/2230796/pexels-photo-2230796.jpeg" class="h-20 w-20 rounded-full object-cover" alt="logo"> 
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu_LjE_ntilN9e8hzWjvBW8TwnUStrRxss1oKkJPq4U41SGXvLFfFGNME&s" class="h-20 w-20 rounded-full object-cover" alt="logo"> 
                 
             </div>
 

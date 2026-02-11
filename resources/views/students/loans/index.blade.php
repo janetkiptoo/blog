@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mx-auto py-8">
 
-    <h1 class="text-2xl font-bold mb-6">My Loans</h1>
+    <h1 class="text-2xl font-bold  text-center mb-6">My Loans</h1>
 
     @forelse($loans as $loan)
     <div class="bg-white shadow p-6 rounded mb-4">

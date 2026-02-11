@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <div class="max-w-4xl mx-auto py-8 space-y-4">
+<div class="container mx-auto py-8">
+ <h1 class="text-2xl font-bold  text-center mb-6">Available Loan Products</h1>
+    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
 
         @if($products->count())
             @foreach($products as $product)
@@ -24,5 +25,6 @@
         @endif
 
     </div>
+</div>
     
 @endsection

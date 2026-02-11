@@ -91,7 +91,7 @@
                 Already registered?
             </a>
 
-            <x-primary-button class="ms-4">
+            <x-primary-button class="ms-4 bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded-lg">
                 Register
             </x-primary-button>
         </div>

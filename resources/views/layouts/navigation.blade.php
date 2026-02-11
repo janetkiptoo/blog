@@ -1,13 +1,14 @@
 <nav x-data="{ open: false }" class="flex items-center text-white justify-between px-8 py-6 bg-primary">  
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-8 text-white ">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-2 text-white ">
         <div class="flex justify-between h-30">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('student.dashboard') }}">
-                        <img src="https://images.pexels.com/photos/2230796/pexels-photo-2230796.jpeg" class="h-14 w-14 rounded-full object-cover" alt="logo">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu_LjE_ntilN9e8hzWjvBW8TwnUStrRxss1oKkJPq4U41SGXvLFfFGNME&s" class="h-20 w-20 rounded-full object-cover" alt="logo">
                     </a>
+                    
                 </div>
 
                 <!-- Navigation Links -->
