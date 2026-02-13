@@ -66,6 +66,7 @@ class AdminController extends Controller
         'approved_amount' => $loan->loan_amount,
         'balance' => $loan->loan_amount + $loan->total_interest, 
         'approved_at' => now(),
+        
     ]);
 
     return redirect()->back()->with('success','Loan approved.');

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-bold mb-6 text-center">Student Dashboard</h1>
+    <h1 class="text-1xl font-bold mb-6 text-center">Student Dashboard</h1>
 
     <div class="mb-6 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold mb-4">Welcome, {{ Auth::user()->name }}h2>

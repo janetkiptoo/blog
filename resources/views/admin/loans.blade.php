@@ -31,7 +31,7 @@
                     <th class="px-4 py-3 border">Loan Product</th>
                     <th class="px-4 py-3 border">Guarantors</th>
                     <th class="px-4 py-3 border ">Loan Amount</th>
-                    <th class="px-4 py-3 border ">Amount Paid</th>
+                    <!-- <th class="px-4 py-3 border ">Amount Paid</th> -->
                     <th class="px-4 py-3 border ">Balance</th>
                     <th class="px-4 py-3 border ">Status</th>
                     <th class="px-4 py-3 border ">Actions</th>
@@ -49,7 +49,10 @@
    View Guarantors
 </a></td>
                         <td class="px-4 py-3 border text-right"> KES {{ number_format($loan->loan_amount, 2) }} </td>
-                        <td class="px-4 py-3 border text-right text-green-600"> KES {{ number_format($loan->loan_amount - ($loan->balance ?? $loan->loan_amount), 2) }} </td>
+                       <!-- <td class="px-4 py-3 border text-right text-green-600">
+    KES {{ number_format($loan->amount_paid ?? 0, 2) }}
+</td> -->
+
                         <td class="px-4 py-3 border text-right text-red-600">KES {{ number_format($loan->balance ?? $loan->loan_amount, 2) }}</td>
 
                         <td class="px-4 py-3 border text-center">
