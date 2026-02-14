@@ -20,10 +20,10 @@
         </p>
 
         <div class="space-x-4">
-            <a href="#eligibility" class="bg-blue-600 text-white px-6 py-3 rounded font-semibold hover:bg-blue-700 transition">
+            <a href="#eligibility" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition">
                 Check Eligibility
             </a>
-            <a href="{{ route('register') }}" class="bg-green-600 text-white px-6 py-3 rounded font-semibold hover:bg-green-700 transition">
+            <a href="{{ route('register') }}" class="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition">
                 Sign Up
             </a>
         </div>
@@ -65,9 +65,9 @@
         <div>
             <label class="block font-semibold text-gray-700">Loan Purpose</label>
             <select id="loanPurpose" class="border rounded px-3 py-2 w-full">
-                <option value="Tuition Fees">Tuition Fees</option>
+                <option value="Fees Loan">Fees Loan</option>
                 <option value="Personal Loan">Personal Loan</option>
-                <option value="Emergency / Other">Emergency / Other</option>
+                
             </select>
         </div>
 
@@ -77,7 +77,7 @@
         </div>
 
         <div class="md:col-span-2 text-center">
-            <button type="button" onclick="checkEligibility()" class="bg-blue-600 text-white px-6 py-3 rounded font-semibold hover:bg-blue-700 transition">
+            <button type="button" onclick="checkEligibility()" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition">
                 Check Eligibility
             </button>
         </div>
@@ -120,15 +120,14 @@ function checkEligibility() {
         return;
     }
 
-    if ((loanPurpose === 'Tuition Fees' || loanPurpose === 'Accommodation') &&
-        (courseType === 'Undergraduate' || courseType === 'Postgraduate')) {
+    if ((loanPurpose === 'Fees Loan' || loanPurpose === 'Personal Loan') &&
+        (courseType === 'Undergraduate' || courseType === 'Postgraduate' || courseType === 'Vocational' )) {
         resultDiv.innerHTML = '<span class="text-green-600">You are likely eligible for a loan! Sign up to apply.</span>';
     } else {
         resultDiv.innerHTML = '<span class="text-red-600">Based on the info provided, you may not be eligible. Sign up for full evaluation.</span>';
     }
 }
 </script>
-
 
 
 {{-- Loan Products Section --}}
@@ -141,34 +140,28 @@ function checkEligibility() {
                 <tr>
                     <th class="px-6 py-3">Loan Purpose</th>
                     <th class="px-6 py-3">Interest Rate (%)</th>
+                    <th class="px-6 py-3">Min Amount (KES)</th>
                     <th class="px-6 py-3">Max Amount (KES)</th>
                     <th class="px-6 py-3">Grace Period (Months)</th>
+                    <th class="px-6 py-3">Loan Term (Months)</th>
                 </tr>
             </thead>
             <tbody class="bg-white">
+                @foreach($loanProducts as $product)
                 <tr class="border-b hover:bg-gray-100">
-                    <td class="px-6 py-3">Tuition Fees</td>
-                    <td class="px-6 py-3">1.5</td>
-                    <td class="px-6 py-3">500,000</td>
-                    <td class="px-6 py-3">3</td>
+                    <td class="px-6 py-3">{{ $product->product_name }}</td>
+                    <td class="px-6 py-3">{{ $product->interest_rate }}</td>
+                    <td class="px-6 py-3">{{ number_format($product->min_loan_amount) }}</td>
+                    <td class="px-6 py-3">{{ number_format($product->max_loan_amount) }}</td>
+                    <td class="px-6 py-3">{{ $product->grace_period_months }}</td>
+                    <td class="px-6 py-3">{{ $product->loan_term_months }}</td>
                 </tr>
-                <tr class="border-b hover:bg-gray-100">
-                    <td class="px-6 py-3">Personal Loan</td>
-                    <td class="px-6 py-3">2</td>
-                    <td class="px-6 py-3">300,000</td>
-                    <td class="px-6 py-3">2</td>
-                </tr>
-               
-                <tr class="border-b hover:bg-gray-100">
-                    <td class="px-6 py-3">Emergency / Other</td>
-                    <td class="px-6 py-3">1</td>
-                    <td class="px-6 py-3">200,000</td>
-                    <td class="px-6 py-3">0</td>
-                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
 </section>
+
 
 {{-- EMI Calculator --}}
 <section class="bg-gray-50 px-6 md:px-16 py-16">
@@ -195,7 +188,7 @@ function checkEligibility() {
         </div>
 
         <div class="md:col-span-2 text-center">
-            <button type="button" onclick="calculateLoan()" class="bg-green-600 text-white px-6 py-3 rounded font-semibold hover:bg-green-700 transition">
+            <button type="button" onclick="calculateLoan()" class="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition">
                 Calculate EMI
             </button>
         </div>
@@ -207,19 +200,19 @@ function checkEligibility() {
         <p>Total Payable: <span id="total_payable_display">KES 0</span></p>
     </div>
 </section>
-
 <script>
-const loanProducts = {
-    'Tuition Fees': { interestRate: 1.5, gracePeriod: 3, maxAmount: 500000 },
-    'Personal loan': { interestRate: 2, gracePeriod: 2, maxAmount: 300000 },
-    'Emergency / Other': { interestRate: 1, gracePeriod: 0, maxAmount: 200000 }
-};
+const loanProducts = @json($loanProducts->mapWithKeys(function($product) {
+    return [$product->product_name => [
+        'interestRate' => $product->interest_rate,
+        'gracePeriod' => $product->grace_period_months,
+        'maxAmount' => $product->max_loan_amount
+    ]];
+}));
 
 function calculateLoan() {
     const loanPurpose = document.getElementById('loanPurposeCalc').value;
     const P = parseFloat(document.getElementById('loan_amount').value);
     const T = parseInt(document.getElementById('term_months').value);
-
     const resultDiv = document.getElementById('emi_result');
 
     if (!loanProducts[loanPurpose]) return;
@@ -248,6 +241,7 @@ function calculateLoan() {
     document.getElementById('total_payable_display').innerText = 'KES ' + totalPayable.toFixed(2);
 }
 </script>
+
 
 {{-- How It Works --}}
 <section class="px-6 md:px-16 py-16 bg-cover bg-center">
@@ -360,7 +354,7 @@ function calculateLoan() {
 <section class="bg-cover text-white px-6 md:px-16 py-16 text-center" style="background-image: url('{{ asset('assets/bg.jpg') }}');">
     <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to start your student loan?</h2>
     <p class="text-lg mb-8">Apply today and take the first step toward achieving your academic goals with ease and confidence.</p>
-    <a href="{{ route('register') }}" class="bg-green-600 text-white px-8 py-4 rounded font-semibold hover:bg-green-700 transition">
+    <a href="{{ route('register') }}" class="bg-green-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-700 transition">
         Sign Up Now
     </a>
 </section>

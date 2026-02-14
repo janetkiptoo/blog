@@ -41,6 +41,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/cash-payments/{id}/approve', [AdminCashPaymentController::class, 'approve'])->name('cash-payments.approve');
     Route::post('/cash-payments/{id}/reject', [AdminCashPaymentController::class, 'reject'])->name('cash-payments.reject');
 
+     Route::post('/support-tickets',[SupportReplyController::class, 'index'])->name('support.index');
+    Route::post('/support-tickets/{ticket}/reply',[SupportReplyController::class, 'store'])->name('support.reply');
+
+
 
 
 });

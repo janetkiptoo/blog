@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\LoanProduct;
 
 class WebController extends Controller
 {
     public function home()
     {
-        return view('web.home');
+    $loanProducts = LoanProduct::all(); // fetch all products
+    return view('web.home', compact('loanProducts'));
+
     }
 
     public function about()

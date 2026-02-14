@@ -1,6 +1,6 @@
  <div class=" flex items-center justify-between px-4 py-2 bg-primary">
         <div class="flex items-center gap-2">
-         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu_LjE_ntilN9e8hzWjvBW8TwnUStrRxss1oKkJPq4U41SGXvLFfFGNME&s" class="h-14 w-14 rounded-full object-cover" alt="logo">
+         <img src="{{ asset('assets/loggo.jpeg') }}" alt="Student Loan Logo" class="mx-auto block h-20 rounded-full sm:mx-0 sm:shrink-0">
         </div>
 
         <div >
