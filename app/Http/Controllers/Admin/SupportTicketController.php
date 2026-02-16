@@ -6,21 +6,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SupportTicket;
 use App\Models\SupportReply;
-use App\Mail\SupportTicketReplyMail;
-use Illuminate\Support\Facades\Mail;
 
-
-
-class SupportReplyController extends Controller
+class SupportTicketController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        
-    }
 
+        $tickets = SupportTicket::latest()->get();
+        return view('admin.support_tickets.index', compact('tickets'));
+    }
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -32,33 +30,20 @@ class SupportReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, SupportTicket $ticket)
+    public function store(Request $request)
     {
-        $request->validate([
-            'message' => 'required|string',
-        ]);
-
-        $reply = $ticket->replies()->create([
-            'message' => $request->message,
-            'is_admin' => true,
-        ]);
-
-        $ticket->update(['status' => 'resolved']);
-
-        
-        Mail::to($ticket->email)->send(
-            new SupportTicketReplyMail($ticket, $reply)
-        );
-
-        return back()->with('success', 'Reply sent successfully.');
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(SupportTicket $ticket)
     {
-         
+
+        $ticket->load('replies');
+        return view('admin.support_tickets.show', compact('ticket'));
+        //
     }
 
     /**

@@ -11,6 +11,8 @@ use App\Http\Controllers\AdminTermsController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\LoanController;
 use App\Http\Controllers\Admin\AdminCashPaymentController;
+use App\Http\Controllers\Admin\SupportReplyController;
+use App\Http\Controllers\Admin\SupportTicketController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -41,9 +43,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/cash-payments/{id}/approve', [AdminCashPaymentController::class, 'approve'])->name('cash-payments.approve');
     Route::post('/cash-payments/{id}/reject', [AdminCashPaymentController::class, 'reject'])->name('cash-payments.reject');
 
-     Route::post('/support-tickets',[SupportReplyController::class, 'index'])->name('support.index');
-    Route::post('/support-tickets/{ticket}/reply',[SupportReplyController::class, 'store'])->name('support.reply');
-
+         
+     Route::get('/support-tickets', [SupportTicketController::class, 'index'])->name('support-tickets.index');
+    Route::get('/support-tickets/{ticket}', [SupportTicketController::class, 'show'])->name('support-tickets.show');
+    Route::post('/support-tickets/{ticket}/reply', [SupportReplyController::class, 'store'])->name('support-tickets.reply');
 
 
 
