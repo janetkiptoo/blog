@@ -1,10 +1,19 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}" class="grid grid-cols-2 gap-5 min-w-5xl bg-gray-100 p-6 rounded-lg shadow"  enctype="multipart/form-data">
+
+ <div class="text-center">
+            <h1 class="text-3xl font-bold text-gray-800">
+                Create Your Account
+            </h1>
+            <p class="text-gray-600 mt-2">
+                Sign up to check eligibility and apply for student loans
+            </p>
+        </div>
+    <form method="POST" action="{{ route('register') }}" class="grid  gap-5 min-w-3xl bg-gray-100 p-6 rounded-lg shadow"  enctype="multipart/form-data">
         @csrf
 
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
+            <x-input-label for="name" :value="__('Full Name')" />
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
@@ -16,19 +25,19 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <div class="mt-4">
+        <!-- <div class="mt-4">
             <x-input-label for="national_id" :value="__('National ID')" />
             <x-text-input id="national_id" class="block mt-1 w-full" type="number" name="national_id" :value="old('national_id')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('national_id')" class="mt-2" />
-        </div>
+        </div> -->
 
         <div class="mt-4">
             <x-input-label for="phone" :value="__('Phone')" />
-            <x-text-input id="phone" class="block mt-1 w-full" type="number" name="phone" :value="old('phone')" required autocomplete="username" />
+            <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')"  />
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
 
-        <div class="mt-4">
+        <!-- <div class="mt-4">
             <x-input-label for="institution" :value="__('Institution')" />
             <x-text-input id="institution" class="block mt-1 w-full" type="text" name="institution" :value="old('institution')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('institution')" class="mt-2" />
@@ -53,7 +62,7 @@
             <x-input-label for="student_reg_no" :value="__('student_reg_no')" />
             <x-text-input id="student_reg_no" class="block mt-1 w-full" type="text" name="student_reg_no" :value="old('student_reg_no')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('student_reg_no')" class="mt-2" />
-        </div>
+        </div> -->
     
              
 
@@ -79,12 +88,12 @@
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
-
+<!-- 
         <div class="form-group">
             <label for="image">upload ID Image</label>
              <input type="file" name="image" id="image" class="form-control">
             <x-input-error :messages="$errors->get('image')" class="mt-2" />
-           </div>
+           </div> -->
 
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 " href="{{ route('login') }}">

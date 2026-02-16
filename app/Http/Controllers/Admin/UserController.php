@@ -42,28 +42,28 @@ public function store(Request $request)
         'email' => 'required|email|unique:users',
         'password' => 'required|min:6',
         'role' => 'required',
-        'national_id' => 'required',
+        // 'national_id' => 'required',
         'phone' =>'required',
-        'institution' => 'required',
-        'course' => 'required',
-        'year_of_study' => 'required',
-        'student_reg_no' =>'required',
-        'image' => 'required|image|mimes:jpeg,png,jpg|max:4096',
+        // 'institution' => 'required',
+        // 'course' => 'required',
+        // 'year_of_study' => 'required',
+        // 'student_reg_no' =>'required',
+        // 'image' => 'required|image|mimes:jpeg,png,jpg|max:4096',
     ]);
-    $path = $request->file('image')->store('photos', 'public');
+    // $path = $request->file('image')->store('photos', 'public');
 
     User::create([
         'name' => $request->name,
         'email' => $request->email,
         'password' => Hash::make($request->password),
         'role' => $request->role,
-        'national_id' =>$request->national_id,
+        // 'national_id' =>$request->national_id,
          'phone' => $request->phone,
-        'institution' => $request->institution,
-        'course' => $request->course,
-        'year_of_study' => $request->year_of_study,
-        'student_reg_no' => $request->student_reg_no,
-        'image' => $path,
+        // 'institution' => $request->institution,
+        // 'course' => $request->course,
+        // 'year_of_study' => $request->year_of_study,
+        // 'student_reg_no' => $request->student_reg_no,
+        // 'image' => $path,
         
     ]);
 
