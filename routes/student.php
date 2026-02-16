@@ -7,6 +7,10 @@ use App\Http\Controllers\WebController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\GuarantorController;
 use App\Http\Controllers\TermController;
+use App\Http\Controllers\ProfileCompletionController;
+use App\Http\Controllers\AcademicProfileController;
+
+
 
 
 use Illuminate\Support\Facades\Route;
@@ -35,7 +39,11 @@ use Illuminate\Support\Facades\Route;
     Route::get('/guarantors/{loan}/create', [GuarantorController::class, 'create'])->name('guarantors.create');
     Route::post('/guarantors/{loan}', [GuarantorController::class, 'store'])->name('guarantors.store');
 
-     Route::get('/terms', [TermController::class, 'show'])->name('terms');
+    Route::get('/terms', [TermController::class, 'show'])->name('terms');
+    Route::get('/profile/complete', [ProfileCompletionController::class, 'edit'])->name('profile.complete');
+    Route::post('/profile/complete', [ProfileCompletionController::class, 'update'])->name('profile.complete.update');
+    Route::get('/profile/academic', [AcademicProfileController::class, 'edit'])->name('profile.academic');
+    Route::post('/profile/academic', [AcademicProfileController::class, 'update'])->name('profile.academic.update');
 
 
       

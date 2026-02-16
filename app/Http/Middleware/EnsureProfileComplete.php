@@ -17,7 +17,7 @@ class EnsureProfileComplete
     public function handle(Request $request, Closure $next): Response
     {
 
-    if (!$user->national_id || !$user->date_of_birth || !$user->phone) {
+    if (!$user->national_id || !$user->date_of_birth ) {
             return redirect()->route('profile.complete')
                 ->with('warning', 'Please complete your profile before applying for a loan.');
         }
