@@ -5,7 +5,6 @@
 @section('content')
 <section class="max-w-6xl mx-auto py-16 px-6 space-y-14 min-h-screen">
 
-    {{-- Header --}}
     <div class="text-center space-y-3">
         <h1 class="text-4xl font-bold text-gray-800">Contact Us</h1>
         <p class="text-gray-600 max-w-2xl mx-auto">
@@ -14,30 +13,29 @@
         </p>
     </div>
 
-    {{-- Contact Info --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
         <div class="p-6 border rounded-lg shadow-sm">
-            <h3 class="font-semibold text-lg text-gray-800 mb-2">Phone Support</h3>
+            <h3 class=" text-lg text-black mb-2">Phone Support</h3>
             <p class="text-gray-700">0711 111 111</p>
             <p class="text-sm text-gray-500">Mon – Fri, 9:00 AM – 5:00 PM</p>
         </div>
 
         <div class="p-6 border rounded-lg shadow-sm">
-            <h3 class="font-semibold text-lg text-gray-800 mb-2">Email Support</h3>
+            <h3 class=" text-lg text-black mb-2">Email Support</h3>
             <p class="text-gray-700">support@studentloan.com</p>
             <p class="text-sm text-gray-500">We respond within 24–48 hours</p>
         </div>
 
         <div class="p-6 border rounded-lg shadow-sm">
-            <h3 class="font-semibold text-lg text-gray-800 mb-2">Location</h3>
+            <h3 class="text-lg text-black mb-2">Location</h3>
             <p class="text-gray-700">Kenya</p>
             <p class="text-sm text-gray-500">Serving eligible institutions nationwide</p>
         </div>
     </div>
 
-    {{-- Contact Form --}}
+    
     <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+        <h2 class="text-2xl font-bold text-black mb-6 text-center">
             Send Us a Message
         </h2>
 
@@ -69,8 +67,7 @@
 
     <div>
         <label class="block font-semibold text-gray-700">Message</label>
-        <textarea name="message" rows="4"
-                  class="w-full border rounded px-4 py-2">{{ old('message') }}</textarea>
+        <textarea name="message" rows="4"class="w-full border rounded px-4 py-2">{{ old('message') }}</textarea>
     </div>
 
     <div class="text-center">

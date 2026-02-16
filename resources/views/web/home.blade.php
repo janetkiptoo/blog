@@ -4,7 +4,7 @@
 
 @section('content')
 
-{{-- Hero Section --}}
+
 <section class="flex flex-col md:flex-row items-center bg-center py-12 gap-8 px-6 md:px-16">
     <div class="flex-1">
         <img src="{{ asset('assets/students.jpg') }}" alt="Student Loan" class="rounded-xl shadow-lg mx-auto">
@@ -31,7 +31,7 @@
 </section>
 
 
-{{-- Eligibility Check --}}
+
 <section id="eligibility" class="bg-gray-100 px-6 md:px-16 py-16">
     <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">Check Your Eligibility</h2>
 
@@ -130,7 +130,7 @@ function checkEligibility() {
 </script>
 
 
-{{-- Loan Products Section --}}
+
 <section class="bg-gray-50 px-6 md:px-16 py-16">
     <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">Available Loan Products</h2>
 
@@ -163,7 +163,7 @@ function checkEligibility() {
 </section>
 
 
-{{-- EMI Calculator --}}
+
 <section class="bg-gray-50 px-6 md:px-16 py-16">
     <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">Estimate Your EMI</h2>
 
@@ -243,12 +243,12 @@ function calculateLoan() {
 </script>
 
 
-{{-- How It Works --}}
+
 <section class="px-6 md:px-16 py-16 bg-cover bg-center">
     <h2 class="text-3xl font-bold text-black text-center mb-12">How It Works</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-        <div class="p-6 border rounded-lg shadow hover:shadow-lg transition">
+        <div class="p-6 border rounded-lg shadow hover:shadow-lg transition transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 ">
             <div class="text-sky-600 mb-4">
                 <svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V6m0 12v-2"></path>
@@ -258,7 +258,7 @@ function calculateLoan() {
             <p class="text-gray-700 text-sm">Fill out the form, upload documents, and submit your application.</p>
         </div>
 
-        <div class="p-6 border rounded-lg shadow hover:shadow-lg transition">
+        <div class="p-6 border rounded-lg shadow hover:shadow-lg transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 ">
             <div class="text-orange-500 mb-4">
                 <svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m-6-8h6"></path>
@@ -268,7 +268,7 @@ function calculateLoan() {
             <p class="text-gray-700 text-sm">Application is reviewed quickly, and approval is granted within days.</p>
         </div>
 
-        <div class="p-6 border rounded-lg shadow hover:shadow-lg transition">
+        <div class="p-6 border rounded-lg shadow hover:shadow-lg transition delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 ">
             <div class="text-yellow-500 mb-4">
                 <svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
