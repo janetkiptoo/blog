@@ -41,43 +41,45 @@
             Send Us a Message
         </h2>
 
-        <form method="POST" action="{{ route('contact.store') }}" class="space-y-6 bg-gray-50 p-8 rounded-lg shadow">
+       <form method="POST" action="{{ route('contact.store') }}"
+      class="space-y-6 bg-gray-50 p-8 rounded-lg shadow">
     @csrf
 
-            <div>
-                <label class="block font-semibold text-gray-700">Full Name</label>
-                <input type="text" class="w-full border rounded px-4 py-2" placeholder="Your name">
-            </div>
+    <div>
+        <label class="block font-semibold text-gray-700">Full Name</label>
+        <input type="text" name="name"class="w-full border rounded px-4 py-2 value="{{ old('name') }}">
+    </div>
 
-            <div>
-                <label class="block font-semibold text-gray-700">Email Address</label>
-                <input type="email" class="w-full border rounded px-4 py-2" placeholder="you@example.com">
-            </div>
+    <div>
+        <label class="block font-semibold text-gray-700">Email Address</label>
+        <input type="email" name="email" class="w-full border rounded px-4 py-2" value="{{ old('email') }}">
+    </div>
 
-            <div>
-                <label class="block font-semibold text-gray-700">Inquiry Type</label>
-                <select class="w-full border rounded px-4 py-2">
-                    <option>Loan Application</option>
-                    <option>Eligibility</option>
-                    <option>Repayment</option>
-                    <option>Technical Issue</option>
-                    <option>Other</option>
-                </select>
-            </div>
+    <div>
+        <label class="block font-semibold text-gray-700">Inquiry Type</label>
+        <select name="category" class="w-full border rounded px-4 py-2">
+            <option value="">-- Select --</option>
+            <option value="Loan Application">Loan Application</option>
+            <option value="Eligibility">Eligibility</option>
+            <option value="Repayment">Repayment</option>
+            <option value="Technical Issue">Technical Issue</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
 
-            <div>
-                <label class="block font-semibold text-gray-700">Message</label>
-                <textarea rows="4" class="w-full border rounded px-4 py-2"
-                    placeholder="Describe your issue or question"></textarea>
-            </div>
+    <div>
+        <label class="block font-semibold text-gray-700">Message</label>
+        <textarea name="message" rows="4"
+                  class="w-full border rounded px-4 py-2">{{ old('message') }}</textarea>
+    </div>
 
-            <div class="text-center">
-                <button type="submit"
-                    class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition">
-                    Submit Message
-                </button>
-            </div>
-        </form>
+    <div class="text-center">
+        <button type="submit"class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700">
+            Submit Message
+        </button>
+    </div>
+</form>
+
         @if(session('success'))
     <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
         {{ session('success') }}

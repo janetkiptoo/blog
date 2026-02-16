@@ -1,31 +1,22 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Support Request Received</title>
+</head>
+<body>
+    <p>Hello {{ $ticket->name }},</p>
 
-@section('content')
+    <p>We have received your support request. Here are the details you submitted:</p>
 
-{{-- resources/views/emails/support/received.blade.php --}}
-<p>Hello {{ $ticket->name }},</p>
+    <ul>
+        <li><strong>Category:</strong> {{ $ticket->category }}</li>
+        <li><strong>Message:</strong> {{ $ticket->message }}</li>
+    </ul>
 
-<p>
-    Thank you for contacting Student Loan Support.
-    We have received your request and our team will review it shortly.
-</p>
+    <p>Our team will review your inquiry and get back to you as soon as possible.</p>
 
-<p>
-    <strong>Ticket Reference:</strong> #{{ $ticket->id }} <br>
-    <strong>Category:</strong> {{ $ticket->category }}
-</p>
-
-<p>
-    Our typical response time is within <strong>24–48 business hours</strong>.
-</p>
-
-<p>
-    Please do not reply to this email with sensitive personal or financial information.
-</p>
-
-<p>
-    Regards,<br>
-    Student Loan Support Team
-</p>
-
-@endsection
+    <p>Thank you,<br>
+    Student Loan Support Team</p>
+</body>
+</html>

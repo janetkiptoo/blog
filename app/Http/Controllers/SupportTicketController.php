@@ -20,12 +20,9 @@ public function store(Request $request)
     ]);
 
     $ticket = SupportTicket::create($validated);
+    Mail::to($ticket->email)->send(new SupportTicketReceived($ticket));
 
-    Mail::to($ticket->email)->send(
-        new SupportTicketReceived($ticket)
-    );
-
-    return back()->with('success', 'Your message has been received. Please check your email.');
+    return redirect()->route('web.contact')->with('success', 'Your message has been received. Please check your email.');
 }
     //
 }
