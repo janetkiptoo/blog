@@ -41,6 +41,7 @@
                             {{ ucfirst($user->role) }}
                         </span>
                     </td>
+                  
                     <td class="px-6 py-4 text-center">
                         <a href="{{ route('admin.users.show', $user) }}"
                            class="inline-block bg-primary-700 hover:bg-primary-600 transition text-white px-4 py-2 rounded-md text-xs font-semibold">

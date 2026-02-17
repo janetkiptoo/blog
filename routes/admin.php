@@ -35,7 +35,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/repayments', [AdminRepaymentController::class, 'index'])->name('repayments.index');
 
     Route::get('/loans/{loan}/repayments', [AdminRepaymentController::class, 'show'])->name('repayments.show');
-    Route::get('/loans/{loan}/guarantors', [AdminGuarantorController::class, 'index'])->name('loans.guarantors');
+
     Route::resource('payment-methods', PaymentMethodController::class);
     Route::post('/loans/{id}/disburse', [LoanController::class, 'disburse'])->name('loan.disburse');
 
@@ -44,9 +44,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/cash-payments/{id}/reject', [AdminCashPaymentController::class, 'reject'])->name('cash-payments.reject');
 
          
-     Route::get('/support-tickets', [SupportTicketController::class, 'index'])->name('support-tickets.index');
+    Route::get('/support-tickets', [SupportTicketController::class, 'index'])->name('support-tickets.index');
     Route::get('/support-tickets/{ticket}', [SupportTicketController::class, 'show'])->name('support-tickets.show');
     Route::post('/support-tickets/{ticket}/reply', [SupportReplyController::class, 'store'])->name('support-tickets.reply');
+
+    
+    Route::get('/users/{user}/guarantors',[AdminGuarantorController::class, 'index'])->name('guarantors.index');
+    Route::get('/guarantors/{guarantor}',[AdminGuarantorController::class, 'show'])->name('guarantors.show');
+
+    Route::post('/guarantors/{guarantor}/approve', [AdminGuarantorController::class, 'approve'])->name('guarantors.approve');
+    Route::post('/guarantors/{guarantor}/reject', [AdminGuarantorController::class, 'reject'])->name('guarantors.reject');
 
 
 

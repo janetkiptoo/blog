@@ -4,7 +4,7 @@
 <div class=" py-6">
 
     <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">Loan Products Available</h2>
+        <h2 class="text-xl font-bold">Loan Products Available</h2>
 
         <a href="{{ route('admin.loan-products.create') }}" class="bg-primary-700 hover:bg-primary-500 text-white px-3 py-1 rounded"> +Add Product
         </a>

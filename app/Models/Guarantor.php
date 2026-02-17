@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Guarantor extends Model
 {
     protected $fillable = [
-        'loan_application_id',
+        
         'name',
+        'user_id',
         'relationship',
         'national_id',
         'phone',
@@ -17,10 +18,18 @@ class Guarantor extends Model
         'employment_status',
         'physical_address',
         'image',
+        'income_range',
+        'id_type',
+        'status',
+        'admin_notes',
+        'rejected_reason',
+        'reviewed_at',
     ];
 
-    public function loan()
+     public function user()
     {
-        return $this->belongsTo(LoanApplication::class);
+        return $this->belongsTo(User::class);
     }
+
+    
 }

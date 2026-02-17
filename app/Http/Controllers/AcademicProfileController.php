@@ -62,6 +62,7 @@ class AcademicProfileController extends Controller
             'institution_type' => 'required|string|max:100',
             'course_name' => 'required|string|max:255',
             'level' => 'required|string|max:50',
+            'student_registration_number' => 'required|string|max:50',
             'student_document' => 'required|file|mimes:pdf,jpeg,png,jpg|max:4096',
         ]);
 
@@ -70,6 +71,7 @@ class AcademicProfileController extends Controller
             'institution_type' => $request->institution_type,
             'course_name' => $request->course_name,
             'level' => $request->level,
+            'student_registration_number' => $request->student_registration_number,
             'student_document' => $request->file('student_document')->store('student_docs', 'public'),
         ]);
 

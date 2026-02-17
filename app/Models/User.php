@@ -30,6 +30,13 @@ class User extends Authenticatable implements MustVerifyEmail
     'government_id_number',
     'address',
     'password',
+    'institution_name',
+    'institution_type',
+    'course_name',
+    'level',
+    'student_document',
+    'student_registration_number',
+    
     
     ];
 
@@ -70,5 +77,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Payment::class);
     }
-    
+    public function guarantors()
+    {
+        return $this->hasMany(Guarantor::class);
+    }
+    public function isEligibleForLoan(): bool
+{
+    return $this->approvedGuarantors()->count() >= 2
+        && $this->profile_status === 'approved'
+        && $this->academic_status === 'approved';
+}
+
 }

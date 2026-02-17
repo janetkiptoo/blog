@@ -45,6 +45,12 @@
         </div>
 
         <div>
+            <x-input-label for="student_registration_number" :value="__('Student Registration Number')" />
+            <x-text-input id="student_registration_number" class="block mt-1 w-full" type="text" name="student_registration_number" value="{{ old('student_registration_number', $user->student_registration_number) }}" required />
+            <x-input-error :messages="$errors->get('student_registration_number')" class="mt-2" />
+        </div>
+
+        <div>
             <x-input-label for="student_document" :value="__('Upload Student ID / Admission Letter')" />
             <input type="file" name="student_document" id="student_document" class="w-full border p-2 rounded" required />
             <x-input-error :messages="$errors->get('student_document')" class="mt-2" />

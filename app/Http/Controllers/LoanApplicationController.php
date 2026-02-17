@@ -108,6 +108,13 @@ public function process_repayment(Request $request, $id)
     {
         $user = auth()->user();
 
+        if (auth()->user()->verification_status !== 'approved') {
+          return redirect()
+        ->route('student.profile.complete')
+        ->with('warning', 'Complete and verify your profile before applying.');
+}
+
+
         $request->validate([
             'loan_amount' => 'required|numeric|min:1',
             'term_months' => 'required|integer|min:2', // 1 grace + at least 1 payment
