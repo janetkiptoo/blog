@@ -19,7 +19,11 @@
                    'bg-yellow-100 text-yellow-700') }}">
                 {{ ucfirst($guarantor->status) }}
             </span>
+
         </p>
+        @if ($guarantor->status ==='rejected')
+        <p><strong>Rejected reason:</strong> {{ $guarantor->rejection_reason }}</p>
+        @endif
     </div>
 
     <img src="{{ asset('storage/'.$guarantor->image) }}"
@@ -27,24 +31,29 @@
 
     @if($guarantor->status === 'pending')
     <div class="flex gap-4">
-        <form method="POST" action="{{ route('admin.guarantors.approve', $guarantor) }}">
-            @csrf
-            <button class="bg-green-600 text-white px-4 py-2 rounded">
-                Approve
-            </button>
-        </form>
+        <form method="POST" 
+      action="{{ route('admin.guarantors.approve', $guarantor) }}" 
+      class="inline">
+    @csrf
+    <button type="submit"
+        class="bg-green-600 text-white px-3 py-1 rounded-full text-sm">
+        Approve
+    </button>
+</form>
 
-       
-        <form method="POST" action="{{ route('admin.guarantors.reject', $guarantor) }}">
-            @csrf
-            <button class="bg-red-600 text-white px-4 py-2 rounded">
-                Reject
-            </button>
-            <textarea name="rejection_reason"class="border w-full p-2 rounded mb-2"placeholder="Reason for rejection" required></textarea>
 
-        </form>
+    <form method="POST" action="{{ route('admin.guarantors.reject', $guarantor) }}">
+    @csrf
 
-    </div>
+    <textarea name="rejection_reason"
+        class="w-full border rounded p-2 mb-2"
+        placeholder="Reason for rejection" required></textarea>
+
+    <button class="bg-red-600 text-white px-4 py-2 rounded-full">
+        Reject Guarantor
+    </button>
+</form>
+ </div>
     @endif
 
 </div>

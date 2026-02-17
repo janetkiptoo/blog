@@ -18,6 +18,13 @@ class GuarantorController extends Controller
     
 public function store(Request $request)
 {
+     $user = auth()->user();
+
+    if ($user->guarantors()->count() >= 2) {
+        return back()->withErrors([
+            'limit' => 'You can only add a maximum of 2 guarantors.'
+        ]);
+    }
     $request->validate([
         'name' => 'required|string|max:255',
         'relationship' => 'required|string|max:100',

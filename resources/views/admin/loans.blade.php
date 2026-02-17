@@ -29,7 +29,7 @@
                     <th class="px-4 py-3 border">Student</th>
                     <th class="px-4 py-3 border">Reg No</th>
                     <th class="px-4 py-3 border">Loan Product</th>
-                    <th class="px-4 py-3 border">Guarantors</th>
+                    
                     <th class="px-4 py-3 border ">Loan Amount</th>
                     <!-- <th class="px-4 py-3 border ">Amount Paid</th> -->
                     <th class="px-4 py-3 border ">Balance</th>
@@ -44,10 +44,7 @@
                         <td class="px-4 py-3 border">{{ $loan->user->name }} </td>
                         <td class="px-4 py-3 border">{{ $loan->user->student_reg_no }} </td>
                         <td class="px-4 py-3 border">{{ $loan->loanProduct->product_name }}</td>
-                         <td class="px-4 py-3 border">   <a href="{{ route('admin.loans.guarantors', $loan->id) }}"
-   class="bg-primary-700 text-white px-4 py-2 rounded hover:bg-primary-500">
-   View Guarantors
-</a></td>
+         
                         <td class="px-4 py-3 border text-right"> KES {{ number_format($loan->loan_amount, 2) }} </td>
                        <!-- <td class="px-4 py-3 border text-right text-green-600">
     KES {{ number_format($loan->amount_paid ?? 0, 2) }}

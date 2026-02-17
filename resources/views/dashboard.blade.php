@@ -12,6 +12,12 @@
        <p><strong>Student Reg No:</strong> {{  Auth::user()->student_reg_no }}</p>
     </div>
 
+    
+
+ 
+
+
+
     @if($loan)
     <div class="mb-6 p-6 bg-white shadow-lg rounded-lg">
         <h2 class="text-2xl font-semibold mb-2">Your Latest Loan</h2>

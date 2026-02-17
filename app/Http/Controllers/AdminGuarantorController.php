@@ -7,6 +7,10 @@ use App\Models\Guarantor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Mail\GuarantorApprovedMail;
+use App\Mail\GuarantorRejectedMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class AdminGuarantorController extends Controller
 {
@@ -18,19 +22,24 @@ class AdminGuarantorController extends Controller
     }
  
 
+   
    public function approve(Guarantor $guarantor)
-    {
+   {
     $guarantor->update([
         'status' => 'approved',
         'rejection_reason' => null,
         'reviewed_at' => now(),
     ]);
 
-    return back()->with('success', 'Guarantor approved successfully.');
-   }
+    Mail::to($guarantor->user->email)
+        ->send(new GuarantorApprovedMail($guarantor));
+
+    return back()->with('success', 'Guarantor approved and student notified.');
+    }
+
 
    public function reject(Request $request, Guarantor $guarantor)
-    {
+{
     $request->validate([
         'rejection_reason' => 'required|string|min:5',
     ]);
@@ -41,8 +50,12 @@ class AdminGuarantorController extends Controller
         'reviewed_at' => now(),
     ]);
 
-    return back()->with('success', 'Guarantor rejected.');
-     }
+    Mail::to($guarantor->user->email)
+        ->send(new GuarantorRejectedMail($guarantor));
+
+    return back()->with('success', 'Guarantor rejected and student notified.');
+}
+
 
 
     public function show($id)

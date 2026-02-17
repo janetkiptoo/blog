@@ -12,11 +12,50 @@
         </h2>
 
         <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
-        <p><strong>Institution:</strong> {{ Auth::user()->institution }}</p>
-        <p><strong>Course:</strong> {{ Auth::user()->course }}</p>
+        <p><strong>Institution:</strong> {{ Auth::user()->institution_name}}</p>
+        <p><strong>Course:</strong> {{ Auth::user()->course_name }}</p>
+        <p><strong>Level:</strong> {{ Auth::user()->level }}</p>
+        
        
-        <p><strong>Student Reg No:</strong> {{ Auth::user()->student_reg_no }}</p>
+        <p><strong>Student Reg No:</strong> {{ Auth::user()->student_registration_number }}</p>
     </div>
+
+  
+
+    <h2 class="text-xl font-bold mb-4">Guarantor Status</h2>
+
+<table class="w-full border">
+    <thead>
+        <tr class="bg-gray-100">
+            <th class="p-2">Name</th>
+            <th class="p-2">Relationship</th>
+            <th class="p-2">Status</th>
+            <th class="p-2">Remarks</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(auth()->user()->guarantors as $guarantor)
+        <tr>
+            <td class="p-2">{{ $guarantor->name }}</td>
+            <td class="p-2">{{ ucfirst($guarantor->relationship) }}</td>
+            <td class="p-2">
+                @if($guarantor->status === 'approved')
+                    <span class="text-green-600 font-bold">Approved</span>
+                @elseif($guarantor->status === 'rejected')
+                    <span class="text-red-600 font-bold">Rejected</span>
+                @else
+                    <span class="text-yellow-600 font-bold">Pending</span>
+                @endif
+            </td>
+            <td class="p-2">
+                {{ $guarantor->rejection_reason ?? '—' }}
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+
+    
 
 
     @if($loan)

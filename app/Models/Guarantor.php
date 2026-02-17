@@ -22,7 +22,7 @@ class Guarantor extends Model
         'id_type',
         'status',
         'admin_notes',
-        'rejected_reason',
+        'rejection_reason',
         'reviewed_at',
     ];
 

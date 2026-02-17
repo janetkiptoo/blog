@@ -9,6 +9,17 @@
         Guarantor / Guardian Information
     </h2>
 
+    @if(auth()->user()->guarantors()->count() < 2)
+    <a href="{{ route('student.guarantors.create') }}"
+       class="bg-primary-700 text-white px-4 py-2 rounded">
+        Add Guarantor
+    </a>
+@else
+    <p class="text-red-600 font-semibold">
+        You have reached the maximum of 2 guarantors.
+    </p>
+@endif
+
     <form method="POST"
           action="{{ route('student.profile.guarantors.store') }}"
           enctype="multipart/form-data"
@@ -139,5 +150,8 @@
             </button>
         </div>
     </form>
+
+
+
 </div>
 @endsection

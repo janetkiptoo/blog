@@ -81,11 +81,17 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Guarantor::class);
     }
-    public function isEligibleForLoan(): bool
-{
-    return $this->approvedGuarantors()->count() >= 2
-        && $this->profile_status === 'approved'
-        && $this->academic_status === 'approved';
-}
+    public function activeGuarantors()
+    {
+    return $this->hasMany(Guarantor::class)
+        ->whereIn('status', ['pending', 'approved']);
+     }
+
+//     public function isEligibleForLoan(): bool
+// {
+//     return $this->approvedGuarantors()->count() >= 2
+//         && $this->profile_status === 'approved'
+//         && $this->academic_status === 'approved';
+// }
 
 }
