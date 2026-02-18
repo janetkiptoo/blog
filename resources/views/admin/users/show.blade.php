@@ -20,6 +20,8 @@
 
         <div class="mt-6 flex gap-4">
             <a href="{{ route('admin.users.edit', $user) }}" class="bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded">Edit </a>
+             <a href="{{ route('admin.personal-profiles.show', $user->personalProfile) }}">Review Personal Profile</a>
+
             <a href="{{ route('admin.guarantors.index', $user) }}" class="bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded">Guarantors </a>
             <a href="{{ route('admin.loans', $user) }}" class="bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded">loans </a>
             <a href="{{ route('admin.repayments.show', $user) }}" class="bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded">Repayments </a>

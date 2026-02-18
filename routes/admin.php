@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminGuarantorController;
 use App\Http\Controllers\AdminTermsController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\LoanController;
+use App\Http\Controllers\AdminPersonalProfileController;
 use App\Http\Controllers\Admin\AdminCashPaymentController;
 use App\Http\Controllers\Admin\SupportReplyController;
 use App\Http\Controllers\Admin\SupportTicketController;
@@ -54,6 +55,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::post('/guarantors/{guarantor}/approve', [AdminGuarantorController::class, 'approve'])->name('guarantors.approve');
     Route::post('/guarantors/{guarantor}/reject', [AdminGuarantorController::class, 'reject'])->name('guarantors.reject');
+
+   Route::get('/personal-profiles/{personalProfile}', [AdminPersonalProfileController::class, 'show'])->name('personal-profiles.show');
+   Route::post('/personal-profiles/{profile}/approve', [AdminPersonalProfileController::class, 'approve'])->name('personal.approve');
+    Route::post('/personal-profiles/{profile}/reject', [AdminPersonalProfileController::class, 'reject'])->name('personal.reject');
+
+    
 
 
 

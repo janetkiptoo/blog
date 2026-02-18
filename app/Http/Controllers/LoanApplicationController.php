@@ -117,7 +117,7 @@ public function process_repayment(Request $request, $id)
 
         $request->validate([
             'loan_amount' => 'required|numeric|min:1',
-            'term_months' => 'required|integer|min:2', // 1 grace + at least 1 payment
+            'term_months' => 'required|integer|min:2', 
         ]);
 
         $product = LoanProduct::findOrFail($productId);
@@ -156,6 +156,7 @@ public function process_repayment(Request $request, $id)
         return redirect()->route('student.guarantors.create', $loan->id);
     }
 
+
     public function destroy(LoanApplication $loan_application)
     {
         $user = auth()->user();
@@ -172,4 +173,7 @@ public function process_repayment(Request $request, $id)
 
         return redirect()->route('student.loans.index')->with('success', 'Loan application deleted successfully.');
     }
+
+
+    
 }

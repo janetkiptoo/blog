@@ -21,21 +21,16 @@ class User extends Authenticatable implements MustVerifyEmail
     'name',
     'email',
     'phone',
-    'date_of_birth',
-    'national_id',
-    'id_image',
-    'gender',
-    'nationality',
-    'government_id_type',
-    'government_id_number',
-    'address',
+    
+    // 'national_id',
+    // 'id_image',
+    // 'gender',
+    // 'nationality',
+    // 'government_id_type',
+    // 'government_id_number',
+    // 'address',
     'password',
-    'institution_name',
-    'institution_type',
-    'course_name',
-    'level',
-    'student_document',
-    'student_registration_number',
+   
     
     
     ];
@@ -87,11 +82,35 @@ class User extends Authenticatable implements MustVerifyEmail
         ->whereIn('status', ['pending', 'approved']);
      }
 
-//     public function isEligibleForLoan(): bool
-// {
-//     return $this->approvedGuarantors()->count() >= 2
-//         && $this->profile_status === 'approved'
-//         && $this->academic_status === 'approved';
-// }
+     public function personalProfile()
+    {
+    return $this->hasOne(PersonalProfile::class);
+    }
+
+    public function academicProfile()
+    {
+    return $this->hasOne(AcademicProfile::class);
+    }
+
+    
+
+    public function isFullyApproved(): bool
+   {
+    return optional($this->personalProfile)->status === 'approved'
+        && optional($this->academicProfile)->status === 'approved';
+     }
+
+
+
+public function isEligibleForLoan(): bool
+{
+    return
+        $this->personalProfile?->status === 'approved' &&
+        $this->academicProfile?->status === 'approved' &&
+        $this->guarantors()
+            ->where('status', 'approved')
+            ->count() >= 2;
+}
+
 
 }

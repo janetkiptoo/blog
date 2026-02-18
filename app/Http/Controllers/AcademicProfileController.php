@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AcademicProfile;
 
 
 class AcademicProfileController extends Controller
@@ -43,45 +44,49 @@ class AcademicProfileController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit()
-    {
-          $user = Auth::user();
-        return view('student.profile.academic', compact('user'));
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-     public function update(Request $request)
+     public function edit()
     {
         $user = Auth::user();
+        return view('student.profile.academic', compact('user'));
+    }
 
+    public function update(Request $request)
+    {
         $request->validate([
             'institution_name' => 'required|string|max:255',
             'institution_type' => 'required|string|max:100',
             'course_name' => 'required|string|max:255',
-            'level' => 'required|string|max:50',
-            'student_registration_number' => 'required|string|max:50',
-            'student_document' => 'required|file|mimes:pdf,jpeg,png,jpg|max:4096',
+            'level' => 'required|string|max:100',
+            'student_registration_number' => 'required|string|max:100',
+            'student_document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:4096',
         ]);
 
-        $user->update([
-            'institution_name' => $request->institution_name,
-            'institution_type' => $request->institution_type,
-            'course_name' => $request->course_name,
-            'level' => $request->level,
-            'student_registration_number' => $request->student_registration_number,
-            'student_document' => $request->file('student_document')->store('student_docs', 'public'),
+        $user = Auth::user();
+
+        $data = $request->only([
+            'institution_name',
+            'institution_type',
+            'course_name',
+            'level',
+            'student_registration_number',
         ]);
 
-        return redirect()->route('student.dashboard')->with('success', 'Academic profile completed successfully!');
-    }
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        if ($request->hasFile('student_document')) {
+            $data['student_document'] =
+                $request->file('student_document')->store('academic_docs', 'public');
+        }
+
+        AcademicProfile::updateOrCreate(
+            ['user_id' => $user->id],
+            array_merge($data, [
+                'status' => 'pending',
+                'rejection_reason' => null,
+                'reviewed_at' => null,
+            ])
+        );
+
+        return redirect()
+            ->route('student.profile.guarantors.create')
+            ->with('success', 'Academic details submitted for review.');
     }
 }

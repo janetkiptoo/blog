@@ -20,6 +20,7 @@
         <p><strong>Student Reg No:</strong> {{ Auth::user()->student_registration_number }}</p>
     </div>
 
+
   
 
     <h2 class="text-xl font-bold mb-4">Guarantor Status</h2>

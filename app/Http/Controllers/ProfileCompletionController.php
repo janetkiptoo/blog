@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PersonalProfile;
+
 
 class ProfileCompletionController extends Controller
 {
@@ -52,38 +54,49 @@ class ProfileCompletionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
-    {
 
-        $request->validate([
-    'gender' => 'required|string',
-    'nationality' => 'required|string|max:100',
-    'government_id_type' => 'required|string|max:50',
-    'government_id_number' => 'required|string|max:50',
-    'address' => 'required|string|max:500',
-    'date_of_birth' => 'required|date',
-    'id_image' => 'nullable|image|mimes:jpeg,png,jpg|max:4096',
-]);
+public function update(Request $request)
+{
+    $request->validate([
+        'gender' => 'required|string',
+        'nationality' => 'required|string|max:100',
+        'government_id_type' => 'required|string|max:50',
+        'government_id_number' => 'required|string|max:50',
+        'address' => 'required|string|max:500',
+        'date_of_birth' => 'required|date',
+        'id_image' => 'nullable|image|mimes:jpeg,png,jpg|max:4096',
+    ]);
 
-$user = Auth::user();
-$user->gender = $request->gender;
-$user->nationality = $request->nationality;
-$user->government_id_type = $request->government_id_type;
-$user->government_id_number = $request->government_id_number;
-$user->address = $request->address;
+    $user = Auth::user();
 
-$user->date_of_birth = $request->date_of_birth;
+    $data = $request->only([
+        'gender',
+        'nationality',
+        'government_id_type',
+        'government_id_number',
+        'address',
+        'date_of_birth',
+    ]);
 
-if ($request->hasFile('id_image')) {
-    $user->id_image = $request->file('id_image')->store('ids', 'public');
+    if ($request->hasFile('id_image')) {
+        $data['id_image'] = $request->file('id_image')->store('ids', 'public');
+    }
+
+    
+    PersonalProfile::updateOrCreate(
+        ['user_id' => $user->id],
+        array_merge($data, [
+            'status' => 'pending',
+            'rejection_reason' => null,
+            'reviewed_at' => null,
+        ])
+    );
+
+    return redirect()
+        ->route('student.profile.academic')
+        ->with('success', 'Personal information submitted for review.');
 }
 
-$user->save();
-
-
-        return redirect()->route('student.profile.academic')->with('success', 'Profile updated successfully!');
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
