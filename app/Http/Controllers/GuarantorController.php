@@ -20,11 +20,12 @@ public function store(Request $request)
 {
      $user = auth()->user();
 
-    if ($user->guarantors()->count() >= 2) {
-        return back()->withErrors([
-            'limit' => 'You can only add a maximum of 2 guarantors.'
-        ]);
-    }
+    if ($user->activeGuarantors()->count() >= 2) {
+    return back()->withErrors([
+        'limit' => 'You can only have 2 active guarantors.'
+    ]);
+}
+
     $request->validate([
         'name' => 'required|string|max:255',
         'relationship' => 'required|string|max:100',
@@ -35,7 +36,13 @@ public function store(Request $request)
         'image' => 'required|image|mimes:jpeg,png,jpg|max:4096',
         'employment_status' => 'required|in:employed,not employed',
         'physical_address' => 'nullable|string|max:255',
-        'income_range' => 'required|string',
+        'income_range' => ['nullable','string',
+        function ($attr, $value, $fail) use ($request) {
+            if ($request->employment_status === 'employed' && empty($value)) {
+                $fail('Income range is required for employed guarantors.');
+            }
+        },
+    ],
         'id_type' => 'required|string',
     ]);
 
@@ -70,9 +77,12 @@ public function store(Request $request)
         abort(403);
     }
 
-    if ($loan->guarantors()->count() < 2) {
-        return back()->withErrors('At least 2 guarantors are required.');
-    }
+    if ($user->activeGuarantors()->count() >= 2) {
+    return back()->withErrors([
+        'limit' => 'You can only have 2 active guarantors.'
+    ]);
+}
+
 
     if ($loan->guarantors()->where('status', 'approved')->count() < 2) {
         return back()->withErrors('Guarantors must be approved before submission.');

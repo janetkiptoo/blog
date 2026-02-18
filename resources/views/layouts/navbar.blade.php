@@ -15,17 +15,17 @@
 
                 @if (Auth::check())
 
-            <form method="POST" action="{{ route('logout') }}" class="inline text-white">
+            <form method="POST" action="{{ route('logout') }}" class="inline text-white font-bold">
                 @csrf
-                <button type="submit">Logout</button>
+                <button type="submit">LOG OUT</button>
             </form>
                 @else
-              <div class="flex gap-6  ">
+              <div class="flex gap-6  text-white font-bold  ">
                 <a href="/login">
-                 <button class=" text-white  px-4 rounded">login</button>
+                 <button class=" text-white  px-4 rounded">LOGIN</button>
                 </a>
                 <a href="/register">
-                <button class=" text-white px-4 rounded">sign up</button>
+                <button class=" text-white px-4 rounded">SIGN UP</button>
                 </a>
                 </div>
 @endif

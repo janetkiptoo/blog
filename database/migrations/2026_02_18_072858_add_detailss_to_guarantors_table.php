@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('guarantors', function (Blueprint $table) {
-            
-    $table->string('email')->nullable();
-    $table->string('id_type');
-    $table->text('admin_notes')->nullable();
+            $table->string('income_range')->nullable();
+
+            //
         });
     }
 

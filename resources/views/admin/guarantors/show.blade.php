@@ -12,6 +12,8 @@
         <p><strong>Email:</strong> {{ $guarantor->email ?? 'N/A' }}</p>
         <p><strong>Employment:</strong> {{ ucfirst($guarantor->employment_status) }}</p>
         <p><strong>Income Range:</strong> {{ $guarantor->income_range }}</p>
+        <p><strong>ID Number/Passport Number:</strong> {{ $guarantor->national_id }}</p>
+
         <p><strong>Status:</strong>
             <span class="px-2 py-1 rounded text-sm
                 {{ $guarantor->status === 'approved' ? 'bg-green-100 text-green-700' :

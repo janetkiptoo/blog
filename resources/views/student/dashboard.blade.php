@@ -24,36 +24,35 @@
 
     <h2 class="text-xl font-bold mb-4">Guarantor Status</h2>
 
-<table class="w-full border">
-    <thead>
-        <tr class="bg-gray-100">
-            <th class="p-2">Name</th>
-            <th class="p-2">Relationship</th>
-            <th class="p-2">Status</th>
-            <th class="p-2">Remarks</th>
-        </tr>
-    </thead>
-    <tbody>
+
+
         @foreach(auth()->user()->guarantors as $guarantor)
-        <tr>
-            <td class="p-2">{{ $guarantor->name }}</td>
-            <td class="p-2">{{ ucfirst($guarantor->relationship) }}</td>
-            <td class="p-2">
-                @if($guarantor->status === 'approved')
-                    <span class="text-green-600 font-bold">Approved</span>
-                @elseif($guarantor->status === 'rejected')
-                    <span class="text-red-600 font-bold">Rejected</span>
-                @else
-                    <span class="text-yellow-600 font-bold">Pending</span>
-                @endif
-            </td>
-            <td class="p-2">
-                {{ $guarantor->rejection_reason ?? '—' }}
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+    <div class="border p-4 rounded mb-3">
+        <p><strong>Name:</strong> {{ $guarantor->name }}</p>
+        <p><strong>Relationship:</strong>{{ ucfirst($guarantor->relationship) }}</p>
+        <p><strong>Status:</strong>
+            <span class="
+                {{ $guarantor->status === 'approved' ? 'text-green-600' :
+                   ($guarantor->status === 'rejected' ? 'text-red-600' : 'text-yellow-600') }}">
+                {{ ucfirst($guarantor->status) }}
+            </span>
+        </p>
+         @if($guarantor->status === 'rejected')
+
+    <p><strong>Reason:</strong> {{ $guarantor->rejection_reason ?? '—' }}</p>
+    @endif
+
+        @if($guarantor->status === 'rejected'
+            && auth()->user()->activeGuarantors()->count() < 2)
+            <a href="{{ route('student.profile.guarantors.create') }}"
+               class="inline-block mt-2 bg-blue-600 text-white px-3 py-1 rounded">
+                Add Replacement Guarantor
+            </a>
+        @endif
+    </div>
+@endforeach
+
+
 
     
 

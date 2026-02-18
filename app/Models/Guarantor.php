@@ -31,5 +31,12 @@ class Guarantor extends Model
         return $this->belongsTo(User::class);
     }
 
+public function activeGuarantors()
+{
+    return $this->hasMany(Guarantor::class)
+        ->whereIn('status', ['pending', 'approved']);
+}
+
+
     
 }
