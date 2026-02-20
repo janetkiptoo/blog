@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\LoanApplication;
 use App\Models\Guarantor;
+// use App\Mail\GuarantorRemovedMail;
+// use Illuminate\Support\Facades\Mail;
 
 class GuarantorController extends Controller
 {
@@ -66,6 +68,28 @@ public function store(Request $request)
     return redirect()
         ->route('student.dashboard')
         ->with('success', 'Guarantor details submitted and awaiting approval.');
+}
+
+public function destroy(Guarantor $guarantor)
+{
+    if ($guarantor->user_id !== auth()->id()) {
+        abort(403);
+    }
+
+    if ($guarantor->status === 'approved') {
+        return back()->with('error', 'Approved guarantors cannot be removed.');
+    }
+
+    $guarantor->update([
+        'status' => 'replaced',
+    ]);
+
+    $guarantor->delete(); 
+
+    //  Mail::to(config('mail.admin_email'))
+    //     ->send(new GuarantorRemovedMail($guarantor));
+
+    return back()->with('success', 'Guarantor removed successfully.');
 }
 
     /**

@@ -31,6 +31,7 @@
                             {{ $guarantor->status === 'approved' ? 'bg-green-100 text-green-700' : '' }}
                             {{ $guarantor->status === 'pending' ? 'bg-yellow-100 text-yellow-700' : '' }}
                             {{ $guarantor->status === 'rejected' ? 'bg-red-100 text-red-700' : '' }}
+                             {{ $guarantor->status === 'replaced' ? 'bg-grey-100 text-grey-700' : '' }}
                         ">
                             {{ ucfirst($guarantor->status) }}
                         </span>
@@ -40,6 +41,18 @@
                            class="text-blue-600 underline">
                             Review
                         </a>
+
+                        <div>
+ @if($guarantor->trashed())
+    <form method="POST"
+          action="{{ route('admin.guarantors.restore', $guarantor->id) }}">
+        @csrf
+        <button class="bg-green-600 text-white px-3 py-1 rounded">
+            Restore
+        </button>
+    </form>
+@endif
+</div>
                     </td>
                 </tr>
             @empty

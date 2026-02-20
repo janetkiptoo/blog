@@ -84,7 +84,7 @@
 <div class="bg-white p-5 rounded shadow mb-6">
     <h2 class="text-xl font-bold mb-3">Guarantors</h2>
 
-    @foreach($guarantors as $guarantor)
+    @foreach(auth()->user()->activeGuarantors as $guarantor)
         <div class="border p-3 rounded mb-3">
             <p><strong>Name:</strong> {{ $guarantor->name }}</p>
             <p><strong>Relationship:</strong> {{ ucfirst($guarantor->relationship) }}</p>
@@ -107,6 +107,17 @@
         </a>
             @endif
         </div>
+        @if(in_array($guarantor->status, ['pending', 'rejected']))
+    <form action="{{ route('student.profile.guarantors.destroy', $guarantor) }}"method="POST" class="inline-block mt-2"
+          onsubmit="return confirm('Are you sure you want to remove this guarantor?')">
+        @csrf
+        @method('DELETE')
+
+        <button class="bg-red-600 text-white px-3 py-1 rounded">
+            Remove Guarantor
+        </button>
+    </form>
+@endif
     @endforeach
 
    

@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Route;
     
     Route::get('/profile/guarantors', [GuarantorController::class, 'create'])->name('profile.guarantors.create');
     Route::post('/profile/guarantors', [GuarantorController::class, 'store'])->name('profile.guarantors.store');
+    Route::delete('/profile/guarantors/{guarantor}',[GuarantorController::class, 'destroy'])->name('profile.guarantors.destroy');
 
     Route::get('/terms', [TermController::class, 'show'])->name('terms');
     Route::get('/profile/complete', [ProfileCompletionController::class, 'edit'])->name('profile.complete');

@@ -76,9 +76,13 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Guarantor::class);
     }
+
+  
+
     public function activeGuarantors()
     {
     return $this->hasMany(Guarantor::class)
+         ->whereNull('deleted_at')
         ->whereIn('status', ['pending', 'approved']);
      }
 

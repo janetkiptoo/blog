@@ -16,7 +16,8 @@ class AdminGuarantorController extends Controller
 {
     public function index(User $user)
     {
-        $guarantors = $user->guarantors()->latest()->get();
+        $guarantors = $user->guarantors() ->withTrashed() ->latest()->get();
+
 
         return view('admin.guarantors.index', compact('user', 'guarantors'));
     }
@@ -54,6 +55,26 @@ class AdminGuarantorController extends Controller
         ->send(new GuarantorRejectedMail($guarantor));
 
     return back()->with('success', 'Guarantor rejected and student notified.');
+}
+
+public function restore($id)
+{
+    $guarantor = Guarantor::withTrashed()->findOrFail($id);
+    $user = $guarantor->user;
+
+    
+    if ($user->activeGuarantors()->count() >= 2) {
+        return back()->with('error', 'User already has 2 active guarantors.');
+    }
+
+    $guarantor->restore();
+
+    $guarantor->update([
+        'status' => 'pending',
+        'rejection_reason' => null,
+    ]);
+
+    return back()->with('success', 'Guarantor restored successfully.');
 }
 
 

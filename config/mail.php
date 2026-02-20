@@ -46,6 +46,7 @@ return [
     'password' => env('MAIL_PASSWORD'),
     'timeout' => null,
     'auth_mode' => null,
+    'admin_email' => env('ADMIN_EMAIL', 'kjanet506@gmail.com'),
 ],
 
 

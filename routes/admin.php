@@ -57,6 +57,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/guarantors/{guarantor}/approve', [AdminGuarantorController::class, 'approve'])->name('guarantors.approve');
     Route::post('/guarantors/{guarantor}/reject', [AdminGuarantorController::class, 'reject'])->name('guarantors.reject');
 
+    Route::post('/guarantors/{guarantor}/restore', [AdminGuarantorController::class, 'restore'])->name('guarantors.restore');
+
    Route::get('/personal-profiles/{personalProfile}', [AdminPersonalProfileController::class, 'show'])->name('personal-profiles.show');
    Route::post('/personal-profiles/{personalProfile}/approve', [AdminPersonalProfileController::class, 'approve'])->name('personal-profiles.approve');
     Route::post('/personal-profiles/{personalProfile}/reject', [AdminPersonalProfileController::class, 'reject'])->name('personal-profiles.reject');
