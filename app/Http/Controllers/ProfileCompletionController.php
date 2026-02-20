@@ -47,7 +47,8 @@ class ProfileCompletionController extends Controller
     public function edit()
     {
          $user = Auth::user();
-        return view('student.profile.complete', compact('user'));
+        $profile = PersonalProfile::where('user_id', $user->id)->first();
+        return view('student.profile.complete', compact('user','profile'));
         //
     }
 
@@ -79,8 +80,13 @@ public function update(Request $request)
     ]);
 
     if ($request->hasFile('id_image')) {
-        $data['id_image'] = $request->file('id_image')->store('ids', 'public');
-    }
+            $existingProfile = PersonalProfile::where('user_id', $user->id)->first();
+            if ($existingProfile && $existingProfile->id_image) {
+                \Storage::disk('public')->delete($existingProfile->id_image);
+            }
+            
+            $data['id_image'] = $request->file('id_image')->store('ids', 'public');
+        }
 
     
     PersonalProfile::updateOrCreate(

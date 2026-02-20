@@ -15,7 +15,7 @@
             <p><strong>Nationa_id:</strong> {{ $user->national_id }}</p>
             <p><strong>Role:</strong> {{ $user->role }}</p>
             <p><strong>Created At:</strong> {{ $user->created_at }}</p>
-             <img src="{{ asset('storage/' . $user->image) }}" alt="national ID" style="max-width: 200px;">
+           
         </div>
 
         <div class="mt-6 flex gap-4">

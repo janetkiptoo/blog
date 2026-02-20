@@ -47,7 +47,8 @@ class AcademicProfileController extends Controller
      public function edit()
     {
         $user = Auth::user();
-        return view('student.profile.academic', compact('user'));
+         $academicProfile = AcademicProfile::where('user_id', $user->id)->first();
+        return view('student.profile.academic', compact('user', 'academicProfile'));
     }
 
     public function update(Request $request)
@@ -72,8 +73,12 @@ class AcademicProfileController extends Controller
         ]);
 
         if ($request->hasFile('student_document')) {
-            $data['student_document'] =
-                $request->file('student_document')->store('academic_docs', 'public');
+            $existingProfile = AcademicProfile::where('user_id', $user->id)->first();
+            if ($existingProfile && $existingProfile->student_document) {
+                \Storage::disk('public')->delete($existingProfile->student_document);
+            }
+            
+            $data['student_document'] = $request->file('student_document')->store('academic_docs', 'public');
         }
 
         AcademicProfile::updateOrCreate(

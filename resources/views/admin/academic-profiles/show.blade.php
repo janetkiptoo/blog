@@ -45,8 +45,7 @@
     <form method="POST"
           action="{{ route('admin.academic-profiles.reject', $academicProfile) }}">
         @csrf
-        <textarea name="rejection_reason"
-                  class="border rounded w-full p-2 mb-2"
+        <textarea name="rejection_reason"class="border rounded w-full p-2 mb-2"
                   placeholder="Reason for rejection"></textarea>
 
         <button class="bg-red-600 text-white px-4 py-2 rounded">

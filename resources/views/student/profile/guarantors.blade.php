@@ -9,7 +9,7 @@
         Guarantor / Guardian Information
     </h2>
 
-    @if(auth()->user()->guarantors()->count() > 2)
+    @if(auth()->user()->guarantors()->count() < 2)
     <p class="text-red-600 font-semibold">
         You have reached the maximum of 2 guarantors.
     </p>
@@ -35,9 +35,7 @@
         
         <div>
             <label class="block text-sm font-semibold text-gray-700">Relationship</label>
-            <select name="relationship"
-                    class="w-full border rounded px-4 py-2"
-                    required>
+            <select name="relationship" class="w-full border rounded px-4 py-2"required>
                 <option value="">Select Relationship</option>
                 <option value="parent">Parent</option>
                 <option value="guardian">Guardian</option>
