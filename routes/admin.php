@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminTermsController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\LoanController;
 use App\Http\Controllers\AdminPersonalProfileController;
+use App\Http\Controllers\AdminAcademicProfileController;
 use App\Http\Controllers\Admin\AdminCashPaymentController;
 use App\Http\Controllers\Admin\SupportReplyController;
 use App\Http\Controllers\Admin\SupportTicketController;
@@ -57,10 +58,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/guarantors/{guarantor}/reject', [AdminGuarantorController::class, 'reject'])->name('guarantors.reject');
 
    Route::get('/personal-profiles/{personalProfile}', [AdminPersonalProfileController::class, 'show'])->name('personal-profiles.show');
-   Route::post('/personal-profiles/{profile}/approve', [AdminPersonalProfileController::class, 'approve'])->name('personal.approve');
-    Route::post('/personal-profiles/{profile}/reject', [AdminPersonalProfileController::class, 'reject'])->name('personal.reject');
+   Route::post('/personal-profiles/{personalProfile}/approve', [AdminPersonalProfileController::class, 'approve'])->name('personal-profiles.approve');
+    Route::post('/personal-profiles/{personalProfile}/reject', [AdminPersonalProfileController::class, 'reject'])->name('personal-profiles.reject');
 
-    
+    Route::get('/academic-profiles/{academicProfile}',[AdminAcademicProfileController::class, 'show'] )->name('academic-profiles.show');
+    Route::post('/academic-profiles/{academicProfile}/approve',[AdminAcademicProfileController::class, 'approve'])->name('academic-profiles.approve');
+    Route::post('/academic-profiles/{academicProfile}/reject',[AdminAcademicProfileController::class, 'reject'] )->name('academic-profiles.reject');
 
 
 

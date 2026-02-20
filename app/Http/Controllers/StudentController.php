@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use App\Models\Users;
 use App\Models\LoanApplication;
+use App\Models\AcademicProfile;
+use App\Models\PersonalProfile;
+use App\Models\guarantors;
 
 class StudentController extends Controller
 {
@@ -12,14 +16,30 @@ class StudentController extends Controller
     public function dashboard()
     {
         $student = auth()->user()->student;
+        $user = auth()->user();
+        $loans = LoanApplication::with('loanProduct')->where('user_id', $user->id)->get();
 
      
         $loan = LoanApplication::where('user_id', auth()->id()) 
                                ->orderBy('created_at', 'desc')
                                ->first();
 
-        return view('student.dashboard', compact('student', 'loan'));
+        
+    return view('student.dashboard', [
+        'personalProfile' => $user->personalProfile,
+        'academicProfile' => $user->academicProfile,
+        'guarantors' => $user->guarantors,
+        'approvedGuarantorsCount' =>
+            $user->guarantors()->where('status', 'approved')->count(),
+        'loanEligible' =>
+            optional($user->personalProfile)->status === 'approved'
+            && optional($user->academicProfile)->status === 'approved'
+            && $user->guarantors()->where('status', 'approved')->count() >= 2,
+        
+    ]);
     }
+
+ 
 
     public function pay()
     {

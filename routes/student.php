@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoanApplicationController;
 use App\Http\Controllers\LoanProductController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\GuarantorController;

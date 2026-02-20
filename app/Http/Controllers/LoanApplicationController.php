@@ -113,6 +113,14 @@ public function process_repayment(Request $request, $id)
         ->route('student.profile.complete')
         ->with('warning', 'Complete and verify your profile before applying.');
 }
+   if (
+    !$user->academicProfile ||
+    $user->academicProfile->status !== 'approved'
+) {
+    return redirect()->route('student.dashboard')
+        ->with('error', 'Your academic profile must be approved before applying for a loan.');
+}
+
 
 
         $request->validate([

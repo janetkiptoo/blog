@@ -1,20 +1,18 @@
 @extends('layouts.adminn')
 
 @section('content')
-<div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+<div class="max-w-6xl mx-auto bg-white p-6 rounded shadow">
 
     <h1 class="text-2xl font-bold mb-6">Personal Profile Review</h1>
 
-    <div class="grid grid-cols-2 gap-6 text-sm">
+    <div class="grid grid-cols-2 gap-6 ">
         <p><strong>Name:</strong> {{ $personalProfile->user->name }}</p>
         <p><strong>Gender:</strong> {{ $personalProfile->gender }}</p>
         <p><strong>Nationality:</strong> {{ $personalProfile->nationality }}</p>
         <p><strong>Date of Birth:</strong> {{ $personalProfile->date_of_birth }}</p>
         <p><strong>ID Type:</strong> {{ $personalProfile->government_id_type }}</p>
         <p><strong>ID Number:</strong> {{ $personalProfile->government_id_number }}</p>
-        <p class="col-span-2">
-            <strong>Address:</strong> {{ $personalProfile->address }}
-        </p>
+        <p class="col-span-2"><strong>Address:</strong> {{ $personalProfile->address }}</p>
     </div>
 
     <div class="mt-6">
@@ -41,7 +39,8 @@
                     Approve
                 </button>
             </form>
-
+</div>
+            <div class="mt-6 flex gap-4">
             <form method="POST" action="{{ route('admin.personal-profiles.reject', $personalProfile) }}">
                 @csrf
                 <textarea name="rejection_reason"
