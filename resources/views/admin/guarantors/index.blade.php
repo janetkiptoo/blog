@@ -52,8 +52,8 @@
         </button>
     </form>
 @endif
-</div>
-                    </td>
+    </div>
+               </td>
                 </tr>
             @empty
                 <tr>

@@ -29,8 +29,7 @@ class StudentController extends Controller
         'personalProfile' => $user->personalProfile,
         'academicProfile' => $user->academicProfile,
         'guarantors' => $user->guarantors,
-        'approvedGuarantorsCount' =>
-            $user->guarantors()->where('status', 'approved')->count(),
+        'approvedGuarantorsCount' =>$user->guarantors()->where('status', 'approved')->count(),
         'loanEligible' =>
             optional($user->personalProfile)->status === 'approved'
             && optional($user->academicProfile)->status === 'approved'

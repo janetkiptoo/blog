@@ -171,9 +171,9 @@ function checkEligibility() {
         <div>
             <label class="block font-semibold text-gray-700">Loan Purpose</label>
             <select id="loanPurposeCalc" class="border rounded px-3 py-2 w-full">
-                <option>Tuition Fees</option>
-                <option>Personal loan</option>
-                <option>Emergency / Other</option>
+                <option>Personal Loan</option>
+                <option>fees Loan</option>
+                <!-- <option>Emergency / Other</option> -->
             </select>
         </div>
 

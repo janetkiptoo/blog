@@ -35,11 +35,11 @@
 
         <form method="POST" action="{{ route('student.profile.complete.update') }}" enctype="multipart/form-data" class="space-y-4">
             @csrf
-            @method('PUT')
+            @method('POST')
 
            
             <div>
-                <label class="block font-semibold text-gray-700">Gender <span class="text-red-500"></span></label>
+                <label class="block font-semibold text-gray-700">Gender <span class="text-red-500"></span>*</label>
                 <select name="gender" class="w-full border rounded px-3 py-2" required>
                     <option value="">Select Gender</option>
                     <option value="male" {{ old('gender', $profile->gender ?? '') == 'male' ? 'selected' : '' }}>Male</option>
@@ -51,7 +51,7 @@
 
             
             <div>
-                <label class="block font-semibold text-gray-700">Nationality <span class="text-red-500"></span></label>
+                <label class="block font-semibold text-gray-700">Nationality <span class="text-red-500"></span>*</label>
                 <input type="text" name="nationality" value="{{ old('nationality', $profile->nationality ?? '') }}"
                        class="w-full border rounded px-3 py-2" placeholder="e.g., Kenyan" required>
                 <x-input-error :messages="$errors->get('nationality')" class="mt-1" />
@@ -59,7 +59,7 @@
 
             
             <div>
-                <label class="block font-semibold text-gray-700">Government ID Type <span class="text-red-500"></span></label>
+                <label class="block font-semibold text-gray-700">Government ID Type <span class="text-red-500"></span>*</label>
                 <select name="government_id_type" class="w-full border rounded px-3 py-2" required>
                     <option value="">Select ID Type</option>
                     <option value="national_id" {{ old('government_id_type', $profile->government_id_type ?? '') == 'national_id' ? 'selected' : '' }}>National ID</option>
@@ -70,7 +70,7 @@
             </div>
 
             <div>
-                <label class="block font-semibold text-gray-700">Government ID Number <span class="text-red-500"></span></label>
+                <label class="block font-semibold text-gray-700">Government ID Number <span class="text-red-500"></span>*</label>
                 <input type="text" name="government_id_number" value="{{ old('government_id_number', $profile->government_id_number ?? '') }}"
                        class="w-full border rounded px-3 py-2" required>
                 <x-input-error :messages="$errors->get('government_id_number')" class="mt-1" />
@@ -78,14 +78,14 @@
 
            
             <div>
-                <label class="block font-semibold text-gray-700">Physical Address <span class="text-red-500"></span></label>
+                <label class="block font-semibold text-gray-700">Physical Address <span class="text-red-500"></span>*</label>
                 <textarea name="address" rows="3" class="w-full border rounded px-3 py-2" required>{{ old('address', $profile->address ?? '') }}</textarea>
                 <x-input-error :messages="$errors->get('address')" class="mt-1" />
             </div>
 
             
             <div>
-                <label class="block font-semibold text-gray-700">Date of Birth <span class="text-red-500"></span></label>
+                <label class="block font-semibold text-gray-700">Date of Birth <span class="text-red-500"></span>*</label>
                 <input type="date" 
                        name="date_of_birth" 
                        value="{{ old('date_of_birth', $profile->date_of_birth ?? '') }}"

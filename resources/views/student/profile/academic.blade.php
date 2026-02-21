@@ -34,14 +34,14 @@
             @method('POST')
 
             <div>
-                <x-input-label for="institution_name" :value="__('Institution Name')" />
+                <x-input-label for="institution_name" :value="__('Institution Name*')" />
                 <x-text-input id="institution_name" class="block mt-1 w-full" type="text" name="institution_name" 
                               value="{{ old('institution_name', $academicProfile->institution_name ?? '') }}" required />
                 <x-input-error :messages="$errors->get('institution_name')" class="mt-2" />
             </div>
 
             <div>
-                <x-input-label for="institution_type" :value="__('Institution Type')" />
+                <x-input-label for="institution_type" :value="__('Institution Type*')" />
                 <select id="institution_type" name="institution_type" class="w-full border p-2 rounded" required>
                     <option value="">Select type</option>
                     <option value="University" {{ old('institution_type', $academicProfile->institution_type ?? '') == 'University' ? 'selected' : '' }}>University</option>
@@ -52,14 +52,14 @@
             </div>
 
             <div>
-                <x-input-label for="course_name" :value="__('Course Name')" />
+                <x-input-label for="course_name" :value="__('Course Name*')" />
                 <x-text-input id="course_name" class="block mt-1 w-full" type="text" name="course_name" 
                               value="{{ old('course_name', $academicProfile->course_name ?? '') }}" required />
                 <x-input-error :messages="$errors->get('course_name')" class="mt-2" />
             </div>
 
             <div>
-                <x-input-label for="level" :value="__('Level / Year of Study')" />
+                <x-input-label for="level" :value="__('Level / Year of Study*')" />
                 <select id="level" name="level" class="w-full border p-2 rounded" required>
                     <option value="">Select year</option>
                     <option value="1" {{ old('level', $academicProfile->level ?? '') == '1' ? 'selected' : '' }}>Year 1</option>
@@ -71,7 +71,7 @@
             </div>
 
             <div>
-                <x-input-label for="student_registration_number" :value="__('Student Registration Number')" />
+                <x-input-label for="student_registration_number" :value="__('Student Registration Number*')" />
                 <x-text-input id="student_registration_number" class="block mt-1 w-full" type="text" name="student_registration_number" 
                               value="{{ old('student_registration_number', $academicProfile->student_registration_number ?? '') }}" required />
                 <x-input-error :messages="$errors->get('student_registration_number')" class="mt-2" />
@@ -79,7 +79,7 @@
 
             <div>
                 <x-input-label for="student_document">
-                    Upload Student ID / Admission Letter
+                    Upload Student ID / Admission Letter*
                     @if(!isset($academicProfile) || !$academicProfile->student_document)
                         <span class="text-red-500"></span>
                     @endif

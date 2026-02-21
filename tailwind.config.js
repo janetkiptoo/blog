@@ -17,7 +17,7 @@ export default {
 
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                mono: ['Figtree', ...defaultTheme.fontFamily.mono],
             },
             colors: {
                 primary: {

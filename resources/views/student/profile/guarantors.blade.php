@@ -9,7 +9,7 @@
         Guarantor / Guardian Information
     </h2>
 
-    @if(auth()->user()->guarantors()->count() < 2)
+    @if(auth()->user()->guarantors()->count() > 2)
     <p class="text-red-600 font-semibold">
         You have reached the maximum of 2 guarantors.
     </p>
@@ -25,7 +25,7 @@
 
         
         <div>
-            <label class="block text-sm font-semibold text-gray-700">Full Name</label>
+            <label class="block text-sm font-semibold text-gray-700">Full Name*</label>
             <input type="text" name="name"
                    class="w-full border rounded px-4 py-2"
                    required>
@@ -34,7 +34,7 @@
 
         
         <div>
-            <label class="block text-sm font-semibold text-gray-700">Relationship</label>
+            <label class="block text-sm font-semibold text-gray-700">Relationship*</label>
             <select name="relationship" class="w-full border rounded px-4 py-2"required>
                 <option value="">Select Relationship</option>
                 <option value="parent">Parent</option>
@@ -46,7 +46,7 @@
         </div>
 
         <div>
-            <label class="block text-sm font-semibold text-gray-700">ID Type</label>
+            <label class="block text-sm font-semibold text-gray-700">ID Type*</label>
             <select name="id_type"
                     class="w-full border rounded px-4 py-2"
                     required>
@@ -58,7 +58,7 @@
         </div>
 
         <div>
-            <label class="block text-sm font-semibold text-gray-700">National ID Number/Passport Number</label>
+            <label class="block text-sm font-semibold text-gray-700">National ID Number/Passport Number*</label>
             <input type="text" name="national_id"
                    class="w-full border rounded px-4 py-2"
                    required>
@@ -67,7 +67,7 @@
 
        
         <div>
-            <label class="block text-sm font-semibold text-gray-700">Phone Number</label>
+            <label class="block text-sm font-semibold text-gray-700">Phone Number*</label>
             <input type="text" name="phone"
                    class="w-full border rounded px-4 py-2"
                    required>
@@ -83,7 +83,7 @@
 
        
         <div>
-            <label class="block text-sm font-semibold text-gray-700">Employment Status</label>
+            <label class="block text-sm font-semibold text-gray-700">Employment Status*</label>
             <select name="employment_status"class="w-full border rounded px-4 py-2" required>
                 <option value="employed">Employed</option>
                 <option value="not employed">Not Employed</option>
@@ -93,7 +93,7 @@
 
         
         <div>
-            <label class="block text-sm font-semibold text-gray-700">Income Range</label>
+            <label class="block text-sm font-semibold text-gray-700">Income Range*</label>
             <select name="income_range" class="w-full border rounded px-4 py-2" required>
                 <option value="">Select Income Range</option>
                 <option value="below_20000">Below 20,000</option>
@@ -105,7 +105,7 @@
         </div>
        
         <div>
-            <label class="block text-sm font-semibold text-gray-700">Physical Address</label>
+            <label class="block text-sm font-semibold text-gray-700">Physical Address*</label>
             <input type="text" name="physical_address"
                    class="w-full border rounded px-4 py-2">
             @error('physical_address') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
@@ -114,7 +114,7 @@
        
         <div>
             <label class="block text-sm font-semibold text-gray-700">
-                Upload ID Document (JPEG/PNG)
+                Upload ID Document (JPEG/PNG)*
             </label>
             <input type="file" name="image"
                    class="w-full border rounded px-4 py-2"

@@ -12,10 +12,10 @@
         </h2>
 
         <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
-        <p><strong>Institution:</strong> {{ Auth::user()->institution_name}}</p>
-        <p><strong>Course:</strong> {{ Auth::user()->course_name }}</p>
-        <p><strong>Level:</strong> {{ Auth::user()->level }}</p>
-        <p><strong>Student Reg No:</strong> {{ Auth::user()->student_registration_number }}</p>
+        <p><strong>Institution:</strong> {{Auth::user()->academicProfile->institution_name}}</p>
+        <p><strong>Course:</strong> {{ Auth::user()->academicProfile->course_name }}</p>
+        <p><strong>Level:</strong> {{ Auth::user()->academicProfile->level }}</p>
+        <p><strong>Student Reg No:</strong> {{ Auth::user()->academicProfile->student_registration_number }}</p>
     </div>
 
 
@@ -47,6 +47,12 @@
     </a>
 @endif
 
+@if(!$academicProfile || $academicProfile->status === 'pending')
+    <a href="{{ route('student.profile.academic') }}" class=" inline-block mt-3 text-white bg-primary-700 px-4 py-2 rounded-full">
+        {{ $academicProfile ? 'Edit & Resubmit' : 'Submit Academic Profile' }}
+    </a>
+@endif
+
 </div>
 
 <div class="bg-white p-5 rounded shadow mb-6">
@@ -71,6 +77,7 @@
                 Edit & Resubmit
             </a>
         @endif
+
     @else
         <p class="text-yellow-700">Not submitted</p>
         <a href="{{ route('student.profile.complete') }}"
@@ -78,6 +85,14 @@
             Complete Personal Profile
         </a>
     @endif
+
+     @if($personalProfile->status === 'pending')
+
+            <a href="{{ route('student.profile.complete') }}"
+               class="inline-block mt-3  bg-primary-700 text-white px-4 py-2 rounded-full">
+                Edit & Resubmit
+            </a>
+        @endif
 </div>
 
 
@@ -106,19 +121,58 @@
             Replace Guarantor
         </a>
             @endif
+
+   
         </div>
         @if(in_array($guarantor->status, ['pending', 'rejected']))
-    <form action="{{ route('student.profile.guarantors.destroy', $guarantor) }}"method="POST" class="inline-block mt-2"
-          onsubmit="return confirm('Are you sure you want to remove this guarantor?')">
-        @csrf
-        @method('DELETE')
+    
+        <button onclick="openModal({{ $guarantor->id }})" class="mt-2 px-3 py-1 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200">
+    Remove Guarantor
+</button>
 
-        <button class="bg-red-600 text-white px-3 py-1 rounded">
-            Remove Guarantor
-        </button>
-    </form>
+    
 @endif
     @endforeach
+
+<div id="removeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full mx-4">
+        <h3 class="text-lg font-semibold text-black mb-2">Remove Guarantor</h3>
+        <p class="text-sm text-black mb-6">Are you sure you want to remove this guarantor? This action cannot be undone.</p>
+        <div class="flex justify-end gap-3">
+            <button onclick="closeModal()" class="px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50">
+                Cancel
+            </button>
+            <form id="removeForm" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="px-4 py-2 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600">
+                    Yes, Remove
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(guarantorId) {
+        const form = document.getElementById('removeForm');
+        form.action = `/student/profile/guarantors/${guarantorId}`;
+        const modal = document.getElementById('removeModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('removeModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    
+    document.getElementById('removeModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+</script>
 
    
 </div>

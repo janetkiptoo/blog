@@ -32,40 +32,13 @@
                 <option value="admin">Admin</option>
             </select>
         </div>
-         <div class="mb-4">
-            <label class="block font-medium">national_id</label>
-            <input type="national_id" name="national_id" class="w-full border rounded p-2" required>
-        </div>
+        
          <div class="mb-4">
             <label class="block font-medium">phone</label>
             <input type="phone" name="phone" class="w-full border rounded p-2" required>
         </div>
-         <div class="mb-4">
-            <label class="block font-medium">institution</label>
-            <input type="institution" name="institution" class="w-full border rounded p-2" required>
-        </div>
-         <div class="mb-4">
-            <label class="block font-medium">course</label>
-            <input type="course" name="course" class="w-full border rounded p-2" required>
-        </div>
-         <div class="mb-4">
-            <label class="block font-medium">year_of_study</label>
-             <select name="year_of_study" class="w-full border p-2 rounded">
-                    <option value="year_of_study" >1 </option>
-                     <option value="year_of_study" >2</option>
-                     <option value="year_of_study" >3</option>
-                     <option value="year_of_study" >4</option>
-             </select>
-        </div>
 
-         <div class="mb-4">
-            <label class="block font-medium">student_reg_no</label>
-            <input type="student_reg_no" name="student_reg_no" class="w-full border rounded p-2" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="image">upload ID Image</label>
-             <input type="file" name="image" id="image" class="form-control">
+        
 
         <button class="bg-primary-700 hover:bg-primary-500 text-white px-4 py-2 rounded"> Create User</button>
     </form>

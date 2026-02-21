@@ -36,10 +36,12 @@
                         {{ $user->email }}
                     </td>
                     <td class="px-6 py-4">
+                        
                         <span class="px-3 py-1  text-xs font-semibold
                             {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700' }}">
                             {{ ucfirst($user->role) }}
                         </span>
+                       
                     </td>
                   
                     <td class="px-6 py-4 text-center">
