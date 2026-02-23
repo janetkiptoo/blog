@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('repayment_schedules', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('loan_application_id');
-            $table->foreign('loan_application_id')->references('id')->on('loan_application')->onDelete('cascade');
+            $table->foreign('loan_application_id')->references('id')->on('loan_applications')->onDelete('cascade');
             $table->decimal('amount_due', 12, 2);
             $table->date('due_date');
             $table->enum('status', ['pending', 'paid'])->default('pending');

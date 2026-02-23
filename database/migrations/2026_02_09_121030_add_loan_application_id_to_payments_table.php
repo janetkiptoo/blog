@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('payments', function (Blueprint $table) {
               
               $table->unsignedBigInteger('loan_application_id')->nullable();
-              $table->foreign('loan_application_id')->references('id')->on('loan_application')->onDelete('cascade');
+              $table->foreign('loan_application_id')->references('id')->on('loan_applications')->onDelete('cascade');
             //
         });
     }

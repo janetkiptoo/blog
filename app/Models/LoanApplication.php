@@ -7,37 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class LoanApplication extends Model
 {
-    const STATUS_PENDING   = 'pending';
-    const STATUS_APPROVED  = 'approved';
-    const STATUS_REJECTED  = 'rejected';
-    const STATUS_DISBURSED = 'disbursed';
-    const STATUS_PAID      = 'paid';
-protected $table = 'loan_application';                                                                              
     protected $fillable = [
-        'name',
-        'email',
-        'phone',
-        'national_id',
-        'institution',
-        'course',
-        'year_of_study',
-        'student_reg_no',
         'user_id',
         'loan_product_id',
         'loan_amount',
-        'status',
         'term_months',
         'interest_rate',
-        'balance',
         'monthly_payment',
-        'total_paid',
         'total_interest',
         'approved_amount',
+        'balance',
+        'total_paid',
+        'status',
+        'submitted_at',
+        'approved_at',
         'disbursed_at',
+        'rejection_reason',
     ];
-
-  
-
    
     public function user()
     {

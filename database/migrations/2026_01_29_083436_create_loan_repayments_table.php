@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
-            $table->foreign('loan_application_id')->references('id')->on('loan_application')->onDelete('cascade');
+            $table->foreign('loan_application_id')->references('id')->on('loan_applications')->onDelete('cascade');
         });
         //
     }

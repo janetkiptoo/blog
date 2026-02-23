@@ -25,6 +25,19 @@ class LoanApplicationController extends Controller
         return view('loans.apply', compact('product'));
     }
 
+
+
+    private function ensureEligibility($user)
+{
+    abort_if(
+        optional($user->personalProfile)->status !== 'approved' ||
+        optional($user->academicProfile)->status !== 'approved' ||
+        $user->guarantors()->where('status', 'approved')->count() < 2,
+        403,
+        'Complete and approve your profile and guarantors before applying.'
+    );
+}
+
 public function process_repayment(Request $request, $id)
 {
     $request->validate([
@@ -108,21 +121,6 @@ public function process_repayment(Request $request, $id)
     {
         $user = auth()->user();
 
-        if (auth()->user()->verification_status !== 'approved') {
-          return redirect()
-        ->route('student.profile.complete')
-        ->with('warning', 'Complete and verify your profile before applying.');
-}
-   if (
-    !$user->academicProfile ||
-    $user->academicProfile->status !== 'approved'
-) {
-    return redirect()->route('student.dashboard')
-        ->with('error', 'Your academic profile must be approved before applying for a loan.');
-}
-
-
-
         $request->validate([
             'loan_amount' => 'required|numeric|min:1',
             'term_months' => 'required|integer|min:2', 
@@ -140,16 +138,9 @@ public function process_repayment(Request $request, $id)
         $monthlyPayment = $totalPayable / $repaymentMonths;
 
         $loan = LoanApplication::create([
-            'name' => $user->name,
-            'email' => $user->email,
-            'phone' => $user->phone,
-            'national_id' => $user->national_id,
-            'institution' => $user->institution,
-            'course' => $user->course,
-            'year_of_study' => $user->year_of_study,
-            'student_reg_no' => $user->student_reg_no,
-            'user_id' => $user->id,
-            'loan_product_id' => $productId,
+          
+           'user_id' => $user->id,
+           'loan_product_id' => $productId,
            'loan_amount' => $loanAmount,
            'term_months'  => $termMonths,
            'interest_rate' => $interestRate,
@@ -158,11 +149,13 @@ public function process_repayment(Request $request, $id)
            'total_paid'=> 0,
            'balance' => $totalPayable,
            'repayment_start_date' => now()->addMonth(),
-           'status' => 'pending',
+           'status' => 'draft',
         ]);
 
-        return redirect()->route('student.guarantors.create', $loan->id);
+        return redirect()->route('student.profile.guarantors.create');
     }
+
+    
 
 
     public function destroy(LoanApplication $loan_application)
@@ -181,7 +174,6 @@ public function process_repayment(Request $request, $id)
 
         return redirect()->route('student.loans.index')->with('success', 'Loan application deleted successfully.');
     }
-
 
     
 }

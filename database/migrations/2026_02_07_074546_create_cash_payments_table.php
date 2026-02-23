@@ -15,7 +15,7 @@ return new class extends Migration
     
             $table->id();
             $table->unsignedBigInteger('loan_application_id');
-            $table->foreign('loan_application_id')->references('id')->on('loan_application')->onDelete('cascade');
+            $table->foreign('loan_application_id')->references('id')->on('loan_applications')->onDelete('cascade');
             $table->foreignId('payment_id') ->constrained('payments') ->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->decimal('amount', 10, 2);

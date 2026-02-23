@@ -15,14 +15,8 @@
     </p>
 @endif
 
-
-
-    <form method="POST"
-          action="{{ route('student.profile.guarantors.store') }}"
-          enctype="multipart/form-data"
-          class="space-y-5">
+    <form method="POST" action="{{ route('student.profile.guarantors.store') }}"enctype="multipart/form-data" class="space-y-5">
         @csrf
-
         
         <div>
             <label class="block text-sm font-semibold text-gray-700">Full Name*</label>

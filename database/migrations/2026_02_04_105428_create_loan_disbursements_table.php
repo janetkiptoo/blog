@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('loan_disbursements', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('loan_application_id');
-            $table->foreign('loan_application_id')->references('id')->on('loan_application')->onDelete('cascade');
+            $table->foreign('loan_application_id')->references('id')->on('loan_applications')->onDelete('cascade');
             $table->foreignId('user_id') ->constrained('users') ->onDelete('cascade');
             $table->decimal('amount', 10, 2);
             $table->string('phone_number');

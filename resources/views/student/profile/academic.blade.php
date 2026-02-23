@@ -66,6 +66,7 @@
                     <option value="2" {{ old('level', $academicProfile->level ?? '') == '2' ? 'selected' : '' }}>Year 2</option>
                     <option value="3" {{ old('level', $academicProfile->level ?? '') == '3' ? 'selected' : '' }}>Year 3</option>
                     <option value="4" {{ old('level', $academicProfile->level ?? '') == '4' ? 'selected' : '' }}>Year 4</option>
+                     <option value="5" {{ old('level', $academicProfile->level ?? '') == '5' ? 'selected' : '' }}>Year 5</option>
                 </select>
                 <x-input-error :messages="$errors->get('level')" class="mt-2" />
             </div>

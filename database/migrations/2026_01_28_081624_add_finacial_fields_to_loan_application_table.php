@@ -16,7 +16,7 @@ return new class extends Migration
             $table->decimal('monthly_payment', 12, 2)->after('interest_rate');
             $table->decimal('balance', 12, 2)->after('monthly_payment');
             $table->decimal('total_paid', 12, 2)->after('balance');
-            $table->integer('term_months')->after('total_paid'); // ✅ just integer
+            $table->integer('term_months')->after('total_paid');
             $table->timestamp('approved_at')->nullable()->after('total_paid');
             $table->timestamp('paid_at')->nullable()->after('approved_at');
         });
@@ -40,3 +40,5 @@ return new class extends Migration
         });
     }
 };
+
+

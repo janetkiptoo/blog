@@ -20,9 +20,9 @@ return new class extends Migration
             $table->boolean('consent_given')->default(false);
 
             // Foreign key column and constraint
-            $table->foreignId('loan_application_id')
-                ->constrained('loan_application')
-                ->cascadeOnDelete();
+            // $table->foreignId('loan_application_id')
+            //     ->constrained('loan_applications')
+            //     ->cascadeOnDelete();
 
             $table->timestamps();
         });

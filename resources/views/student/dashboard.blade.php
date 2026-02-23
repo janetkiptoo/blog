@@ -121,14 +121,28 @@
             Replace Guarantor
         </a>
             @endif
+</div>
 
-   
+
+         <div>
+             @if(auth()->user()->guarantors()->count() < 2)
+    <p class="text-red-600 font-semibold">
+       <a href="{{ route('student.profile.guarantors.create') }}"
+           class=" bg-primary-700 text-white px-4 py-2 rounded-full">
+            Add Guarantor
+        </a>
+    </p>
+@endif
+
         </div>
+
+        <div>
         @if(in_array($guarantor->status, ['pending', 'rejected']))
     
-        <button onclick="openModal({{ $guarantor->id }})" class="mt-2 px-3 py-1 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200">
+        <button onclick="openModal({{ $guarantor->id }})" class="mt-2 px-3 py-1 text-sm bg-red-100 text-red-600 rounded-full  hover:bg-red-200">
     Remove Guarantor
 </button>
+</div>
 
     
 @endif
