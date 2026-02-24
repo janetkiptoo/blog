@@ -89,50 +89,13 @@ public function destroy(Guarantor $guarantor)
     //  Mail::to(config('mail.admin_email'))
     //     ->send(new GuarantorRemovedMail($guarantor));
 
-    return back()->with('success', 'Guarantor removed successfully.');
+   
+    return redirect()->route('student.profile.guarantors.create')->with('info', 'Please add a replacement guarantor.');
 }
 
     /**
      * Final submission of loan
      */
-    public function submit(LoanApplication $loan)
-{
-     $user = auth()->user();
-
-    if ($loan->user_id !== auth()->id()) {
-        abort(403);
-    }
-
-    if (auth()->user()->verification_status !== 'approved') {
-          return redirect()
-        ->route('student.profile.complete')
-        ->with('warning', 'Complete and verify your profile before applying.');
-}
-
-  if (
-    !$user->academicProfile ||
-    $user->academicProfile->status !== 'approved'
-) {
-    return redirect()->route('student.dashboard')
-        ->with('error', 'Your academic profile must be approved before applying for a loan.');
-}
-
-    if ($user->activeGuarantors()->count() >= 2) {
-    return back()->withErrors([
-        'limit' => 'You can only have 2 active guarantors.'
-    ]);
-}
-    if ($loan->guarantors()->where('status', 'approved')->count() < 2) {
-        return back()->withErrors('Guarantors must be approved before submission.');
-    }
-
-    $loan->update([
-        'status' => 'submitted',
-    ]);
-
-    return redirect()
-        ->route('student.dashboard')
-        ->with('success', 'Loan application submitted for review.');
-}
+    
 
 }

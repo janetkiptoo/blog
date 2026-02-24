@@ -13,6 +13,7 @@ use App\Enums\PaymentChannel;
 use App\Enums\PaymentStatus;
 use Illuminate\Http\Request;
 use App\Models\CashPayment;
+use App\Models\Guarantor;
 
 
 
@@ -21,9 +22,9 @@ class LoanApplicationController extends Controller
     public function index($productId)
     {
         $product = LoanProduct::findOrFail($productId);
-
         return view('loans.apply', compact('product'));
     }
+    
 
 
 
@@ -116,46 +117,138 @@ public function process_repayment(Request $request, $id)
     return view('students.loans.repay', compact('loan', 'monthlyPayment', 'totalPayable', 'totalInterest'));
 }
 
-
-    public function store(Request $request, $productId)
-    {
-        $user = auth()->user();
-
-        $request->validate([
-            'loan_amount' => 'required|numeric|min:1',
-            'term_months' => 'required|integer|min:2', 
-        ]);
-
-        $product = LoanProduct::findOrFail($productId);
-
-        $loanAmount = $request->loan_amount;
-        $termMonths = $request->term_months;
-        $interestRate = $product->interest_rate;
-        $gracePeriod = $product->grace_period_months;
-        $repaymentMonths = $termMonths - $gracePeriod;
-        $totalInterest = ($loanAmount * ($interestRate / 100)) * $repaymentMonths;
-        $totalPayable  = $loanAmount + $totalInterest;
-        $monthlyPayment = $totalPayable / $repaymentMonths;
-
-        $loan = LoanApplication::create([
-          
-           'user_id' => $user->id,
-           'loan_product_id' => $productId,
-           'loan_amount' => $loanAmount,
-           'term_months'  => $termMonths,
-           'interest_rate' => $interestRate,
-           'monthly_payment'=>$monthlyPayment,
-           'total_interest'=>$totalInterest,
-           'total_paid'=> 0,
-           'balance' => $totalPayable,
-           'repayment_start_date' => now()->addMonth(),
-           'status' => 'draft',
-        ]);
-
-        return redirect()->route('student.profile.guarantors.create');
-    }
+public function store(Request $request, $productId)
+{
+    $user = auth()->user();
 
     
+    $this->ensureEligibility($user);
+
+
+    $product = LoanProduct::findOrFail($productId);
+
+    $request->validate([
+        'loan_amount' => ['required','numeric','min:' . $product->min_loan_amount,'max:' . $product->max_loan_amount,],
+        'term_months' => ['required','integer','min:1', 'max:' . $product->loan_term_months,],
+    ], [
+        'term_months.max' => 'The loan duration cannot exceed ' . $product->loan_term_months . ' months.',
+    ]);
+
+
+    
+    $product = LoanProduct::findOrFail($productId);
+
+    
+    $loanAmount   = $request->loan_amount;
+    $termMonths   = $request->term_months;
+    $interestRate = $product->interest_rate;
+    $gracePeriod  = $product->grace_period_months;
+
+    $repaymentMonths = max(1, $termMonths - $gracePeriod);
+
+    $totalInterest  = ($loanAmount * ($interestRate / 100)) * $repaymentMonths;
+    $totalPayable   = $loanAmount + $totalInterest;
+    $monthlyPayment = $totalPayable / $repaymentMonths;
+
+    
+    $loan = LoanApplication::create([
+        'user_id'         => $user->id,
+        'loan_product_id' => $product->id,
+        'loan_amount'     => $loanAmount,
+        'term_months'     => $termMonths,
+        'interest_rate'   => $interestRate,
+        'monthly_payment' => $monthlyPayment,
+        'total_interest'  => $totalInterest,
+        'total_paid'      => 0,
+        'balance'         => $totalPayable,
+        'status'          => 'draft',
+    ]);
+
+
+    return redirect()->route(
+        'student.loans.guarantors.confirm',
+        $loan->id
+    );
+}
+
+public function confirm(LoanApplication $loan)
+{
+     $user = auth()->user();
+
+    abort_if($loan->user_id !== $user->id, 403);
+    abort_if($loan->status !== 'draft', 403);
+
+    $guarantors = $user->guarantors()
+        ->where('status', 'approved')
+        ->get();
+
+    abort_if(
+        $guarantors->count() < 2,
+        403,
+        'You must have at least 2 approved guarantors.'
+    );
+
+    return view(
+        'student.loans.confirm-guarantors',
+        compact('loan', 'guarantors')
+    );
+}
+
+
+public function submit(Request $request, LoanApplication $loan)
+{
+    $user = auth()->user();
+
+    abort_if($loan->user_id !== $user->id, 403);
+    abort_if($loan->status !== 'draft', 403);
+
+    $request->validate([
+        'accept_terms' => 'accepted',
+    ]);
+
+    abort_if(
+        optional($user->personalProfile)->status !== 'approved' ||
+        optional($user->academicProfile)->status !== 'approved' ||
+        $user->guarantors()->where('status', 'approved')->count() < 2,
+        403,
+        'Eligibility requirements not met.'
+    );
+
+    $loan->update([
+        'status' => 'submitted',
+        'submitted_at' => now(),
+    ]);
+
+    return redirect()
+        ->route('student.dashboard')
+        ->with('success', 'Loan application submitted successfully.');
+}
+
+public function review(LoanApplication $loan)
+{
+    $user = auth()->user();
+
+    abort_if($loan->user_id !== $user->id, 403);
+    abort_if($loan->status !== 'draft', 403);
+
+   
+    abort_if(
+        optional($user->personalProfile)->status !== 'approved' ||
+        optional($user->academicProfile)->status !== 'approved' ||
+        $user->guarantors()->where('status', 'approved')->count() < 2,
+        403,
+        'You are not eligible to submit this loan.'
+    );
+
+    return view('student.loans.review', [
+        'loan' => $loan->load('loanProduct'),
+        'personalProfile' => $user->personalProfile,
+        'academicProfile' => $user->academicProfile,
+        'guarantors' => $user->guarantors()->where('status', 'approved')->get(),
+    ]);
+}
+
+
 
 
     public function destroy(LoanApplication $loan_application)
@@ -166,7 +259,7 @@ public function process_repayment(Request $request, $id)
             abort(403, 'Unauthorized action.');
         }
 
-        if ($loan_application->status !== 'pending') {
+        if ($loan_application->status !== 'draft') {
             return redirect()->route('student.loans.index')->with('error', 'Only pending loan applications can be deleted.');
         }
 
@@ -174,6 +267,42 @@ public function process_repayment(Request $request, $id)
 
         return redirect()->route('student.loans.index')->with('success', 'Loan application deleted successfully.');
     }
+
+//     public function removeGuarantor(LoanApplication $loan, $guarantorId, $guarantor)
+// {
+//     abort_if($loan->status !== 'draft', 403);
+
+//     abort_if($loan->user_id !== auth()->id(), 403);
+
+//     $guarantor->delete();
+
+//     abort_if(
+//         $loan->guarantors()->count() < 1,
+//         400,
+//         'A loan must have at least one guarantor.'
+//     );
+
+//     return back()->with('success', 'Guarantor removed.');
+// }
+
+public function replaceGuarantor(LoanApplication $loan, Guarantor $guarantor)
+{
+    $user = auth()->user();
+
+    
+    abort_if($loan->user_id !== $user->id, 403);
+    abort_if($loan->status !== 'draft', 403);
+
+    
+    $guarantor->update([
+        'status' => 'replaced',
+    ]);
+    $guarantor->delete();
+
+    return redirect()
+        ->route('student.profile.guarantors.create', $loan->id)
+        ->with('info', 'Guarantor replaced. Please add a new guarantor.');
+}
 
     
 }

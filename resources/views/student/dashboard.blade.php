@@ -193,8 +193,8 @@
 
 @if($loanEligible)
     
-       class="bg-green-600 text-white px-6 py-3 rounded text-lg">
-        Apply for Loan
+       <div class="bg-green-600 text-white px-6 py-3 rounded text-lg">
+         You can now Apply for Loan
     </a>
 @else
     <div class="bg-yellow-100 text-yellow-800 p-4 rounded">

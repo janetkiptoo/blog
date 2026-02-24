@@ -23,12 +23,13 @@
                 type="number"
                 name="term_months"
                 id="term_months"
-                min="{{ $product->min_term_months }}"
-                max="{{ $product->max_term_months }}"
+                min="1"
+                max="{{ $product->loan_term_months }}"
                 required
                 oninput="calculateLoan()"
                 class="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
             >
+
         </div>
 
         <div class="mb-4">
@@ -58,16 +59,6 @@
         <input type="hidden" name="total_interest" id="total_interest">
         <input type="hidden" name="total_payable" id="total_payable">
 
-        {{-- Terms --}}
-        <div class="mb-6">
-            <label class="flex items-center">
-                <input type="checkbox" name="terms_accepted" required class="mr-2">
-                <span class="text-gray-700">
-                    I accept the
-                    <a href="{{ route('student.terms') }}" target="_blank" class="text-blue-600 underline">Terms & Conditions</a>
-                </span>
-            </label>
-        </div>
 
         {{-- Submit --}}
         <div class="flex justify-end">

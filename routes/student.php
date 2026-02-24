@@ -46,15 +46,10 @@ use Illuminate\Support\Facades\Route;
     Route::post('/profile/complete', [ProfileCompletionController::class, 'update'])->name('profile.complete.update');
     Route::get('/profile/academic', [AcademicProfileController::class, 'edit'])->name('profile.academic');
     Route::post('/profile/academic', [AcademicProfileController::class, 'update'])->name('profile.academic.update');
-
-
-      
-   
-
-
-    
-    
-    
+    Route::get('/loans/{loan}/guarantors/confirm',[LoanApplicationController::class, 'confirm'])->name('loans.guarantors.confirm');
+    Route::delete('/loans/{loan}/guarantors/{guarantor}/replace',[LoanApplicationController::class, 'replaceGuarantor'])->name('loans.guarantors.replace');
+    Route::get( '/loans/{loan}/review',[LoanApplicationController::class, 'review'])->name('loans.review');
+   Route::post('/loans/{loan}/submit',[LoanApplicationController::class, 'submit'])->name('loans.submit');
 
     
 });

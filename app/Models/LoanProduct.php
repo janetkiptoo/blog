@@ -15,7 +15,7 @@ class LoanProduct extends Model
         'min_loan_amount',
         'grace_period_months',
     ];
-    // app/Models/LoanProduct.php
+   
 
 public function loanApplications()
 {
