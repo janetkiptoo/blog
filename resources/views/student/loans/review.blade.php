@@ -17,6 +17,8 @@
         <p><span class="font-semibold">Name:</span> {{ auth()->user()->name }}</p>
         <p><span class="font-semibold">Nationality:</span> {{ $personalProfile->nationality }}</p>
         <p><span class="font-semibold">ID Type:</span> {{ $personalProfile->government_id_type }}</p>
+       <p><span class="font-semibold">ID Number:</span> {{ $personalProfile->government_id_number }}</p>
+        <p><span class="font-semibold">Address:</span> {{ $personalProfile->address }}</p>
     </div>
 
     <div class="bg-white shadow rounded p-6">
@@ -24,26 +26,39 @@
         <p><span class="font-semibold">Institution:</span> {{ $academicProfile->institution_name }}</p>
         <p><span class="font-semibold">Course:</span> {{ $academicProfile->course_name }}</p>
         <p><span class="font-semibold">Level:</span> {{ $academicProfile->level }}</p>
+         <p><span class="font-semibold">Student Registration Number:</span> {{ $academicProfile->student_registration_number }}</p>
     </div>
 
     <div class="bg-white shadow rounded p-6">
         <h2 class="text-xl font-bold mb-4">Guarantors</h2>
         @foreach($guarantors as $g)
-            <p>{{ $g->name }} : {{ ucfirst($g->relationship) }}</p>
+            <p>{{ $g->name }} :{{ ucfirst($g->relationship) }}</p>
         @endforeach
+
+        @if($guarantors->count() < 2)
+            <p class="text-red-600 mt-2 font-semibold">
+                You need at least 2 approved guarantors to submit this loan.
+            </p>
+        @endif
     </div>
 
     <form method="POST" action="{{ route('student.loans.submit', $loan) }}" class="bg-white shadow rounded p-6 space-y-4">
         @csrf
+
         <label class="flex items-center">
-            <input type="checkbox" name="accept_terms" required class="mr-2">
+            <input type="checkbox" name="accept_terms" required class="mr-2" 
+                @if($guarantors->count() < 2) disabled @endif
+            >
             <span class="text-gray-700">
                 I accept the
                 <a href="{{ route('student.terms') }}" target="_blank" class="text-blue-600 underline">Terms & Conditions</a>
             </span>
         </label>
 
-        <button class="w-full bg-primary-700 text-white px-6 py-2 rounded hover:bg-primary-800">
+        <button type="submit" 
+            class="w-full bg-primary-700 text-white px-6 py-2 rounded hover:bg-primary-800"
+            @if($guarantors->count() < 2) disabled @endif
+        >
             Submit Loan Application
         </button>
     </form>

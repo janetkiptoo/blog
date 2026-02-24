@@ -36,7 +36,8 @@ use Illuminate\Support\Facades\Route;
 
     Route::delete('/loans/{loan_application}', [LoanApplicationController::class, 'destroy'])->name('loans.destroy');
 
-    
+    Route::get('/loans/{loan}/guarantors/create',[GuarantorController::class, 'create'])->name('loans.guarantors.create');
+    Route::post('/loans/{loan}/guarantors',[GuarantorController::class, 'store'])->name('loans.guarantors.store');
     Route::get('/profile/guarantors', [GuarantorController::class, 'create'])->name('profile.guarantors.create');
     Route::post('/profile/guarantors', [GuarantorController::class, 'store'])->name('profile.guarantors.store');
     Route::delete('/profile/guarantors/{guarantor}',[GuarantorController::class, 'destroy'])->name('profile.guarantors.destroy');

@@ -19,7 +19,6 @@
     </div>
 
 
-
    <div class="bg-white p-5 rounded shadow mb-6">
     <h2 class="text-xl font-bold mb-2">Academic Profile</h2>    
 @if($academicProfile)
@@ -95,7 +94,7 @@
         @endif
 </div>
 
-
+<!-- 
 <div class="bg-white p-5 rounded shadow mb-6">
     <h2 class="text-xl font-bold mb-3">Guarantors</h2>
 
@@ -121,9 +120,9 @@
             Replace Guarantor
         </a>
             @endif
-</div>
+</div> -->
 
-
+<!-- 
          <div>
              @if(auth()->user()->guarantors()->count() < 2)
     <p class="text-red-600 font-semibold">
@@ -189,11 +188,11 @@
 </script>
 
    
-</div>
+</div> -->
 
 @if($loanEligible)
     
-       <div class="bg-green-600 text-white px-6 py-3 rounded text-lg">
+       <div class="bg-green-600 text-white px-6 py-3 rounded ">
          You can now Apply for Loan
     </a>
 @else
@@ -206,9 +205,7 @@
             @if(optional($academicProfile)->status !== 'approved')
                 <li>Academic Profile</li>
             @endif
-            @if($approvedGuarantorsCount < 2)
-                <li>Two Approved Guarantors</li>
-            @endif
+           
         </ul>
     </div>
 @endif

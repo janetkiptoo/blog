@@ -91,7 +91,7 @@ class AcademicProfileController extends Controller
         );
 
         return redirect()
-            ->route('student.profile.guarantors.create')
+            ->route('student.dashboard')
             ->with('success', 'Academic details submitted for review.');
     }
 }

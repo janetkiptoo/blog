@@ -28,14 +28,13 @@ class LoanApplicationController extends Controller
 
 
 
-    private function ensureEligibility($user)
+ private function ensureEligibility($user)
 {
     abort_if(
         optional($user->personalProfile)->status !== 'approved' ||
-        optional($user->academicProfile)->status !== 'approved' ||
-        $user->guarantors()->where('status', 'approved')->count() < 2,
+        optional($user->academicProfile)->status !== 'approved',
         403,
-        'Complete and approve your profile and guarantors before applying.'
+        'Complete and approve your profile before applying.'
     );
 }
 
@@ -134,8 +133,6 @@ public function store(Request $request, $productId)
         'term_months.max' => 'The loan duration cannot exceed ' . $product->loan_term_months . ' months.',
     ]);
 
-
-    
     $product = LoanProduct::findOrFail($productId);
 
     
@@ -164,55 +161,40 @@ public function store(Request $request, $productId)
         'status'          => 'draft',
     ]);
 
-
-    return redirect()->route(
-        'student.loans.guarantors.confirm',
-        $loan->id
-    );
+   return redirect()->route(
+    'student.loans.guarantors.create',
+    $loan->id
+);
 }
 
 public function confirm(LoanApplication $loan)
 {
-     $user = auth()->user();
-
-    abort_if($loan->user_id !== $user->id, 403);
+    abort_if($loan->user_id !== auth()->id(), 403);
     abort_if($loan->status !== 'draft', 403);
+    
 
-    $guarantors = $user->guarantors()
-        ->where('status', 'approved')
-        ->get();
-
-    abort_if(
-        $guarantors->count() < 2,
-        403,
-        'You must have at least 2 approved guarantors.'
-    );
-
-    return view(
-        'student.loans.confirm-guarantors',
-        compact('loan', 'guarantors')
-    );
+    return view('student.loans.confirm-guarantors', [
+        'loan' => $loan,
+        'guarantors' => $loan->guarantors
+    ]);
 }
 
 
 public function submit(Request $request, LoanApplication $loan)
 {
-    $user = auth()->user();
-
-    abort_if($loan->user_id !== $user->id, 403);
+    abort_if($loan->user_id !== auth()->id(), 403);
     abort_if($loan->status !== 'draft', 403);
+    
 
     $request->validate([
         'accept_terms' => 'accepted',
     ]);
 
     abort_if(
-        optional($user->personalProfile)->status !== 'approved' ||
-        optional($user->academicProfile)->status !== 'approved' ||
-        $user->guarantors()->where('status', 'approved')->count() < 2,
-        403,
-        'Eligibility requirements not met.'
-    );
+    $loan->guarantors()->count() < 2,
+    403,
+    'You must add 2 guarantors before submitting the loan.'
+);
 
     $loan->update([
         'status' => 'submitted',
@@ -237,6 +219,7 @@ public function review(LoanApplication $loan)
         optional($user->academicProfile)->status !== 'approved' ||
         $user->guarantors()->where('status', 'approved')->count() < 2,
         403,
+        
         'You are not eligible to submit this loan.'
     );
 
@@ -244,7 +227,7 @@ public function review(LoanApplication $loan)
         'loan' => $loan->load('loanProduct'),
         'personalProfile' => $user->personalProfile,
         'academicProfile' => $user->academicProfile,
-        'guarantors' => $user->guarantors()->where('status', 'approved')->get(),
+        'guarantors' => $loan->guarantors,
     ]);
 }
 
@@ -268,39 +251,18 @@ public function review(LoanApplication $loan)
         return redirect()->route('student.loans.index')->with('success', 'Loan application deleted successfully.');
     }
 
-//     public function removeGuarantor(LoanApplication $loan, $guarantorId, $guarantor)
-// {
-//     abort_if($loan->status !== 'draft', 403);
-
-//     abort_if($loan->user_id !== auth()->id(), 403);
-
-//     $guarantor->delete();
-
-//     abort_if(
-//         $loan->guarantors()->count() < 1,
-//         400,
-//         'A loan must have at least one guarantor.'
-//     );
-
-//     return back()->with('success', 'Guarantor removed.');
-// }
 
 public function replaceGuarantor(LoanApplication $loan, Guarantor $guarantor)
 {
-    $user = auth()->user();
-
-    
-    abort_if($loan->user_id !== $user->id, 403);
+    abort_if($loan->user_id !== auth()->id(), 403);
     abort_if($loan->status !== 'draft', 403);
+    abort_if($guarantor->loan_application_id !== $loan->id, 403);
 
-    
-    $guarantor->update([
-        'status' => 'replaced',
-    ]);
+    $guarantor->update(['status' => 'replaced']);
     $guarantor->delete();
 
     return redirect()
-        ->route('student.profile.guarantors.create', $loan->id)
+        ->route('student.loans.guarantors.create', $loan->id)
         ->with('info', 'Guarantor replaced. Please add a new guarantor.');
 }
 

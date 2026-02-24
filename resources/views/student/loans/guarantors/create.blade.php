@@ -1,4 +1,4 @@
-@extends('layouts.web')
+@extends('layouts.app')
 
 @section('title', 'Guarantor Details')
 
@@ -15,7 +15,7 @@
     </p>
 @endif
 
-    <form method="POST" action="{{ route('student.profile.guarantors.store') }}"enctype="multipart/form-data" class="space-y-5">
+    <form method="POST" action="{{ route('student.loans.guarantors.store' , $loan) }}"enctype="multipart/form-data" class="space-y-5">
         @csrf
         
         <div>
@@ -123,6 +123,7 @@
         </div>
         @error('consent_given') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
 
+        
         
         <div class="pt-4">
             <button type="submit"

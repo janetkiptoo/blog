@@ -13,6 +13,7 @@ class Guarantor extends Model
         
         'name',
         'user_id',
+        'loan_application_id',
         'relationship',
         'national_id',
         'phone',
@@ -38,6 +39,11 @@ public function activeGuarantors()
 {
     return $this->hasMany(Guarantor::class)
         ->whereIn('status', ['pending', 'approved']);
+}
+
+public function loan()
+{
+    return $this->belongsTo(LoanApplication::class, 'loan_application_id');
 }
 
 

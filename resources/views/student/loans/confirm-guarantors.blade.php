@@ -8,6 +8,24 @@
         The following guarantors will be attached to this loan application.
     </p> 
 
+    <p class="text-sm text-gray-600 mb-4">
+    Guarantors added: {{ $loan->guarantors->count() }} / 2
+</p>
+
+@if($loan->guarantors->count() < 2)
+    <a href="{{ route('student.loans.guarantors.create', $loan) }}"
+       class="btn btn-primary">
+        Add another guarantor
+    </a>
+@endif
+
+@if($loan->guarantors->count() === 2)
+    <a href="{{ route('student.loans.review', $loan) }}"
+       class="btn btn-success">
+        Continue to Review
+    </a>
+@endif
+
     @foreach($guarantors as $guarantor)
         <div class="border p-4 rounded mb-3 flex justify-between items-center">
             <div>
@@ -35,3 +53,4 @@
 
 </div>
 @endsection
+

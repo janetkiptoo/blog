@@ -23,12 +23,12 @@
         @endif
         @if ($loan->status === 'pending')
         <form action="{{ route('student.loans.destroy', $loan) }}" method="POST" class="inline" onsubmit="return confirm('Cancel this loan application?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class=" inline-block mt-4 text-white rounded bg-red-600">Cancel </button>
-                                </form>
-                        @else
-                        @endif
+            @csrf
+            @method('DELETE')
+            <button type="submit" class=" inline-block mt-4 text-white rounded bg-red-600">Cancel </button>
+            </form>
+            @else
+            @endif
 
     </div>
     @empty
