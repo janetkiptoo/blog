@@ -375,48 +375,26 @@ function calculateLoan() {
 
 {{-- FAQs Accordion --}}
 <section class="px-6 md:px-16 py-16">
-    <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">Frequently Asked Questions</h2>
+    <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">
+        Frequently Asked Questions
+    </h2>
 
     <div class="max-w-4xl mx-auto space-y-4">
-        <div x-data="{ open: false }" class="border rounded-lg">
-            <button @click="open = !open" class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-gray-800">
-                Who can apply for a student loan?
-                <span x-text="open ? '-' : '+'"></span>
-            </button>
-            <div x-show="open" class="px-4 py-3 text-gray-700 border-t">
-                Any student enrolled in an accredited institution with a valid ID and proof of admission can apply.
-            </div>
-        </div>
+        @foreach ($faqs as $faq)
+            <div x-data="{ open: false }" class="border rounded-lg">
+                <button
+                    @click="open = !open"
+                    class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-gray-800"
+                >
+                    {{ $faq->question }}
+                    <span x-text="open ? '-' : '+'"></span>
+                </button>
 
-        <div x-data="{ open: false }" class="border rounded-lg">
-            <button @click="open = !open" class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-gray-800">
-                Do I need a co-applicant?
-                <span x-text="open ? '-' : '+'"></span>
-            </button>
-            <div x-show="open" class="px-4 py-3 text-gray-700 border-t">
-                Some loans may require a guarantor depending on the loan amount and risk assessment.
+                <div x-show="open" x-collapse class="px-4 py-3 text-gray-700 border-t">
+                    {{ $faq->answer }}
+                </div>
             </div>
-        </div>
-
-        <div x-data="{ open: false }" class="border rounded-lg">
-            <button @click="open = !open" class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-gray-800">
-                Does checking eligibility affect my credit score?
-                <span x-text="open ? '-' : '+'"></span>
-            </button>
-            <div x-show="open" class="px-4 py-3 text-gray-700 border-t">
-                No, our eligibility check is soft and does not impact your credit score.
-            </div>
-        </div>
-
-        <div x-data="{ open: false }" class="border rounded-lg">
-            <button @click="open = !open" class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-gray-800">
-                When do I start repaying?
-                <span x-text="open ? '-' : '+'"></span>
-            </button>
-            <div x-show="open" class="px-4 py-3 text-gray-700 border-t">
-                Repayment typically starts after course completion or after a grace period defined in the loan product.
-            </div>
-        </div>
+        @endforeach
     </div>
 </section>
 

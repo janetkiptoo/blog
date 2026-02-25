@@ -52,15 +52,39 @@
                         </x-dropdown-link>
 
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+                        <form method="POST" action="{{ route('logout') }}" id="logout-form">
+    @csrf
 
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                Log Out
-                            </x-dropdown-link>
-                        </form>
+    <x-dropdown-link :href="route('logout')"
+            onclick="event.preventDefault(); document.getElementById('logout-modal').classList.remove('hidden');">
+        Log Out
+    </x-dropdown-link>
+</form>
+
+<!-- Logout Confirmation Modal -->
+<div id="logout-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center">
+    
+    <div class="absolute inset-0 bg-black opacity-50" onclick="document.getElementById('logout-modal').classList.add('hidden')"></div>
+
+   
+    <div class="relative bg-white rounded-lg shadow-lg p-6 w-80 z-10">
+        <h2 class="text-lg font-semibold text-gray-800 mb-2">Confirm Logout</h2>
+        <p class="text-sm text-gray-600 mb-6">Are you sure you want to log out?</p>
+
+        <div class="flex justify-end gap-3">
+            <button type="button"
+                onclick="document.getElementById('logout-modal').classList.add('hidden')"
+                class="px-4 py-2 text-sm rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100">
+                Cancel
+            </button>
+            <button type="button"
+                onclick="document.getElementById('logout-form').submit()"
+                class="px-4 py-2 text-sm rounded-md bg-red-600 text-white hover:bg-red-700">
+                Yes, Log Out
+            </button>
+        </div>
+    </div>
+</div>
                     </x-slot>
                 </x-dropdown>
             </div>

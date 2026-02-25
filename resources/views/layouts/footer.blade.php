@@ -20,10 +20,10 @@
                 <h3 class="text-white font-semibold mb-4">Quick Links</h3>
                 <ul class="space-y-2 text-sm">
                     <li><a href="{{ route('web.home') }}" class="hover:text-white">Home</a></li>
-                    <li><a href="#eligibility" class="hover:text-white">Check Eligibility</a></li>
-                    <li><a href="#products" class="hover:text-white">Loan Products</a></li>
-                    <li><a href="#calculator" class="hover:text-white">EMI Calculator</a></li>
-                    <li><a href="#faqs" class="hover:text-white">FAQs</a></li>
+                    <li><a href="{{ route('web.about') }}" class="hover:text-white">About Us</a></li>
+                    <li><a href="{{ route('web.services') }}" class="hover:text-white">Services</a></li>
+                    <li><a href="{{ route('web.contact') }}" class="hover:text-white">Contact</a></li>
+                   
                 </ul>
             </div>
 

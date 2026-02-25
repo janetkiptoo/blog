@@ -13,12 +13,20 @@
         <p><strong>Balance:</strong> KES {{ number_format($loan->balance, 2) }}</p>
         <p><strong>Status:</strong> {{ ucfirst($loan->status) }}</p>
 
-         @if($loan->status !== 'paid')
+        
 
-        <a href="{{ route('student.loans.repay', $loan->id)}}"class="inline-block mt-4 text-white rounded bg-primary-700 hover:bg-primary-500"> Repay Loan
+     
+       @if($loan->status === \App\Models\LoanApplication::STATUS_DISBURSED)
+    <a href="{{ route('student.loans.repay.form', $loan->id) }}"
+       class="bg-green-600 text-white px-4 py-2 rounded">
+        Make Repayment
     </a>
-       
-        @else
+@else
+    <span class="text-red-400 ">
+        Repayment available after disbursement
+    </span>
+@endif
+         @if($loan->status === 'paid')
             <p class="text-green-600 mt-3 font-semibold">Loan fully paid</p>
         @endif
         @if ($loan->status === 'pending')

@@ -15,6 +15,7 @@ use App\Http\Controllers\AdminAcademicProfileController;
 use App\Http\Controllers\Admin\AdminCashPaymentController;
 use App\Http\Controllers\Admin\SupportReplyController;
 use App\Http\Controllers\Admin\SupportTicketController;
+use App\Http\Controllers\Admin\FaqController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::resource('loan-products', AdminLoanProductController::class);
     Route::resource('terms', AdminTermsController::class);
+
+     Route::resource('faqs', FaqController::class);
 
     Route::get('/repayments', [AdminRepaymentController::class, 'index'])->name('repayments.index');
 
@@ -71,6 +74,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/academic-profiles/{academicProfile}/approve',[AdminAcademicProfileController::class, 'approve'])->name('academic-profiles.approve');
     Route::post('/academic-profiles/{academicProfile}/reject',[AdminAcademicProfileController::class, 'reject'] )->name('academic-profiles.reject');
 
+  
 
 
     // Route::get('/loans', [AdminLoanController::class, 'index'])->name('loans.index');
@@ -83,3 +87,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
 
 });
+
+

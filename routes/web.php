@@ -11,6 +11,7 @@ Route::get('/home', [WebController::class, 'home']);
 Route::get('/about', [WebController::class, 'about'])->name('web.about');
 Route::get('/services', [WebController::class, 'services'])->name('web.services');
 Route::get('/contact', [WebController::class, 'contact'])->name('web.contact');
+Route::get('/faqs', [FaqController::class, 'index']);
 Route::post('/contact', [SupportTicketController::class, 'store'])->name('contact.store');
 Route::post('/payments/mpesa', [MpesaController::class, 'stkPush'])->middleware('auth')->name('mpesa.stkpush');
 
