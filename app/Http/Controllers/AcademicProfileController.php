@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AcademicProfile;
+use App\Models\EligibilityRequirement;
 
 
 class AcademicProfileController extends Controller
@@ -48,8 +49,13 @@ class AcademicProfileController extends Controller
     {
         $user = Auth::user();
          $academicProfile = AcademicProfile::where('user_id', $user->id)->first();
-        return view('student.profile.academic', compact('user', 'academicProfile'));
+          $institutions = EligibilityRequirement::where('is_active', true)
+        ->select('institution', 'institution_type')
+        ->distinct()
+        ->get();
+        return view('student.profile.academic', compact('user','institutions','academicProfile'));
     }
+
 
     public function update(Request $request)
     {

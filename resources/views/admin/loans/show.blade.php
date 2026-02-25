@@ -69,6 +69,7 @@
     </form>
 
 </div>
+@endif
 
 <div class="bg-white p-6 shadow rounded mt-6">
     <h3 class="text-lg font-bold mb-4">Repayments</h3>
@@ -82,5 +83,5 @@
         <p class="text-gray-500">No repayments yet.</p>
     @endforelse
 </div>
-@endif
+
 @endsection 

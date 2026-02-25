@@ -69,13 +69,7 @@
  <a href="{{ route('admin.support-tickets.index') }}" class="text-white py-2 px-3   mb-2">Contact Us Reply</a>
 </div>
 
-<div class="flex items-center text-white mb-6">
- <svg class="w-[40px] h-[40px] mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round"
-            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8V6m0 12v-2m9-4a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  <a href="{{ route('admin.repayments.index') }}" class="text-white py-2 px-3  mb-2">Repayments history</a>
-       
-</div>
+
 
 
 

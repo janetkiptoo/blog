@@ -32,44 +32,108 @@
         <form method="POST" action="{{ route('student.profile.academic.update') }}" enctype="multipart/form-data" class="space-y-4">
             @csrf
             @method('POST')
+<div>
+    <x-input-label for="institution_name" :value="__('Institution Name*')" />
+    <select id="institution_name" name="institution_name" class="block mt-1 w-full border p-2 rounded" 
+            required onchange="updateInstitutionType()">
+        <option value="">-- Select Institution --</option>
+        @foreach($institutions as $inst)
+            <option value="{{ $inst->institution }}"
+                    data-type="{{ $inst->institution_type }}"
+                    {{ old('institution_name', $academicProfile->institution_name ?? '') == $inst->institution ? 'selected' : '' }}>
+                {{ $inst->institution }}
+            </option>
+        @endforeach
+    </select>
+    <x-input-error :messages="$errors->get('institution_name')" class="mt-2" />
+</div>
 
-            <div>
-                <x-input-label for="institution_name" :value="__('Institution Name*')" />
-                <x-text-input id="institution_name" class="block mt-1 w-full" type="text" name="institution_name" 
-                              value="{{ old('institution_name', $academicProfile->institution_name ?? '') }}" required />
-                <x-input-error :messages="$errors->get('institution_name')" class="mt-2" />
-            </div>
+<div>
+    <x-input-label for="institution_type" :value="__('Institution Type*')" />
+    <select id="institution_type" name="institution_type" class="w-full border p-2 rounded" required disabled>
+        <option value="">Auto-filled on selection</option>
+        <option value="University" {{ old('institution_type', $academicProfile->institution_type ?? '') == 'University' ? 'selected' : '' }}>University</option>
+        <option value="College"    {{ old('institution_type', $academicProfile->institution_type ?? '') == 'College'    ? 'selected' : '' }}>College</option>
+        <option value="Polytechnic"{{ old('institution_type', $academicProfile->institution_type ?? '') == 'Polytechnic'? 'selected' : '' }}>Polytechnic</option>
+    </select>
+    {{-- Hidden input so disabled field still submits --}}
+    <input type="hidden" name="institution_type" id="institution_type_hidden" 
+           value="{{ old('institution_type', $academicProfile->institution_type ?? '') }}">
+    <x-input-error :messages="$errors->get('institution_type')" class="mt-2" />
+</div>
 
-            <div>
-                <x-input-label for="institution_type" :value="__('Institution Type*')" />
-                <select id="institution_type" name="institution_type" class="w-full border p-2 rounded" required>
-                    <option value="">Select type</option>
-                    <option value="University" {{ old('institution_type', $academicProfile->institution_type ?? '') == 'University' ? 'selected' : '' }}>University</option>
-                    <option value="College" {{ old('institution_type', $academicProfile->institution_type ?? '') == 'College' ? 'selected' : '' }}>College</option>
-                    <option value="Polytechnic" {{ old('institution_type', $academicProfile->institution_type ?? '') == 'Polytechnic' ? 'selected' : '' }}>Polytechnic</option>
-                </select>
-                <x-input-error :messages="$errors->get('institution_type')" class="mt-2" />
-            </div>
+<div>
+    <x-input-label for="course_name" :value="__('Course Name*')" />
+    <x-text-input id="course_name" class="block mt-1 w-full" type="text" name="course_name"
+                  value="{{ old('course_name', $academicProfile->course_name ?? '') }}" required />
+    <x-input-error :messages="$errors->get('course_name')" class="mt-2" />
+</div>
 
-            <div>
-                <x-input-label for="course_name" :value="__('Course Name*')" />
-                <x-text-input id="course_name" class="block mt-1 w-full" type="text" name="course_name" 
-                              value="{{ old('course_name', $academicProfile->course_name ?? '') }}" required />
-                <x-input-error :messages="$errors->get('course_name')" class="mt-2" />
-            </div>
+<div>
+    <x-input-label for="level" :value="__('Level / Year of Study*')" />
+    <select id="level" name="level" class="w-full border p-2 rounded" required>
+        <option value="">Select institution first</option>
+        
+        @if(old('level', $academicProfile->level ?? ''))
+            @php $savedLevel = old('level', $academicProfile->level ?? ''); @endphp
+            @foreach(range(1, 5) as $y)
+                <option value="{{ $y }}" {{ $savedLevel == $y ? 'selected' : '' }}>Year {{ $y }}</option>
+            @endforeach
+        @endif
+    </select>
+    <x-input-error :messages="$errors->get('level')" class="mt-2" />
+</div>
 
-            <div>
-                <x-input-label for="level" :value="__('Level / Year of Study*')" />
-                <select id="level" name="level" class="w-full border p-2 rounded" required>
-                    <option value="">Select year</option>
-                    <option value="1" {{ old('level', $academicProfile->level ?? '') == '1' ? 'selected' : '' }}>Year 1</option>
-                    <option value="2" {{ old('level', $academicProfile->level ?? '') == '2' ? 'selected' : '' }}>Year 2</option>
-                    <option value="3" {{ old('level', $academicProfile->level ?? '') == '3' ? 'selected' : '' }}>Year 3</option>
-                    <option value="4" {{ old('level', $academicProfile->level ?? '') == '4' ? 'selected' : '' }}>Year 4</option>
-                     <option value="5" {{ old('level', $academicProfile->level ?? '') == '5' ? 'selected' : '' }}>Year 5</option>
-                </select>
-                <x-input-error :messages="$errors->get('level')" class="mt-2" />
-            </div>
+<script>
+const institutionTypes = {
+    'University':  { maxYears: 4 },
+    'College':     { maxYears: 3 },
+    'Polytechnic': { maxYears: 3 },
+};
+
+const savedLevel = "{{ old('level', $academicProfile->level ?? '') }}";
+
+function updateInstitutionType() {
+    const select      = document.getElementById('institution_name');
+    const selectedOpt = select.options[select.selectedIndex];
+    const type        = selectedOpt.getAttribute('data-type') || '';
+    const typeSelect = document.getElementById('institution_type');
+    const typeHidden = document.getElementById('institution_type_hidden');
+    
+    for (let opt of typeSelect.options) {
+        opt.selected = opt.value === type;
+    }
+    typeHidden.value = type;
+
+   
+    updateYearOptions(type);
+}
+
+function updateYearOptions(type) {
+    const levelSelect = document.getElementById('level');
+    const config      = institutionTypes[type];
+
+    levelSelect.innerHTML = '<option value="">Select year</option>';
+
+    if (!config) return;
+
+    for (let i = 1; i <= config.maxYears; i++) {
+        const opt      = document.createElement('option');
+        opt.value      = i;
+        opt.textContent = `Year ${i}`;
+        if (savedLevel == i) opt.selected = true;
+        levelSelect.appendChild(opt);
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const instSelect = document.getElementById('institution_name');
+    if (instSelect.value) {
+        updateInstitutionType();
+    }
+});
+</script>
 
             <div>
                 <x-input-label for="student_registration_number" :value="__('Student Registration Number*')" />

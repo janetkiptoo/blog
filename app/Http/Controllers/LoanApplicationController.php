@@ -104,16 +104,29 @@ public function process_repayment(Request $request, $id)
 }
 
 
-    public function showRepayForm($id)
+  public function showRepayForm($id)
 {
-    $loan = LoanApplication::with('repayments')->where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+    $loan = LoanApplication::with('repayments')
+        ->where('id', $id)
+        ->where('user_id', auth()->id())
+        ->firstOrFail();
+
+    
+    if ($loan->status !== LoanApplication::STATUS_DISBURSED) {
+        abort(403, 'Repayment is only allowed after loan disbursement.');
+    }
 
     $repaymentMonths = $loan->term_months - $loan->loanProduct->grace_period_months;
-    $monthlyPayment = $loan->monthly_payment;
-    $totalPayable = $loan->monthly_payment * $repaymentMonths;
-    $totalInterest = $totalPayable - $loan->loan_amount;
+    $monthlyPayment  = $loan->monthly_payment;
+    $totalPayable    = $monthlyPayment * $repaymentMonths;
+    $totalInterest   = $totalPayable - $loan->loan_amount;
 
-    return view('students.loans.repay', compact('loan', 'monthlyPayment', 'totalPayable', 'totalInterest'));
+    return view('students.loans.repay', compact(
+        'loan',
+        'monthlyPayment',
+        'totalPayable',
+        'totalInterest'
+    ));
 }
 
 public function store(Request $request, $productId)

@@ -65,6 +65,7 @@
                     <option value="national_id" {{ old('government_id_type', $profile->government_id_type ?? '') == 'national_id' ? 'selected' : '' }}>National ID</option>
                     <option value="passport" {{ old('government_id_type', $profile->government_id_type ?? '') == 'passport' ? 'selected' : '' }}>Passport</option>
                     <option value="drivers_license" {{ old('government_id_type', $profile->government_id_type ?? '') == 'drivers_license' ? 'selected' : '' }}>Driver's License</option>
+                    <option value="birth_certificate" {{ old('government_id_type', $profile->government_id_type ?? '') == 'birth_certificate' ? 'selected' : '' }}>Birth Certificate</option>
                 </select>
                 <x-input-error :messages="$errors->get('government_id_type')" class="mt-1" />
             </div>
@@ -86,12 +87,9 @@
             
             <div>
                 <label class="block font-semibold text-gray-700">Date of Birth <span class="text-red-500"></span>*</label>
-                <input type="date" 
-                       name="date_of_birth" 
-                       value="{{ old('date_of_birth', $profile->date_of_birth ?? '') }}"
-                       max="{{ date('Y-m-d', strtotime('-18 years')) }}"
+                <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $profile->date_of_birth ?? '') }}" max="{{ date('Y-m-d', strtotime('-15 years')) }}"
                        class="w-full border rounded px-3 py-2" required>
-                <p class="text-sm text-gray-500 mt-1">You must be at least 18 years old</p>
+                <p class="text-sm text-gray-500 mt-1">You must be at least 15 years old</p>
                 <x-input-error :messages="$errors->get('date_of_birth')" class="mt-1" />
             </div>
 

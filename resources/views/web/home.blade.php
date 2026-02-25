@@ -31,7 +31,6 @@
 </section>
 
 
-
 <section id="eligibility" class="bg-gray-100 px-6 md:px-16 py-16">
     <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">Check Your Eligibility</h2>
 
@@ -39,45 +38,55 @@
         <div>
             <label class="block font-semibold text-gray-700">Your Country</label>
             <select id="country" class="border rounded px-3 py-2 w-full">
-                <option value="Kenya">Kenya</option>
+                <option value="">-- Select Country --</option>
+                @foreach($eligibilityData['countries'] as $country)
+                    <option value="{{ $country }}">{{ $country }}</option>
+                @endforeach
             </select>
         </div>
 
         <div>
             <label class="block font-semibold text-gray-700">Your Institution</label>
             <select id="institution" class="border rounded px-3 py-2 w-full">
-                <option value="University of Nairobi">University of Nairobi</option>
-                <option value="BD Computing">BD Computing</option>
-                <option value="Kabarak">Kabarak</option>
-                <option value="Moi University">Moi University</option>
+                <option value="">-- Select Institution --</option>
+                @foreach($eligibilityData['institutions'] as $institution)
+                    <option value="{{ $institution }}">{{ $institution }}</option>
+                @endforeach
             </select>
         </div>
 
         <div>
             <label class="block font-semibold text-gray-700">Course Type</label>
             <select id="courseType" class="border rounded px-3 py-2 w-full">
-                <option value="Undergraduate">Undergraduate</option>
-                <option value="Postgraduate">Postgraduate</option>
-                <option value="Vocational">Vocational</option>
+                <option value="">-- Select Course Type --</option>
+                @foreach($eligibilityData['courseTypes'] as $courseType)
+                    <option value="{{ $courseType }}">{{ $courseType }}</option>
+                @endforeach
             </select>
         </div>
 
         <div>
             <label class="block font-semibold text-gray-700">Loan Purpose</label>
             <select id="loanPurpose" class="border rounded px-3 py-2 w-full">
-                <option value="Fees Loan">Fees Loan</option>
-                <option value="Personal Loan">Personal Loan</option>
-                
+                <option value="">-- Select Loan Purpose --</option>
+                @foreach($eligibilityData['loanPurposes'] as $purpose)
+                    <option value="{{ $purpose }}">{{ $purpose }}</option>
+                @endforeach
             </select>
         </div>
 
         <div>
             <label class="block font-semibold text-gray-700">Your Age</label>
-            <input type="number" id="age" class="border rounded px-3 py-2 w-full" placeholder="20">
+            <input type="number" id="age" class="border rounded px-3 py-2 w-full" 
+                   placeholder="e.g. 20"
+                   min="{{ $eligibilityData['minAge'] }}" 
+                   max="{{ $eligibilityData['maxAge'] }}">
+            <p class="text-xs text-gray-500 mt-1">Age must be between {{ $eligibilityData['minAge'] }} and {{ $eligibilityData['maxAge'] }}</p>
         </div>
 
         <div class="md:col-span-2 text-center">
-            <button type="button" onclick="checkEligibility()" class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition">
+            <button type="button" onclick="checkEligibility()"
+                class="bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700 transition">
                 Check Eligibility
             </button>
         </div>
@@ -87,45 +96,47 @@
 </section>
 
 <script>
-const eligibleCountries = ['Kenya'];
-const eligibleInstitutions = ['University of Nairobi', 'BD Computing', 'Kabarak', 'Moi University'];
-const minAge = 18;
-const maxAge = 35;
+const eligibilityConfig = @json($eligibilityData);
 
 function checkEligibility() {
-    const country = document.getElementById('country').value;
+    const country     = document.getElementById('country').value;
     const institution = document.getElementById('institution').value;
-    const courseType = document.getElementById('courseType').value;
+    const courseType  = document.getElementById('courseType').value;
     const loanPurpose = document.getElementById('loanPurpose').value;
-    const age = parseInt(document.getElementById('age').value);
-    const resultDiv = document.getElementById('eligibility_result');
+    const age         = parseInt(document.getElementById('age').value);
+    const resultDiv   = document.getElementById('eligibility_result');
 
-    if (!country || !institution || !age) {
+    if (!country || !institution || !courseType || !loanPurpose || !age) {
         resultDiv.innerHTML = '<span class="text-red-600">Please fill in all required fields.</span>';
         return;
     }
 
-    if (!eligibleCountries.includes(country)) {
-        resultDiv.innerHTML = '<span class="text-red-600"> Sorry, loans are not available in your country.</span>';
+    if (!eligibilityConfig.countries.includes(country)) {
+        resultDiv.innerHTML = '<span class="text-red-600">Sorry, loans are not available in your country.</span>';
         return;
     }
 
-    if (!eligibleInstitutions.includes(institution)) {
-        resultDiv.innerHTML = '<span class="text-red-600"> Sorry, your institution is not eligible.</span>';
+    if (!eligibilityConfig.institutions.includes(institution)) {
+        resultDiv.innerHTML = '<span class="text-red-600">Sorry, your institution is not eligible.</span>';
         return;
     }
 
-    if (age < minAge || age > maxAge) {
-        resultDiv.innerHTML = `<span class="text-red-600"> Age must be between ${minAge} and ${maxAge} to apply.</span>`;
+    if (!eligibilityConfig.courseTypes.includes(courseType)) {
+        resultDiv.innerHTML = '<span class="text-red-600">Sorry, your course type is not eligible.</span>';
         return;
     }
 
-    if ((loanPurpose === 'Fees Loan' || loanPurpose === 'Personal Loan') &&
-        (courseType === 'Undergraduate' || courseType === 'Postgraduate' || courseType === 'Vocational' )) {
-        resultDiv.innerHTML = '<span class="text-green-600">You are likely eligible for a loan! Sign up to apply.</span>';
-    } else {
-        resultDiv.innerHTML = '<span class="text-red-600">Based on the info provided, you may not be eligible. Sign up for full evaluation.</span>';
+    if (!eligibilityConfig.loanPurposes.includes(loanPurpose)) {
+        resultDiv.innerHTML = '<span class="text-red-600">Sorry, that loan purpose is not available.</span>';
+        return;
     }
+
+    if (age < eligibilityConfig.minAge || age > eligibilityConfig.maxAge) {
+        resultDiv.innerHTML = `<span class="text-red-400">Age must be between ${eligibilityConfig.minAge} and ${eligibilityConfig.maxAge} to apply.</span>`;
+        return;
+    }
+
+    resultDiv.innerHTML = '<span class="text-green-400">You are likely eligible for a loan! Sign up to apply.</span>';
 }
 </script>
 
@@ -138,8 +149,8 @@ function checkEligibility() {
         <table class="min-w-full border rounded-lg text-left">
             <thead class="bg-blue-600 text-white">
                 <tr>
-                    <th class="px-6 py-3">Loan Purpose</th>
-                    <th class="px-6 py-3">Interest Rate (%)</th>
+                    <th class="px-6 py-3">Loan Product</th>
+                    <th class="px-6 py-3">Interest Rate per Month (%)</th>
                     <th class="px-6 py-3">Min Amount (KES)</th>
                     <th class="px-6 py-3">Max Amount (KES)</th>
                     <th class="px-6 py-3">Grace Period (Months)</th>
@@ -163,82 +174,141 @@ function checkEligibility() {
 </section>
 
 
-
 <section class="bg-gray-50 px-6 md:px-16 py-16">
     <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">Estimate Your EMI</h2>
 
     <form class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-            <label class="block font-semibold text-gray-700">Loan Purpose</label>
-            <select id="loanPurposeCalc" class="border rounded px-3 py-2 w-full">
-                <option>Personal Loan</option>
-                <option>fees Loan</option>
-                <!-- <option>Emergency / Other</option> -->
+            <label class="block font-semibold text-gray-700">Loan Product</label>
+            <select id="loanPurposeCalc" class="border rounded px-3 py-2 w-full" onchange="updateTermHint()">
+                <option value="">-- Select Loan Product --</option>
+                @foreach($loanProducts as $product)
+                    <option value="{{ $product->product_name }}">{{ $product->product_name }}</option>
+                @endforeach
             </select>
         </div>
 
         <div>
             <label class="block font-semibold text-gray-700">Loan Amount (KES)</label>
-            <input type="number" id="loan_amount" class="border rounded px-3 py-2 w-full" placeholder="100000">
+            <input type="number" id="loan_amount" class="border rounded px-3 py-2 w-full" placeholder="e.g. 100000">
+            <p id="amount_hint" class="text-xs text-gray-500 mt-1"></p>
         </div>
 
         <div>
             <label class="block font-semibold text-gray-700">Loan Term (Months)</label>
-            <input type="number" id="term_months" class="border rounded px-3 py-2 w-full" placeholder="12">
+            <input type="number" id="term_months" class="border rounded px-3 py-2 w-full" placeholder="e.g. 12">
+            <p id="term_hint" class="text-xs text-gray-500 mt-1"></p>
         </div>
 
         <div class="md:col-span-2 text-center">
-            <button type="button" onclick="calculateLoan()" class="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition">
+            <button type="button" onclick="calculateLoan()"
+                class="bg-green-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-green-700 transition">
                 Calculate EMI
             </button>
         </div>
     </form>
 
-    <div id="emi_result" class="mt-4 text-center font-semibold text-lg space-y-1">
+    <p id="error_message" class="text-center text-red-600 font-semibold mt-4 hidden"></p>
+
+    <div id="emi_result" class="mt-4 text-center font-semibold text-lg space-y-1 hidden">
         <p>Monthly Payment: <span id="monthly_payment_display">KES 0</span></p>
         <p>Total Interest: <span id="total_interest_display">KES 0</span></p>
         <p>Total Payable: <span id="total_payable_display">KES 0</span></p>
     </div>
 </section>
+
 <script>
-const loanProducts = @json($loanProducts->mapWithKeys(function($product) {
-    return [$product->product_name => [
-        'interestRate' => $product->interest_rate,
-        'gracePeriod' => $product->grace_period_months,
-        'maxAmount' => $product->max_loan_amount
-    ]];
-}));
+const loanProducts = @json($loanProductsData);
+
+
+function showError(msg) {
+    const err = document.getElementById('error_message');
+    err.textContent = msg;
+    err.classList.remove('hidden');
+    document.getElementById('emi_result').classList.add('hidden');
+}
+
+function clearError() {
+    const err = document.getElementById('error_message');
+    err.textContent = '';
+    err.classList.add('hidden');
+}
+
+function updateTermHint() {
+    const selected = document.getElementById('loanPurposeCalc').value;
+    const termHint = document.getElementById('term_hint');
+    const amountHint = document.getElementById('amount_hint');
+
+    if (!selected || !loanProducts[selected]) {
+        termHint.textContent = '';
+        amountHint.textContent = '';
+        return;
+    }
+
+    const p = loanProducts[selected];
+    termHint.textContent = `Max term: ${p.maxTermMonths} months`;
+    amountHint.textContent = `Range: KES ${Number(p.minAmount).toLocaleString()} – KES ${Number(p.maxAmount).toLocaleString()}`;
+}
 
 function calculateLoan() {
-    const loanPurpose = document.getElementById('loanPurposeCalc').value;
+    clearError();
+
+    const selected = document.getElementById('loanPurposeCalc').value;
     const P = parseFloat(document.getElementById('loan_amount').value);
     const T = parseInt(document.getElementById('term_months').value);
-    const resultDiv = document.getElementById('emi_result');
 
-    if (!loanProducts[loanPurpose]) return;
-
-    const r = loanProducts[loanPurpose].interestRate / 100;
-    const grace = loanProducts[loanPurpose].gracePeriod;
-    const maxAmount = loanProducts[loanPurpose].maxAmount;
-
-    if (!P || !T || T <= grace) {
-        resultDiv.innerText = 'Please enter a valid loan amount and term.';
+    if (!selected) {
+        showError('Please select a loan product.');
         return;
     }
 
-    if (P > maxAmount) {
-        resultDiv.innerText = `Maximum loan amount for ${loanPurpose} is KES ${maxAmount.toLocaleString()}.`;
+    const product = loanProducts[selected];
+
+    if (!product) {
+        showError('Selected loan product not found.');
         return;
     }
 
-    const repaymentMonths = T - grace;
-    const totalInterest = P * r * repaymentMonths;
-    const totalPayable  = P + totalInterest;
+    if (!P || isNaN(P)) {
+        showError('Please enter a valid loan amount.');
+        return;
+    }
+
+    if (P < product.minAmount) {
+        showError(`Minimum loan amount for ${selected} is KES ${Number(product.minAmount).toLocaleString()}.`);
+        return;
+    }
+
+    if (P > product.maxAmount) {
+        showError(`Maximum loan amount for ${selected} is KES ${Number(product.maxAmount).toLocaleString()}.`);
+        return;
+    }
+
+    if (!T || isNaN(T) || T <= 0) {
+        showError('Please enter a valid loan term.');
+        return;
+    }
+
+    if (T > product.maxTermMonths) {
+        showError(`Maximum loan term for ${selected} is ${product.maxTermMonths} months.`);
+        return;
+    }
+
+    if (T <= product.gracePeriod) {
+        showError(`Loan term must be greater than the grace period (${product.gracePeriod} months).`);
+        return;
+    }
+
+    const r = product.interestRate / 100;
+    const repaymentMonths = T - product.gracePeriod;
+    const totalInterest  = P * r * repaymentMonths;
+    const totalPayable   = P + totalInterest;
     const monthlyPayment = totalPayable / repaymentMonths;
 
     document.getElementById('monthly_payment_display').innerText = 'KES ' + monthlyPayment.toFixed(2);
-    document.getElementById('total_interest_display').innerText = 'KES ' + totalInterest.toFixed(2);
-    document.getElementById('total_payable_display').innerText = 'KES ' + totalPayable.toFixed(2);
+    document.getElementById('total_interest_display').innerText  = 'KES ' + totalInterest.toFixed(2);
+    document.getElementById('total_payable_display').innerText   = 'KES ' + totalPayable.toFixed(2);
+    document.getElementById('emi_result').classList.remove('hidden');
 }
 </script>
 
