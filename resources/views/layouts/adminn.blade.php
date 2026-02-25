@@ -67,6 +67,12 @@
 <div class="flex items-center text-white mb-6">
   <svg class="w-[32px] h-[32px] mr-3" xmlns="http://www.w3.org/2000/svg"fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round"d="M9 13h6m-3-3v6m-4-8h8a2 2 0 012 2v10a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2z" />
     </svg>
+ <a href="{{ route('admin.footer.index') }}" class="text-white py-2 px-3   mb-2">Footer </a>
+</div>
+
+<div class="flex items-center text-white mb-6">
+  <svg class="w-[32px] h-[32px] mr-3" xmlns="http://www.w3.org/2000/svg"fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round"d="M9 13h6m-3-3v6m-4-8h8a2 2 0 012 2v10a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2z" />
+    </svg>
  <a href="{{ route('admin.cash-payments.index') }}" class="text-white py-2 px-3   mb-2">Cash Payments</a>
 </div>
 

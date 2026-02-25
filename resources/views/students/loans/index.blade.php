@@ -8,11 +8,24 @@
     @forelse($loans as $loan)
     <div class="bg-white shadow p-6 rounded mb-4">
 
-        <p><strong>Product:</strong> {{ $loan->loanProduct->product_name }}</p>
-        <p><strong>Loan Amount:</strong> KES {{ number_format($loan->loan_amount, 2) }}</p>
+        @foreach ($loans as $loan)
+    <div class="border p-4 rounded mb-4">
+        <p><strong>Product:</strong> {{ $loan->loanProduct->name }}</p>
+        <p><strong>Loan Amount:</strong> KES {{ number_format($loan->amount, 2) }}</p>
         <p><strong>Balance:</strong> KES {{ number_format($loan->balance, 2) }}</p>
         <p><strong>Status:</strong> {{ ucfirst($loan->status) }}</p>
 
+        @if($loan->status === 'draft')
+            <a href="{{ route('loans.resume', $loan->id) }}" class="bg-yellow-500 text-white px-4 py-2 rounded">
+                Resume Application
+            </a>
+        @elseif($loan->status === 'disbursed')
+            <a href="{{ route('loans.repay', $loan->id) }}" class="bg-green-600 text-white px-4 py-2 rounded">
+                Repayment Available
+            </a>
+        @endif
+    </div>
+@endforeach
         
 
      

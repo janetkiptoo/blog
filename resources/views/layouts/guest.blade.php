@@ -4,6 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!-- Font Awesome CDN -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVjZ1d4w+v2X0v4+ZfD9M3xKUPTQ9nRj3O5sVj4+dsPZwTTXG6lgp+zQ/tV0d0evzXfKKl8HYNhU55qlu1g0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 

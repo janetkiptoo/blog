@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\AdminCashPaymentController;
 use App\Http\Controllers\Admin\SupportReplyController;
 use App\Http\Controllers\Admin\SupportTicketController;
 use App\Http\Controllers\Admin\FaqController;
-
+use App\Http\Controllers\Admin\FooterItemController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -40,6 +40,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('terms', AdminTermsController::class);
 
      Route::resource('faqs', FaqController::class);
+
+     Route::resource('footer', FooterItemController::class);
 
     Route::get('/repayments', [AdminRepaymentController::class, 'index'])->name('repayments.index');
 

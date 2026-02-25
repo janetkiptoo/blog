@@ -4,6 +4,7 @@ namespace App\Providers;
 use App\Models\Faq;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Models\FooterItem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,17 @@ class AppServiceProvider extends ServiceProvider
                 ->orderBy('sort_order')
                 ->get()
         );
+    });
+
+
+    View::composer('*', function ($view) {
+        $footerItems = FooterItem::where('is_active', true)
+            ->orderBy('section')
+            ->orderBy('sort_order')
+            ->get()
+            ->groupBy('section');
+
+        $view->with('footerItems', $footerItems);
     });
 }
 }
