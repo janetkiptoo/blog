@@ -32,8 +32,8 @@ class AdminGuarantorController extends Controller
         'reviewed_at' => now(),
     ]);
 
-    Mail::to($guarantor->user->email)
-        ->send(new GuarantorApprovedMail($guarantor));
+    // Mail::to($guarantor->user->email)
+    //     ->send(new GuarantorApprovedMail($guarantor));
 
     return back()->with('success', 'Guarantor approved and student notified.');
     }

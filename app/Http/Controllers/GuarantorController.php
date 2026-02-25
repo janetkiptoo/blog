@@ -79,7 +79,7 @@ public function store(Request $request, LoanApplication $loan)
     
 
     return redirect()
-        ->route('student.loans.guarantors.confirm', $loan->id)
+        ->route('student.loans.disbursement', $loan->id)
         ->with('success', 'Guarantor added successfully.');
 }
 

@@ -23,6 +23,12 @@ class LoanApplication extends Model
         'approved_at',
         'disbursed_at',
         'rejection_reason',
+        'disbursement_method',
+        'disbursement_phone',
+        'bank_name',
+        'bank_account_number',
+        
+        
     ];
    
     public function user()

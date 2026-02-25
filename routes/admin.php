@@ -25,9 +25,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/loans', [AdminController::class, 'loans'])->name('loans');
-    Route::get('/loans', [AdminController::class, 'index'])->name('loans');
-    Route::post('/loans/{id}/approve', [AdminController::class, 'approve'])->name('loan.approve');
-    Route::post('/loans/{id}/reject', [AdminController::class, 'reject'])->name('loan.reject');
+    Route::get('/loans', [AdminController::class, 'index'])->name('loans.index');
+    Route::get('/loans/{loan}', [AdminController::class, 'show'])->name('loans.show');
+    Route::post('/loans/{loan}/review', [AdminController::class, 'markUnderReview'])->name('loans.review');
+    Route::post('/loans/{loan}/approve', [AdminController::class, 'approve'])->name('loans.approve');
+    Route::post('/loans/{loan}/reject', [AdminController::class, 'reject'])->name('loans.reject');
+    // Route::post('/loans/{id}/approve', [AdminController::class, 'approve'])->name('loan.approve');
+    // Route::post('/loans/{id}/reject', [AdminController::class, 'reject'])->name('loan.reject');
 
     Route::resource('users', UserController::class);
 
@@ -66,6 +70,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/academic-profiles/{academicProfile}',[AdminAcademicProfileController::class, 'show'] )->name('academic-profiles.show');
     Route::post('/academic-profiles/{academicProfile}/approve',[AdminAcademicProfileController::class, 'approve'])->name('academic-profiles.approve');
     Route::post('/academic-profiles/{academicProfile}/reject',[AdminAcademicProfileController::class, 'reject'] )->name('academic-profiles.reject');
+
+
+
+    // Route::get('/loans', [AdminLoanController::class, 'index'])->name('loans.index');
+    // Route::get('/loans/{loan}', [AdminLoanController::class, 'show'])->name('loans.show');
+    // Route::post('/loans/{loan}/review', [AdminLoanController::class, 'markUnderReview'])->name('loans.review');
+    // Route::post('/loans/{loan}/approve', [AdminLoanController::class, 'approve'])->name('loans.approve');
+    // Route::post('/loans/{loan}/reject', [AdminLoanController::class, 'reject'])->name('loans.reject');
+    // Route::post('/loans/{loan}/disburse', [AdminLoanController::class, 'disburse'])->name('loans.disburse');
 
 
 

@@ -50,7 +50,12 @@ use Illuminate\Support\Facades\Route;
     Route::get('/loans/{loan}/guarantors/confirm',[LoanApplicationController::class, 'confirm'])->name('loans.guarantors.confirm');
     Route::delete('/loans/{loan}/guarantors/{guarantor}/replace',[LoanApplicationController::class, 'replaceGuarantor'])->name('loans.guarantors.replace');
     Route::get( '/loans/{loan}/review',[LoanApplicationController::class, 'review'])->name('loans.review');
-   Route::post('/loans/{loan}/submit',[LoanApplicationController::class, 'submit'])->name('loans.submit');
+    Route::post('/loans/{loan}/submit',[LoanApplicationController::class, 'submit'])->name('loans.submit');
+
+     Route::get('/loans/{loan}/disbursement', [LoanApplicationController::class, 'disbursementForm'])->name('loans.disbursement');
+     Route::post('/loans/{loan}/disbursement', [LoanApplicationController::class, 'saveDisbursement'])->name('loans.disbursement.save');
+
+   
 
     
 });

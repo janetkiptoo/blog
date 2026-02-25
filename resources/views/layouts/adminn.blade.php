@@ -33,7 +33,7 @@
 <div class="flex items-center text-white mb-6">
  <svg class="w-[32px] h-[32px] mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m-6-8h6M7 20h10a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2z"/>
     </svg>
- <a href="{{ route('admin.loans') }}" class="text-white py-2 px-3  mb-2">Loan Applications</a>
+ <a href="{{ route('admin.loans.index') }}" class="text-white py-2 px-3  mb-2">Loan Applications</a>
 </div>
 
 

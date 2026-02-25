@@ -13,11 +13,59 @@ use Carbon\Carbon;
 class LoanController extends Controller
 {
     
-        public function show($id)
-        {
-            $loan = LoanApplication::with(['user', 'loanProduct', 'repaymentSchedules'])->findOrFail($id);
-            return view('admin.loans.show', compact('loan'));
-        }
+public function index()
+{
+    $loans = LoanApplication::whereIn('status', ['submitted', 'under_review'])
+        ->latest()
+        ->paginate(20);
+
+    return view('admin.loans.index', compact('loans'));
+}
+
+
+public function show(LoanApplication $loan)
+{
+    return view('admin.loans.show', [
+        'loan' => $loan->load([
+            'user.personalProfile',
+            'user.academicProfile',
+            'guarantors',
+            'loanProduct',
+            'repayments'
+        ])
+    ]);
+}
+
+public function approve(LoanApplication $loan)
+{
+    abort_if(
+        $loan->guarantors()->where('status', 'approved')->count() < 2,
+        422,
+        'Loan must have 2 approved guarantors.'
+    );
+
+    $loan->update([
+        'status' => 'approved',
+        'approved_at' => now(),
+        'approved_by' => auth()->id(),
+    ]);
+
+    return back()->with('success', 'Loan approved.');
+}
+
+public function reject(Request $request, LoanApplication $loan)
+{
+    $request->validate([
+        'reason' => 'required|string|min:5',
+    ]);
+
+    $loan->update([
+        'status' => 'rejected',
+        'rejection_reason' => $request->reason,
+    ]);
+
+    return back()->with('success', 'Loan rejected.');
+}
 
 
 public function disburse($id)

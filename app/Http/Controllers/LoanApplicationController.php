@@ -185,6 +185,20 @@ public function submit(Request $request, LoanApplication $loan)
     abort_if($loan->user_id !== auth()->id(), 403);
     abort_if($loan->status !== 'draft', 403);
     
+    abort_if(
+    empty($loan->disbursement_method) ||
+    (
+        $loan->disbursement_method === 'mpesa' &&
+        empty($loan->disbursement_phone)
+    ) ||
+    (
+        $loan->disbursement_method === 'bank' &&
+        (empty($loan->bank_name) || empty($loan->bank_account_number))
+    ),
+    403,
+    'Please provide disbursement details before submitting.'
+);
+    
 
     $request->validate([
         'accept_terms' => 'accepted',
@@ -264,6 +278,37 @@ public function replaceGuarantor(LoanApplication $loan, Guarantor $guarantor)
     return redirect()
         ->route('student.loans.guarantors.create', $loan->id)
         ->with('info', 'Guarantor replaced. Please add a new guarantor.');
+}
+public function disbursementForm(LoanApplication $loan)
+{
+    abort_if($loan->user_id !== auth()->id(), 403);
+    abort_if($loan->status !== 'draft', 403);
+
+    return view('student.loans.disbursement', compact('loan'));
+}
+
+public function saveDisbursement(Request $request, LoanApplication $loan)
+{
+    abort_if($loan->user_id !== auth()->id(), 403);
+    abort_if($loan->status !== 'draft', 403);
+
+    $request->validate([
+        'disbursement_method' => 'required|in:mpesa,bank',
+        'disbursement_phone' => 'required_if:disbursement_method,mpesa|digits:10',
+        'bank_name' => 'required_if:disbursement_method,bank',
+        'bank_account_number' => 'required_if:disbursement_method,bank',
+    ]);
+
+    $loan->update($request->only([
+        'disbursement_method',
+        'disbursement_phone',
+        'bank_name',
+        'bank_account_number',
+    ]));
+
+    return redirect()
+        ->route('student.loans.review', $loan)
+        ->with('success', 'Disbursement details saved.');
 }
 
     

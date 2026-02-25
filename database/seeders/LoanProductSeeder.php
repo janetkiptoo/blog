@@ -20,7 +20,7 @@ class LoanProductSeeder extends Seeder
             'description' => 'A loan for personal use.',
             'min_loan_amount' => 1000,
             'max_loan_amount' => 50000,
-            'interest_rate' => 8.5,
+            'interest_rate' => 1.5,
             'loan_term_months' => 36
         ]);
 
@@ -29,7 +29,7 @@ class LoanProductSeeder extends Seeder
             'description' => 'A loan for purchasing a home.',
             'min_loan_amount' => 10000,
             'max_loan_amount' => 500000,
-            'interest_rate' => 6.5,
+            'interest_rate' => 0.5,
             'loan_term_months' => 240
         ]);
     }
