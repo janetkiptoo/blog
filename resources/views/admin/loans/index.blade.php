@@ -55,12 +55,24 @@
                         </span>
                     </td>
                   
-                    <td class="p-2">
-                        <a href="{{ route('admin.loans.show', $loan) }}"
-                           class="text-blue-600 hover:underline">
-                            View
-                        </a>
-                    </td>
+                   <td class="p-2 flex gap-2">
+    <a href="{{ route('admin.loans.show', $loan) }}"
+       class="text-white bg-primary-600 py-2 px-6 rounded-full">
+        View
+    </a>
+
+    @if($loan->status === 'approved')
+        <form method="POST" action="{{ route('admin.loan.disburse', $loan->id) }}">
+            @csrf
+            <button type="submit" 
+                    class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+                Disburse
+            </button>
+        </form>
+    @elseif($loan->status === 'disbursed')
+        <span class="text-purple-800 font-semibold py-2 px-4">Disbursed</span>
+    @endif
+</td>
                 </tr>
             @empty
                 <tr>

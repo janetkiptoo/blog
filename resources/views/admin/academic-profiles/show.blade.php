@@ -48,7 +48,7 @@
         <textarea name="rejection_reason"class="border rounded w-full p-2 mb-2"
                   placeholder="Reason for rejection"></textarea>
 
-        <button class="bg-red-600 text-white px-4 py-2 rounded">
+        <button class="bg-red-600 text-white px-4 py-2 rounded-full">
             Reject
         </button>
     </form>
@@ -60,4 +60,7 @@
             <p class="text-red-600">{{ $academicProfile->rejection_reason }}</p>
         </div>
     @endif
+
+
+    
 @endsection

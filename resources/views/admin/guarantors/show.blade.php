@@ -49,7 +49,7 @@
     @csrf
 
     <textarea name="rejection_reason"
-        class="w-60 border rounded p-2 mb-2"
+        class="w-full border rounded  mb-2"
         placeholder="Reason for rejection" required></textarea>
 
     <button class="bg-red-600 text-white px-4 py-2 rounded-full">

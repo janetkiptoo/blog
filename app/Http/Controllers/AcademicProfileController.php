@@ -59,7 +59,7 @@ class AcademicProfileController extends Controller
             'course_name' => 'required|string|max:255',
             'level' => 'required|string|max:100',
             'student_registration_number' => 'required|string|max:100',
-            'student_document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:4096',
+            'student_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:4096',
         ]);
 
         $user = Auth::user();

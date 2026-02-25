@@ -44,7 +44,7 @@
             <form method="POST" action="{{ route('admin.personal-profiles.reject', $personalProfile) }}">
                 @csrf
                 <textarea name="rejection_reason"
-                          class="border p-2 rounded w-64"
+                          class="border p-2 rounded w-full"
                           placeholder="Reason for rejection" required></textarea>
 
                 <button class="bg-red-600 text-white px-4 py-2 rounded mt-2">
@@ -61,5 +61,9 @@
         </div>
     @endif
 
+    
+
 </div>
+
+
 @endsection

@@ -19,13 +19,10 @@ class DashboardController extends Controller
     return view('student.dashboard', [
         'personalProfile' => $user->personalProfile,
         'academicProfile' => $user->academicProfile,
-        'guarantors' => $user->guarantors,
-        'approvedGuarantorsCount' =>
-            $user->guarantors()->where('status', 'approved')->count(),
+
         'loanEligible' =>
             optional($user->personalProfile)->status === 'approved'
-            && optional($user->academicProfile)->status === 'approved'
-            && $user->guarantors()->where('status', 'approved')->count() >= 2,
+            && optional($user->academicProfile)->status === 'approved',
         'loan' => $user->loans()->latest()->first(),
     ]
 );

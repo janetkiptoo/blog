@@ -39,10 +39,10 @@
                 </span>
             </p>
 
-             <a href="{{ route('admin.guarantors.show', $g) }}"
-                           class="text-blue-600 underline">
-                            Review
-                        </a>
+            <a href="{{ route('admin.guarantors.show', $g) }}"
+               class="inline-block text-white bg-primary-600 py-2 px-6 rounded-full mt-3">
+                Review
+            </a>
         </div>
     @endforeach
 </div>
@@ -52,7 +52,7 @@
 
     <form method="POST" action="{{ route('admin.loans.approve', $loan) }}">
         @csrf
-        <button class="bg-green-600 text-white px-4 py-2 rounded w-full">
+        <button class="bg-green-600 text-white px-4 py-2 rounded-full">
             Approve Loan
         </button>
     </form>
@@ -63,7 +63,7 @@
             class="w-full border rounded p-2"
             placeholder="Reason for rejection"></textarea>
 
-        <button class="bg-red-600 text-white px-4 py-2 rounded w-full mt-2">
+        <button class="bg-red-600 text-white px-4 py-2 rounded-full mt-2">
             Reject Loan
         </button>
     </form>

@@ -99,7 +99,7 @@
                     <p class="text-sm text-gray-500 mt-1">Upload student ID or admission letter (PDF, JPG, PNG - Max 4MB)</p>
                 @endif
                 
-                <x-input-error :messages="$errors->get('student_document')" class="mt-2" />
+                <x-input-error :messages="$errors->get('student_document')" class="mt-1" />
             </div>
 
             <div class="flex gap-4 justify-center">

@@ -179,81 +179,83 @@ $loan->save();
 
 
 
-    
-public function b2cResult(Request $request)
-{
-    Log::info('B2C RESULT CALLBACK', $request->all());
+  public function b2cResult(Request $request)
+    {
+        Log::info('B2C RESULT CALLBACK', $request->all());
 
-    $result = $request->input('Result');
-    if (!$result) {
-        return response()->json(['message' => 'Invalid result'], 400);
-    }
+        $result = $request->input('Result');
+        if (!$result) {
+            return response()->json(['message' => 'Invalid result'], 400);
+        }
 
-    $conversationID = $result['ConversationID'] ?? null;
-    $resultCode = (int) ($result['ResultCode'] ?? 1);
+        $conversationID = $result['ConversationID'] ?? null;
+        $resultCode = (int) ($result['ResultCode'] ?? 1);
 
-    if (!$conversationID) {
-        Log::error('Missing ConversationID in B2C result');
-        return response()->json(['message' => 'Invalid result data'], 400);
-    }
+        if (!$conversationID) {
+            Log::error('Missing ConversationID in B2C result');
+            return response()->json(['message' => 'Invalid result data'], 400);
+        }
 
-    $disbursement = LoanDisbursement::where('conversation_id', $conversationID)->first();
-    if (!$disbursement) {
-        Log::error('Disbursement not found', ['conversationID' => $conversationID]);
-        return response()->json(['message' => 'Disbursement not found'], 404);
-    }
+        $disbursement = LoanDisbursement::where('conversation_id', $conversationID)->first();
+        if (!$disbursement) {
+            Log::error('Disbursement not found', ['conversationID' => $conversationID]);
+            return response()->json(['message' => 'Disbursement not found'], 404);
+        }
 
-    $loan = LoanApplication::find($disbursement->loan_application_id);
-    if (!$loan) {
-        Log::error('Loan not found for disbursement', ['loan_id' => $disbursement->loan_application_id]);
-        return response()->json(['message' => 'Loan record missing'], 404);
-    }
+        $loan = LoanApplication::find($disbursement->loan_application_id);
+        if (!$loan) {
+            Log::error('Loan not found for disbursement', ['loan_id' => $disbursement->loan_application_id]);
+            return response()->json(['message' => 'Loan record missing'], 404);
+        }
 
-    DB::transaction(function () use ($disbursement, $loan, $resultCode, $result) {
-
-        if ($resultCode === 0) {
-           
-            $transactionAmount = 0;
-            $transactionReceipt = null;
+        DB::transaction(function () use ($disbursement, $loan, $resultCode, $result) {
 
             $params = $result['ResultParameters']['ResultParameter'] ?? [];
+            $transactionAmount = null;
+            $transactionReceipt = null;
+
             foreach ($params as $param) {
                 if ($param['Key'] === 'TransactionReceipt') $transactionReceipt = $param['Value'];
                 if ($param['Key'] === 'TransactionAmount') $transactionAmount = (float) $param['Value'];
             }
 
-            $disbursement->update([
-                'status' => 'success',
-                'mpesa_receipt_number' => $transactionReceipt,
-                'result_code' => 0,
-                'result_desc' => 'Success',
-                'disbursed_at' => now(),
-            ]);
+            if ($resultCode === 0) {
+                // Success
+                $disbursement->update([
+                    'status' => 'completed',
+                    'mpesa_receipt_number' => $transactionReceipt,
+                    'transaction_amount' => $transactionAmount,
+                    'result_code' => 0,
+                    'result_desc' => 'Success',
+                    'disbursed_at' => now(),
+                ]);
 
-            // Update Loan
-            $loan->update([
-                'status' => 'disbursed',
-                'disbursed_at' => now(),
-                
-            ]);
+                $loan->update([
+                    'status' => LoanApplication::STATUS_DISBURSED,
+                    'disbursed_at' => now(),
+                    'disbursed_amount' => $transactionAmount,
+                ]);
+            } else {
+                // Failed B2C Payment
+                $disbursement->update([
+                    'status' => 'failed',
+                    'result_code' => $resultCode,
+                    'result_desc' => $result['ResultDesc'] ?? 'Failed',
+                ]);
 
-        } else {
-            // Failed B2C Payment
-            $disbursement->update([
-                'status' => 'failed',
-                'result_code' => $resultCode,
-                'result_desc' => $result['ResultDesc'] ?? 'Failed',
-            ]);
+                Log::warning('B2C Payment failed', [
+                    'conversationID' => $disbursement->conversation_id,
+                    'Result' => $result
+                ]);
+            }
+        });
 
-            Log::warning('B2C Payment failed', ['conversationID' => $disbursement->conversation_id, 'Result' => $result]);
-        }
-    });
+        return response()->json(['message' => 'B2C result processed']);
+    }
 
-    return response()->json(['message' => 'B2C result processed']);
-}
-
-
-    //   B2C Timeout Callback
+    /**
+     * Handle B2C Timeout Callback
+     */
     public function b2cTimeout(Request $request)
     {
         Log::info('B2C TIMEOUT CALLBACK', $request->all());

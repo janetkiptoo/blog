@@ -228,14 +228,7 @@ public function review(LoanApplication $loan)
     abort_if($loan->status !== 'draft', 403);
 
    
-    abort_if(
-        optional($user->personalProfile)->status !== 'approved' ||
-        optional($user->academicProfile)->status !== 'approved' ||
-        $user->guarantors()->where('status', 'approved')->count() < 2,
-        403,
-        
-        'You are not eligible to submit this loan.'
-    );
+    
 
     return view('student.loans.review', [
         'loan' => $loan->load('loanProduct'),

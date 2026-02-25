@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class LoanApplication extends Model
 {
+
+  public const STATUS_SUBMITTED    = 'submitted';
+    public const STATUS_UNDER_REVIEW = 'under_review';
+    public const STATUS_APPROVED     = 'approved';
+    public const STATUS_REJECTED     = 'rejected';
+    public const STATUS_DISBURSED    = 'disbursed';
+    public const STATUS_CLOSED       = 'closed';
     protected $fillable = [
         'user_id',
         'loan_product_id',
