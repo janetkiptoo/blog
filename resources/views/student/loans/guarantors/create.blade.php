@@ -8,6 +8,8 @@
     <h2 class="text-2xl font-bold text-gray-800 mb-6">
         Guarantor / Guardian Information
     </h2>
+     <p> You are required to have a two guarantors  before making an application.</p>
+
 
     @if(auth()->user()->guarantors()->count() > 2)
     <p class="text-red-600 font-semibold">

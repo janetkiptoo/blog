@@ -18,6 +18,8 @@
         <p><strong>Student Reg No:</strong> {{ Auth::user()->academicProfile->student_registration_number }}</p>
     </div>
 
+    
+
 
    <div class="bg-white p-5 rounded shadow mb-6">
     <h2 class="text-xl font-bold mb-2">Academic Profile</h2>    
@@ -94,101 +96,7 @@
         @endif
 </div>
 
-<!-- 
-<div class="bg-white p-5 rounded shadow mb-6">
-    <h2 class="text-xl font-bold mb-3">Guarantors</h2>
 
-    @foreach(auth()->user()->activeGuarantors as $guarantor)
-        <div class="border p-3 rounded mb-3">
-            <p><strong>Name:</strong> {{ $guarantor->name }}</p>
-            <p><strong>Relationship:</strong> {{ ucfirst($guarantor->relationship) }}</p>
-
-            <p>Status:
-                <span class="
-                    {{ $guarantor->status === 'approved' ? 'text-green-600' :
-                       ($guarantor->status === 'rejected' ? 'text-red-600' : 'text-yellow-600') }}">
-                    {{ ucfirst($guarantor->status) }}
-                </span>
-            </p>
-
-            @if($guarantor->status === 'rejected')
-                <p class="text-red-600 mt-1">
-                    <strong>Reason:</strong> {{ $guarantor->rejection_reason }}
-                </p>
-                 <a href="{{ route('student.profile.guarantors.create') }}"
-           class=" bg-primary-700 text-white px-4 py-2 rounded-full">
-            Replace Guarantor
-        </a>
-            @endif
-</div> -->
-
-<!-- 
-         <div>
-             @if(auth()->user()->guarantors()->count() < 2)
-    <p class="text-red-600 font-semibold">
-       <a href="{{ route('student.profile.guarantors.create') }}"
-           class=" bg-primary-700 text-white px-4 py-2 rounded-full">
-            Add Guarantor
-        </a>
-    </p>
-@endif
-
-        </div>
-
-        <div>
-        @if(in_array($guarantor->status, ['pending', 'rejected']))
-    
-        <button onclick="openModal({{ $guarantor->id }})" class="mt-2 px-3 py-1 text-sm bg-red-100 text-red-600 rounded-full  hover:bg-red-200">
-    Remove Guarantor
-</button>
-</div>
-
-    
-@endif
-    @endforeach
-
-<div id="removeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-    <div class="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full mx-4">
-        <h3 class="text-lg font-semibold text-black mb-2">Remove Guarantor</h3>
-        <p class="text-sm text-black mb-6">Are you sure you want to remove this guarantor? This action cannot be undone.</p>
-        <div class="flex justify-end gap-3">
-            <button onclick="closeModal()" class="px-4 py-2 text-sm rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50">
-                Cancel
-            </button>
-            <form id="removeForm" method="POST">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="px-4 py-2 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600">
-                    Yes, Remove
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script>
-    function openModal(guarantorId) {
-        const form = document.getElementById('removeForm');
-        form.action = `/student/profile/guarantors/${guarantorId}`;
-        const modal = document.getElementById('removeModal');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('removeModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
-
-    
-    document.getElementById('removeModal').addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
-    });
-</script>
-
-   
-</div> -->
 
 @if($loanEligible)
     
@@ -210,10 +118,9 @@
     </div>
 @endif
 
-
-
-    
-
+<div>
+    <p> You are required to have a two guarantors  before making an application.</p>
+</div>
 
 
 

@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             LoanProductSeeder::class,
             SettingsSeeder::class,
             EligibilityRequirementSeeder::class,
-            
+            FooterItemsSeeder::class,   
         ]);
         // User::factory(10)->create();
 
@@ -28,10 +28,6 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
-        $this->call([
-            LoanProductSeeder::class,
-        ]);
         $this->call([
             PaymentMethodSeeder::class,
         ]);

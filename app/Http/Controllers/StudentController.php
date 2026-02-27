@@ -9,6 +9,7 @@ use App\Models\LoanApplication;
 use App\Models\AcademicProfile;
 use App\Models\PersonalProfile;
 use App\Models\guarantors;
+use App\Models\LoanProduct;
 
 class StudentController extends Controller
 {

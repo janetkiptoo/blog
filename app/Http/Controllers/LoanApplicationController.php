@@ -17,13 +17,38 @@ use App\Models\Guarantor;
 
 
 
+
 class LoanApplicationController extends Controller
 {
-    public function index($productId)
-    {
-        $product = LoanProduct::findOrFail($productId);
-        return view('loans.apply', compact('product'));
+    
+   public function index($productId)
+{
+    $user = auth()->user();
+    $product = LoanProduct::findOrFail($productId);
+
+    if ($product->hasActiveLoanForUser($user->id)) {
+        return redirect()
+            ->route('student.loans.index')
+            ->with(
+                'error',
+                'You already have an active loan for this product. Please repay it fully before applying again.'
+            );
     }
+
+    return view('loans.apply', compact('product'));
+}
+
+public function products()
+{
+    $userId = auth()->id();
+
+    $products = LoanProduct::all()->map(function ($product) use ($userId) {
+        $product->has_active_loan = $product->hasActiveLoanForUser($userId);
+        return $product;
+    });
+
+    return view('student.loans.products', compact('products'));
+}
     
 
 
@@ -129,9 +154,32 @@ public function process_repayment(Request $request, $id)
     ));
 }
 
+public function resume($id)
+{
+    $loan = LoanApplication::where('id', $id)
+        ->where('user_id', auth()->id())
+        ->where('status', 'draft')
+        ->firstOrFail();
+
+    $loanProducts = LoanProduct::all(); 
+
+    return view('student.loans.resume', compact('loan', 'loanProducts'));
+}
+
 public function store(Request $request, $productId)
 {
     $user = auth()->user();
+
+    $existingLoan = LoanApplication::where('user_id', $user->id)
+    ->where('loan_product_id', $productId)
+    ->whereIn('status', ['draft', 'pending', 'approved', 'disbursed'])
+    ->exists();
+
+if ($existingLoan) {
+    return back()->with('error', 
+        'You already have an active loan for this product. Please repay it fully before applying again.'
+    );
+}
 
     
     $this->ensureEligibility($user);
@@ -250,26 +298,49 @@ public function review(LoanApplication $loan)
         'guarantors' => $loan->guarantors,
     ]);
 }
+public function update(Request $request, $id)
+{
+    $loan = LoanApplication::where('id', $id)
+        ->where('user_id', auth()->id())
+        ->where('status', 'draft')
+        ->firstOrFail();
 
+    $request->validate([
+        'loan_amount' => 'required|numeric|min:1',
+        'loan_product_id' => 'required|exists:loan_products,id',
+        'term_months' => 'required|integer|min:1',
+    ]);
 
+    $loan->update([
+        'loan_amount' => $request->loan_amount,
+        'loan_product_id' => $request->loan_product_id,
+        'term_months' => $request->term_months,
+    ]);
+
+    return redirect()
+        ->route('student.loans.review', $loan)
+        ->with('success', 'Draft updated successfully.');
+}
 
 
     public function destroy(LoanApplication $loan_application)
-    {
-        $user = auth()->user();
+{
+    $user = auth()->user();
 
-        if ($loan_application->user_id !== $user->id) {
-            abort(403, 'Unauthorized action.');
-        }
-
-        if ($loan_application->status !== 'draft') {
-            return redirect()->route('student.loans.index')->with('error', 'Only pending loan applications can be deleted.');
-        }
-
-        $loan_application->delete();
-
-        return redirect()->route('student.loans.index')->with('success', 'Loan application deleted successfully.');
+    if ($loan_application->user_id !== $user->id) {
+        abort(403, 'Unauthorized action.');
     }
+
+    if (!in_array($loan_application->status, ['draft', 'submitted'])) {
+        return redirect()->route('student.loans.index')
+                         ->with('error', 'Only draft or submitted loan applications can be deleted.');
+    }
+
+    $loan_application->delete();
+
+    return redirect()->route('student.loans.index')
+                     ->with('success', 'Loan application deleted successfully.');
+}
 
 
 public function replaceGuarantor(LoanApplication $loan, Guarantor $guarantor)

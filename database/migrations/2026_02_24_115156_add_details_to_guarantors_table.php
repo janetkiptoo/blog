@@ -14,6 +14,7 @@ return new class extends Migration
        Schema::disableForeignKeyConstraints();
 
 Schema::table('guarantors', function (Blueprint $table) {
+    $table->unsignedBigInteger('loan_application_id');
     $table->foreign('loan_application_id')
           ->references('id')
           ->on('loan_applications')

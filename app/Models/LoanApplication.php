@@ -14,6 +14,8 @@ class LoanApplication extends Model
     public const STATUS_REJECTED     = 'rejected';
     public const STATUS_DISBURSED    = 'disbursed';
     public const STATUS_CLOSED       = 'closed';
+
+    
     protected $fillable = [
         'user_id',
         'loan_product_id',

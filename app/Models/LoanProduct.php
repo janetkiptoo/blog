@@ -17,9 +17,23 @@ class LoanProduct extends Model
     ];
    
 
+
 public function loanApplications()
 {
     return $this->hasMany(LoanApplication::class);
+}
+
+public function hasActiveLoanForUser(int $userId): bool
+{
+    return $this->loanApplications()
+        ->where('user_id', $userId)
+        ->whereIn('status', [
+            LoanApplication::STATUS_SUBMITTED,
+            LoanApplication::STATUS_UNDER_REVIEW,
+            LoanApplication::STATUS_APPROVED,
+            LoanApplication::STATUS_DISBURSED,
+        ])
+        ->exists();
 }
 
     //

@@ -15,7 +15,7 @@
                 </p>
             </div>
 
-            {{-- Quick Links --}}
+           
             <div>
                 <h3 class="text-white font-semibold mb-4">Quick Links</h3>
                 <ul class="space-y-2 text-sm">
@@ -29,7 +29,7 @@
                 </ul>
             </div>
 
-            {{-- Support / Contact --}}
+           
             <div>
                 <h3 class="text-white font-semibold mb-4">Support</h3>
                 <ul class="space-y-2 text-sm">
