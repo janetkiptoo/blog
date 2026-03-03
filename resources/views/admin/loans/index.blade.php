@@ -65,7 +65,7 @@
         <form method="POST" action="{{ route('admin.loan.disburse', $loan->id) }}">
             @csrf
             <button type="submit" 
-                    class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
+                    class="bg-green-500 text-white py-2 px-4 rounded-full hover:bg-green-600">
                 Disburse
             </button>
         </form>

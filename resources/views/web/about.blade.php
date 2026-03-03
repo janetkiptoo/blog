@@ -46,11 +46,11 @@
             </p>
         </div>
 
-        <div class="bg-blue-50 p-8 rounded-xl shadow-sm">
+        <!-- <div class="bg-blue-50 p-8 rounded-xl shadow-sm">
             <p class="text-blue-800 text-lg font-semibold">
                 Education should be a right, not a privilege.
             </p>
-        </div>
+        </div> -->
     </div>
 
     {{-- MISSION & VISION --}}
@@ -61,7 +61,7 @@
         x-transition:enter="transition ease-out duration-700"
         x-transition:enter-start="opacity-0 translate-y-8"
         x-transition:enter-end="opacity-100 translate-y-0"
-        class="bg-gray-50 rounded-2xl p-10 space-y-8"
+        class="bg-gray-50 rounded-2xl p-12 space-y-8"
     >
         <div>
             <h2 class="text-2xl font-bold mb-3">Our Mission</h2>

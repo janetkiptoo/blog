@@ -55,7 +55,7 @@
             </select>
         </div>
 
-        <div>
+        <!-- <div>
             <label class="block font-semibold text-gray-700">Course Type</label>
             <select id="courseType" class="border rounded px-3 py-2 w-full">
                 <option value="">-- Select Course Type --</option>
@@ -63,7 +63,7 @@
                     <option value="{{ $courseType }}">{{ $courseType }}</option>
                 @endforeach
             </select>
-        </div>
+        </div> -->
 
         <div>
             <label class="block font-semibold text-gray-700">Loan Purpose</label>

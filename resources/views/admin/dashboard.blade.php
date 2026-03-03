@@ -58,6 +58,11 @@
             <h2 class="text-2xl font-bold text-indigo-700">KES:{{number_format($totalapprovedAmount), 2}}</h2>
         </div>
 
+         <div class="bg-indigo-50 p-6 rounded shadow">
+            <p class="text-gray-600">Total Repayed Amount</p>
+            <h2 class="text-2xl font-bold text-indigo-700">KES:{{number_format($totalRepayedAmount), 2}}</h2>
+        </div>
+
     </div>
 </div>
 @endsection

@@ -22,6 +22,8 @@ class AdminDashboardController extends Controller
         $pendingapplications = LoanApplication::where('status', 'pending')->count();
 
         $approvedapplications = LoanApplication::where('status', 'approved')->count();
+      
+
 
         $rejectedapplications = LoanApplication::where('status', 'rejected')->count();
 
@@ -29,6 +31,10 @@ class AdminDashboardController extends Controller
 
         $totalapprovedAmount = LoanApplication::where('status', 'approved')
          ->sum('loan_amount');
+
+         $totalRepayedAmount = LoanApplication::where('status', 'paid')
+         ->sum('loan_amount');
+ 
 
         return view('admin.dashboard', compact(
             'totalusers',
@@ -39,6 +45,7 @@ class AdminDashboardController extends Controller
             'approvedapplications',
             'rejectedapplications',
             'totalappliedAmount',
+            'totalRepayedAmount',
             'totalapprovedAmount'
         ));
     }

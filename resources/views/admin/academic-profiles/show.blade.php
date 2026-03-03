@@ -54,13 +54,12 @@
     </form>
 </div>
 @endif
-
+ 
  @if ($academicProfile->status === 'rejected')
         <div class="mt-4 "><strong>Rejection Reason:</strong>
             <p class="text-red-600">{{ $academicProfile->rejection_reason }}</p>
         </div>
     @endif
-
 
     
 @endsection

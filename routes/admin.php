@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\SupportReplyController;
 use App\Http\Controllers\Admin\SupportTicketController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FooterItemController;
+use App\Http\Controllers\Admin\EligibilityRequirementController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -38,7 +39,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::resource('loan-products', AdminLoanProductController::class);
     Route::resource('terms', AdminTermsController::class);
-
+    Route::resource('eligibility',EligibilityRequirementController::class);
      Route::resource('faqs', FaqController::class);
 
      Route::resource('footer', FooterItemController::class);
