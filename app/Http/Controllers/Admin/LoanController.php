@@ -25,6 +25,8 @@ public function index()
 }
 
 
+
+
 public function show(LoanApplication $loan)
 {
     return view('admin.loans.show', [

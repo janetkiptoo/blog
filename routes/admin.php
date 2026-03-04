@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\SupportReplyController;
 use App\Http\Controllers\Admin\SupportTicketController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\FooterItemController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\EligibilityRequirementController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/loans/{loan}/reject', [AdminController::class, 'reject'])->name('loans.reject');
     // Route::post('/loans/{id}/approve', [AdminController::class, 'approve'])->name('loan.approve');
     // Route::post('/loans/{id}/reject', [AdminController::class, 'reject'])->name('loan.reject');
+
 
     Route::resource('users', UserController::class);
 
@@ -77,15 +79,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/academic-profiles/{academicProfile}/approve',[AdminAcademicProfileController::class, 'approve'])->name('academic-profiles.approve');
     Route::post('/academic-profiles/{academicProfile}/reject',[AdminAcademicProfileController::class, 'reject'] )->name('academic-profiles.reject');
 
-  
+  Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
+Route::get('/notifications/{notification}',[NotificationController::class, 'markAsRead'])->name('notifications.read');
 
-
-    // Route::get('/loans', [AdminLoanController::class, 'index'])->name('loans.index');
-    // Route::get('/loans/{loan}', [AdminLoanController::class, 'show'])->name('loans.show');
-    // Route::post('/loans/{loan}/review', [AdminLoanController::class, 'markUnderReview'])->name('loans.review');
-    // Route::post('/loans/{loan}/approve', [AdminLoanController::class, 'approve'])->name('loans.approve');
-    // Route::post('/loans/{loan}/reject', [AdminLoanController::class, 'reject'])->name('loans.reject');
-    // Route::post('/loans/{loan}/disburse', [AdminLoanController::class, 'disburse'])->name('loans.disburse');
 
 
 

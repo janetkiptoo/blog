@@ -7,6 +7,7 @@ use App\Models\LoanProduct;
 use App\Models\LoanRepayment;
 use App\Models\MpesaPayment;
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Services\MpesaServices;
 use App\Enums\PaymentChannel;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use App\Models\CashPayment;
 use App\Models\Guarantor;
 use App\Mail\LoanApplicationMail;
+use App\Notifications\LoanApplicationSubmitted;
 
 
 
@@ -89,6 +91,12 @@ public function process_repayment(Request $request, $id)
             'success' => false,
             'message' => 'Loan is already fully paid.'
         ], 400);
+    }
+
+    $admins = User::where('role', 'admin')->get();
+
+    foreach ($admins as $admin) {
+    $admin->notify(new LoanRepaymentReceived($repayment));
     }
 
     $amount = min($request->amount, $loanApplication->balance);
@@ -276,6 +284,13 @@ public function submit(Request $request, LoanApplication $loan)
         'status' => 'submitted',
         'submitted_at' => now(),
     ]);
+    $admins = User::where('role', 'admin')->get();
+
+    foreach ($admins as $admin) {
+    $admin->notify(new LoanApplicationSubmitted($loan));
+    }
+    
+
 
     return redirect()
         ->route('student.dashboard')
