@@ -384,8 +384,7 @@ function calculateLoan() {
             <div x-data="{ open: false }" class="border rounded-lg">
                 <button
                     @click="open = !open"
-                    class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-gray-800"
-                >
+                    class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-gray-800">
                     {{ $faq->question }}
                     <span x-text="open ? '-' : '+'"></span>
                 </button>

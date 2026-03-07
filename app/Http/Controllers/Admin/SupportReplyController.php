@@ -46,6 +46,7 @@ class SupportReplyController extends Controller
         $ticket->update(['status' => 'resolved']);
 
         
+        
         Mail::to($ticket->email)->send(
             new SupportTicketReplyMail($ticket, $reply)
         );

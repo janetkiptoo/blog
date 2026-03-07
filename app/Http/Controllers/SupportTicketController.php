@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\SupportTicket;
 use App\Mail\SupportTicketReceived;
 use Illuminate\Support\Facades\Mail;
+use App\Models\User;
+use App\Notifications\SupportTicketCreated;
 
 class SupportTicketController extends Controller
 {
@@ -20,6 +22,11 @@ public function store(Request $request)
     ]);
 
     $ticket = SupportTicket::create($validated);
+    $admins = User::where('role', 'admin')->get();
+
+    foreach ($admins as $admin) {
+        $admin->notify(new SupportTicketCreated($ticket));
+    }
     Mail::to($ticket->email)->send(new SupportTicketReceived($ticket));
 
     return redirect()->route('web.contact')->with('success', 'Your message has been received. Please check your email.');

@@ -1,12 +1,20 @@
 @extends('layouts.adminn')
 
 @section('content')
-<div class=" py-8">
+<div class="dash-wrap py-8 px-2">
 
+
+    <div class="mb-10 flex items-end justify-between flex-wrap gap-4">
+        <div>
     <h1 class="text-2xl font-bold mb-6">Admin Dashboard</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+       </div>
+        <span class="text-sm text-gray-900 font-medium">{{ now()->format('l, d M Y') }}</span>
+</div>
+    
 
+    <p class="section-label">Users</p>
+   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
         
         <div class="bg-sky-50 p-6 rounded shadow">
             <p class="text-gray-500">Total Users</p>
@@ -24,7 +32,11 @@
            <h2 class="text-3xl font-bold text-pink-600">{{ $totaladmins}}</h2>
         </div>
 
-      
+</div>
+
+ <p class="section-label">Applications</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+     
         <div class="bg-white p-6 rounded shadow">
             <p class="text-gray-500">Total Applications</p>
              <h2 class="text-3xl font-bold text-white-600">{{ $totalapplications}}</h2>
@@ -46,8 +58,11 @@
             <p class="text-gray-600">Rejected Applications</p>
             <h2 class="text-3xl font-bold text-red-600">{{$rejectedapplications}}</h2>
         </div>
+</div>
 
        
+        <p class="section-label">Financials</p>
+       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         <div class="bg-blue-50 p-6 rounded shadow">
             <p class="text-gray-600">Total Applied Amount</p>
             <h2 class="text-2xl font-bold text-blue-700">KES:{{number_format($totalappliedAmount), 2}}</h2>
@@ -64,5 +79,6 @@
         </div>
 
     </div>
+
 </div>
 @endsection

@@ -210,9 +210,7 @@ if ($existingLoan) {
     $termMonths   = $request->term_months;
     $interestRate = $product->interest_rate;
     $gracePeriod  = $product->grace_period_months;
-
     $repaymentMonths = max(1, $termMonths - $gracePeriod);
-
     $totalInterest  = ($loanAmount * ($interestRate / 100)) * $repaymentMonths;
     $totalPayable   = $loanAmount + $totalInterest;
     $monthlyPayment = $totalPayable / $repaymentMonths;

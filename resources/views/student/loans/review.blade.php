@@ -156,8 +156,7 @@
 
         <label class="flex items-center">
             <input type="checkbox" name="accept_terms" required class="mr-2" 
-                @if($guarantors->count() < 2) disabled @endif
-            >
+                @if($guarantors->count() < 2) disabled @endif >
             <span class="text-gray-700">
                 I accept the
                 <a href="{{ route('student.terms') }}" target="_blank" class="text-blue-600 underline">Terms & Conditions</a>
